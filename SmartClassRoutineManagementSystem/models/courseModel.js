@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 const getCourseByExamYearId = (exam_year_id) => {
-    
+    // console.log("baaaal");
     // console.log(exam_year_id);
     const query = 'SELECT * FROM Course WHERE exam_year_id = ?';
     
@@ -12,7 +12,7 @@ const getCourseByExamYearId = (exam_year_id) => {
                 console.error('Error executing query:', err);
                 return reject(err);
             }
-            // console.log('Query results:', results);
+            // console.log('Query Course data results:', results);
             resolve(results); // Resolve with results (not undefined)
         });
     });
@@ -21,6 +21,7 @@ const getCourseByExamYearId = (exam_year_id) => {
 const getCourseByCourseId = (course_id) => {
     
     // console.log(exam_year_id);
+    // console.log("hiiiiiiiiii");
     const query = 'SELECT * FROM Course WHERE course_id = ?';
     
     
@@ -30,7 +31,7 @@ const getCourseByCourseId = (course_id) => {
                 console.error('Error executing query:', err);
                 return reject(err);
             }
-            console.log('Query results:', results);
+            // console.log('Course results:', results);
             resolve(results); // Resolve with results (not undefined)
         });
     });

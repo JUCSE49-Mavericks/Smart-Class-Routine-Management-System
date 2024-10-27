@@ -4,7 +4,7 @@ const {getCourseByExamYearId, getCourseByCourseId} = require('../models/courseMo
 
 const fetchCourseByExamYearId = async (req, res) => {
     const exam_year_id = req.params.exam_year_id;
-
+    // console.log('Hiiiiiiiiiiiiiiiiiiii');
     try {
         const results = await getCourseByExamYearId(exam_year_id);
 

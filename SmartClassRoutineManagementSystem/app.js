@@ -29,7 +29,8 @@ const { createXmlDataExamYearTable } = require('./models/examYearModel');
 const { createCourseTable, createPrerequisiteCourseTable, createCourseChapterTable, createCourseObjectiveTable, createStudentLearningOutcomesTable, createRecommendedBookTable } = require('./models/syllabusModel');
 const { createScheduleTable} = require('./models/RoutineModel');
 const { createHolidayTable} = require('./models/holidaysModel');
-
+const { createExamCommitteeTable } = require('./models/examCommitteeModel');
+const { createClassRepresentativeTable } = require('./models/classRepresentativeModel');
 
 const {createclassRoutineTable}=require('./models/classRoutineModel');
 
@@ -52,7 +53,8 @@ createStudentLearningOutcomesTable();
 createRecommendedBookTable();
 createScheduleTable();
 createHolidayTable();
-
+createExamCommitteeTable();
+createClassRepresentativeTable();
 
 createclassRoutineTable();
 
@@ -75,7 +77,7 @@ const dataFetch=require('./routes/DataFetch');
 const routineGenerator=require('./routes/routineGeneratorRoutes');
 const teacherImageUpload = require('./controllers/teacherImageUpload');
 const courseRoutes = require('./routes/courseRoutes');
-
+const classRepresentativeRoutes = require('./routes/classRepresentativeRoutes');
 
 
 app.use('/api/auth', authRoutes);
@@ -96,6 +98,7 @@ app.use('/api', routineGenerator);
 app.use('/', teacherImageUpload);
 
 app.use('/api', courseRoutes);
+app.use('/api', classRepresentativeRoutes);
 
 
 

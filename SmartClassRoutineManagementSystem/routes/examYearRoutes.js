@@ -5,7 +5,12 @@ const {
     getExamYearsBySessionId,
     addNewExamYear,
     deleteExamYear
-} = require('../controllers/examYearController')
+} = require('../controllers/examYearController');
+
+const {
+    fetchExamYearById,
+    fetchExamCommitteeByExamYearId,
+  } = require('../controllers/examYearController');
 
 const router = express.Router();
 
@@ -44,5 +49,11 @@ router.get('/session-examyear/:session_id', async (req, res) => {
 
 router.post('/add-new-examyear', addNewExamYear);
 router.delete('/delete-examyear/:exam_year_id', deleteExamYear);
+
+
+router.get('/exam-year-details/:exam_year_id', fetchExamYearById);
+router.get('/exam-committee-exam-year/:exam_year_id', fetchExamCommitteeByExamYearId);
+
+
 
 module.exports = router;

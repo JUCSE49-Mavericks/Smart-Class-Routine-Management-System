@@ -24,6 +24,52 @@ const createXmlDataExamYearTable = () => {
     });
 };
 
+
+// Function to fetch exam year details by exam_year_id
+const getExamYearById = (exam_year_id) => {
+    // console.log('Helllllllllll');
+    // console.log(exam_year_id);
+    const query = 'SELECT * FROM ExamYear WHERE exam_year_id = ?';
+    
+    
+    return new Promise((resolve, reject) => {
+        db.query(query, [exam_year_id], (err, results) => {
+            if (err) {
+                console.error('Error executing query:', err);
+                return reject(err);
+            }
+            // console.log('Query results:', results);
+            resolve(results); // Resolve with results (not undefined)
+        });
+    });
+};
+
+// Function to fetch the exam committee by exam_year_id
+const getExamCommitteeByExamYearId = (exam_year_id) => {
+    // console.log('Hola');
+    const query = `
+        SELECT ec.*, t.*
+        FROM ExamCommittee ec
+        JOIN Teacher t ON ec.teacher_id = t.teacher_id
+        WHERE ec.exam_year_id = ?
+    `;
+    
+    return new Promise((resolve, reject) => {
+        db.query(query, [exam_year_id], (err, results) => {
+            if (err) {
+                console.error('Error executing query:', err);
+                return reject(err);
+            }
+            // console.log('Query results for ExamCommittee:', results);
+            resolve(results); // Resolve with results (not undefined)
+        });
+    });
+};
+
+
+
 module.exports = {
+    getExamYearById,
+    getExamCommitteeByExamYearId,
     createXmlDataExamYearTable
-}
+};

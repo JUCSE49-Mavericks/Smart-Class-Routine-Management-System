@@ -74,6 +74,7 @@ const syllabusFilterRoute = require('./routes/syllabusFilterRoutes');
 const dataFetch=require('./routes/DataFetch');
 const routineGenerator=require('./routes/routineGeneratorRoutes');
 const teacherImageUpload = require('./controllers/teacherImageUpload');
+const courseRoutes = require('./routes/courseRoutes');
 
 
 
@@ -93,6 +94,8 @@ app.use('/api', syllabusFilterRoute);
 app.use('/api', dataFetch);
 app.use('/api', routineGenerator);
 app.use('/', teacherImageUpload);
+
+app.use('/api', courseRoutes);
 
 
 

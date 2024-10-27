@@ -4,6 +4,11 @@ const xml2js = require('xml2js');
 const fs = require('fs');
 const path = require('path');
 const db = require('../config/db');
+const ExamYearModel = require('../models/examYearModel');
+const {
+    getExamYearById,
+    getExamCommitteeByExamYearId
+} = require('../models/examYearModel')
 
 const uploadExamYearAsXML = async (req, res) => {
     const xmlData = req.body;
@@ -21,17 +26,17 @@ const uploadExamYearAsXML = async (req, res) => {
             for (const row of rows) {
                 const exam_year_id = row.exam_year_id && row.exam_year_id[0];
                 const session_id = row.session_id && row.session_id[0];
-                const Education_level=row.Education_level && row.Education_level[0];
-                const Exam_year = row.Exam_year&& row.Exam_year[0];
+                const Education_level = row.Education_level && row.Education_level[0];
+                const Exam_year = row.Exam_year && row.Exam_year[0];
                 const Year = row.Year && row.Year[0];
-                const Semester=row.Semester && row.Semester[0];
-                const Start_date=row.Start_date && row.Start_date[0];
-                const End_date=row.End_date && row.End_date[0];
-               
+                const Semester = row.Semester && row.Semester[0];
+                const Start_date = row.Start_date && row.Start_date[0];
+                const End_date = row.End_date && row.End_date[0];
+
                 // Check if all required fields are present
                 if (session_id && Education_level && Exam_year && Year && Semester && Start_date && End_date) {
                     // const hashedPassword = await bcrypt.hash(Password, 10);
-                    await insertXmlExamYearIntoDatabase({ exam_year_id,session_id,Education_level,Exam_year,Year,Semester,Start_date,End_date});
+                    await insertXmlExamYearIntoDatabase({ exam_year_id, session_id, Education_level, Exam_year, Year, Semester, Start_date, End_date });
                 } else {
                     console.warn('Skipping incomplete row:', row);
                 }
@@ -48,7 +53,7 @@ const uploadExamYearAsXML = async (req, res) => {
 const insertXmlExamYearIntoDatabase = (row) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO ExamYear(exam_year_id,session_id,Education_level,Exam_year,Year,Semester,Start_date,End_date) VALUES (?, ?, ?, ?, ?,?,?,?)';
-        db.query(query, [row.exam_year_id,row.session_id,row.Education_level,row.Exam_year,row.Year,row.Semester,row.Start_date,row.End_date], (err, results) => {
+        db.query(query, [row.exam_year_id, row.session_id, row.Education_level, row.Exam_year, row.Year, row.Semester, row.Start_date, row.End_date], (err, results) => {
             if (err) {
                 reject(err);
             } else {
@@ -113,7 +118,7 @@ const addNewExamYear = (req, res) => {
     const sql = `
         INSERT INTO ExamYear (Year, Semester, Exam_year, Education_level, Start_date, End_date, session_id) 
         VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    
+
     db.query(sql, [Year, Semester, Exam_year, Education_level, Start_date, End_date, session_id], (err, result) => {
         if (err) {
             console.error('Error adding exam year:', err);
@@ -137,10 +142,55 @@ const deleteExamYear = (req, res) => {
 };
 
 
+
+// Controller function to fetch exam year details
+const fetchExamYearById = async (req, res) => {
+    const exam_year_id = req.params.exam_year_id;
+
+    try {
+        const results = await getExamYearById(exam_year_id);
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Exam year not found' });
+        }
+
+        // console.log(results);
+
+        res.json(results[0]); // Return the first matching record
+    } catch (error) {
+        console.error('Error fetching exam year data: ', error);
+        res.status(500).json({ error: 'Database error' });
+    }
+};
+
+
+// Controller function to fetch exam committee
+const fetchExamCommitteeByExamYearId = async (req, res) => {
+    const exam_year_id = req.params.exam_year_id;
+    // console.log('hola hola')
+    try {
+        const results = await getExamCommitteeByExamYearId(exam_year_id);
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Exam year not found' });
+        }
+
+        // Combining the exam year details with the exam committee details
+        res.json(results[0]);
+    } catch (error) {
+        console.error('Error fetching exam year data: ', error);
+        res.status(500).json({ error: 'Database error' });
+    }
+};
+
+
+
 module.exports = {
     uploadExamYearAsXML,
     getExamYearsByDepartmentId,
     getExamYearsBySessionId,
     addNewExamYear,
-    deleteExamYear
+    deleteExamYear,
+    fetchExamYearById,
+    fetchExamCommitteeByExamYearId
 };

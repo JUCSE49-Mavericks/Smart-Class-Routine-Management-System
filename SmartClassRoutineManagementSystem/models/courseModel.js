@@ -1,8 +1,7 @@
 const db = require('../config/db');
 
 const getCourseByExamYearId = (exam_year_id) => {
-    // console.log('Helllllllllll');
-    // console.log('Kam hoise');
+    
     // console.log(exam_year_id);
     const query = 'SELECT * FROM Course WHERE exam_year_id = ?';
     
@@ -20,8 +19,7 @@ const getCourseByExamYearId = (exam_year_id) => {
 };
 
 const getCourseByCourseId = (course_id) => {
-    // console.log('Helllllllllll');
-    // console.log('Kam hoise');
+    
     // console.log(exam_year_id);
     const query = 'SELECT * FROM Course WHERE course_id = ?';
     

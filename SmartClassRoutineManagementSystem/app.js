@@ -33,6 +33,7 @@ const { createExamCommitteeTable } = require('./models/examCommitteeModel');
 const { createClassRepresentativeTable } = require('./models/classRepresentativeModel');
 
 const {createclassRoutineTable}=require('./models/classRoutineModel');
+const {createAssignedCourseTeacherTable} = require('./models/assignedCourseTeacherModel');
 
 
 
@@ -58,6 +59,8 @@ createClassRepresentativeTable();
 
 createclassRoutineTable();
 
+createAssignedCourseTeacherTable();
+
 
 // Routes
 const superUserRoutes = require('./routes/superUserRoutes');
@@ -78,6 +81,7 @@ const routineGenerator=require('./routes/routineGeneratorRoutes');
 const teacherImageUpload = require('./controllers/teacherImageUpload');
 const courseRoutes = require('./routes/courseRoutes');
 const classRepresentativeRoutes = require('./routes/classRepresentativeRoutes');
+const assignedCourseTeacherRoutes = require('./routes/assignedCourseTeacherRoutes');
 
 
 app.use('/api/auth', authRoutes);
@@ -99,6 +103,7 @@ app.use('/', teacherImageUpload);
 
 app.use('/api', courseRoutes);
 app.use('/api', classRepresentativeRoutes);
+app.use('/api', assignedCourseTeacherRoutes);
 
 
 

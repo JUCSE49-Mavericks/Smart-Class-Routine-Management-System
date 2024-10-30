@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs');
 const xml2js = require('xml2js');
 const db = require('../config/db');
-const { updateProfileImage } = require('../models/teacherModel')
+const { updateProfileImage, getAllTeachers } = require('../models/teacherModel')
 const multer = require('multer');
 const path = require('path');
 
@@ -289,6 +289,24 @@ const deleteTeacherById = (teacher_id) => {
 };
 
 
+// Controller to handle getting all teachers
+const fetchAllTeachers = async (req, res) => {
+    try {
+        const results = await getAllTeachers();
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No teachers found' });
+        }
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching teacher data:', error);
+        res.status(500).json({ error: 'Database error' });
+    }
+};
+
+
+
 module.exports = {
     uploadTeacherAsXML,
     getTeacherByEmail,
@@ -301,5 +319,6 @@ module.exports = {
     getTeacherDesignations,
     updateTeacherProfile,
     addNewTeacher,
-    deleteTeacherById
+    deleteTeacherById,
+    fetchAllTeachers
 };

@@ -36,7 +36,23 @@ const updateProfileImage = (teacher_id, profileImage, callback) => {
     db.query(query, [profileImage, teacher_id], callback);
 };
 
+// Function to get all teachers from the database
+const getAllTeachers = () => {
+    const query = 'SELECT * FROM Teacher';
+
+    return new Promise((resolve, reject) => {
+        db.query(query, (error, results) => {
+            if (error) {
+                console.error('Error fetching teachers:', error);
+                return reject(error);
+            }
+            resolve(results);
+        });
+    });
+};
+
 module.exports = {
     createXmlDataTeacherTable,
-    updateProfileImage
+    updateProfileImage,
+    getAllTeachers,
 }

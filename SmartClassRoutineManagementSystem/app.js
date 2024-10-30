@@ -1,10 +1,8 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const verifyToken = require('./middlewares/authMiddleware');
 const fileUpload = require('express-fileupload');
-
 
 const app = express();
 app.use(express.json());
@@ -14,7 +12,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: 'application/xml' }));
 app.use(fileUpload());
 app.use('/uploads', express.static('uploads'));
-
 
 // Create tables if they do not exist
 const { createSuperUserTable } = require('./models/superUserModel');
@@ -27,14 +24,11 @@ const { createXmlDataSessionTable } = require('./models/sessionModel');
 const { createXmlDataStudentTable } = require('./models/studentModel');
 const { createXmlDataExamYearTable } = require('./models/examYearModel');
 const { createCourseTable, createPrerequisiteCourseTable, createCourseChapterTable, createCourseObjectiveTable, createStudentLearningOutcomesTable, createRecommendedBookTable } = require('./models/syllabusModel');
-const { createScheduleTable} = require('./models/RoutineModel');
-const { createHolidayTable} = require('./models/holidaysModel');
+const { createScheduleTable } = require('./models/RoutineModel');
+const { createHolidayTable } = require('./models/holidaysModel');
+const { createclassRoutineTable } = require('./models/classRoutineModel');
 
-
-const {createclassRoutineTable}=require('./models/classRoutineModel');
-
-
-
+// Initialize tables
 createSuperUserTable();
 createXmlDataDeptTable();
 createXmlDataTeacherTable();
@@ -52,10 +46,7 @@ createStudentLearningOutcomesTable();
 createRecommendedBookTable();
 createScheduleTable();
 createHolidayTable();
-
-
 createclassRoutineTable();
-
 
 // Routes
 const superUserRoutes = require('./routes/superUserRoutes');
@@ -71,11 +62,12 @@ const authRoutes = require('./routes/authRoute');
 const syllabusRoute = require('./routes/syllabusRoutes');
 const syllabusRouteTest = require('./routes/syllabusTest');
 const syllabusFilterRoute = require('./routes/syllabusFilterRoutes');
-const dataFetch=require('./routes/DataFetch');
-const routineGenerator=require('./routes/routineGeneratorRoutes');
+const dataFetch = require('./routes/DataFetch');
+const routineGenerator = require('./routes/routineGeneratorRoutes');
 const teacherImageUpload = require('./controllers/teacherImageUpload');
 
-
+// Add your class routine routes here
+const routineRoutes = require('./routes/routineRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api', superUserRoutes);
@@ -92,9 +84,8 @@ app.use('/api', syllabusRouteTest);
 app.use('/api', syllabusFilterRoute);
 app.use('/api', dataFetch);
 app.use('/api', routineGenerator);
+app.use('/api/routines', routineRoutes); // Add the routine routes
 app.use('/', teacherImageUpload);
-
-
 
 // Protected routes
 // app.get('/api/protected', verifyToken, (req, res) => {

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: staffController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: staffController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @author Jannati Tajrimin Mitu
+ */
+
+/**
+ * @module staffController
+ */
+
+const bcrypt = require('bcryptjs');
+const xml2js = require('xml2js');
+const db = require('../config/db');
+
+/**
+ * Uploads staff data from XML input, parses it, clears the existing table,
+ * and inserts the new staff records into the database.
+ * @async
+ * @function uploadStaffAsXML
+ * @param {Object} req - The request object, containing XML data in `req.body`.
+ * @param {Object} res - The response object.
+ */
+const uploadStaffAsXML = async (req, res) => {
+    const xmlData = req.body;
+    console.log('Received XML Data:', xmlData);
+
+    xml2js.parseString(xmlData, async (err, result) => {
+        if (err) {
+            console.error('Error parsing XML:', err);
+            return res.status(400).send('Invalid XML data');
+        }
+
+        const rows = result.root.row;
+        try {
+            await clearTable('Staff');
+            for (const row of rows) {
+                const staff_id = row.staff_id &amp;&amp; row.staff_id[0];
+                const Name = row.Name &amp;&amp; row.Name[0];
+                const Role = row.Role &amp;&amp; row.Role[0];
+                const dept_id = row.dept_id &amp;&amp; row.dept_id[0];
+                const Email = row.Email &amp;&amp; row.Email[0];
+                const Password = row.Password &amp;&amp; row.Password[0];
+                const Phone = row.Phone &amp;&amp; row.Phone[0];
+                const resetToken = row.resetToken &amp;&amp; row.resetToken[0];
+                const resetTokenExpires = row.resetTokenExpires &amp;&amp; row.resetTokenExpires[0];
+
+                if (staff_id &amp;&amp; Name &amp;&amp; Role &amp;&amp; dept_id &amp;&amp; Email &amp;&amp; Password &amp;&amp; Phone) {
+                    const hashedPassword = await bcrypt.hash(Password, 10);
+                    await insertXmlStaffIntoDatabase({
+                        staff_id,
+                        Name,
+                        Role,
+                        dept_id,
+                        Email,
+                        hashedPassword,
+                        Phone,
+                        resetToken,
+                        resetTokenExpires
+                    });
+                } else {
+                    console.warn('Skipping incomplete row:', row);
+                }
+            }
+            res.status(200).send('XML data imported successfully.');
+        } catch (error) {
+            console.error('Error importing XML data:', error);
+            res.status(500).send('Error importing XML data.');
+        }
+    });
+};
+
+/**
+ * Inserts a staff record into the database.
+ * @function insertXmlStaffIntoDatabase
+ * @param {Object} data - The staff data object.
+ * @returns {Promise} - Resolves with query results or rejects with an error.
+ */
+const insertXmlStaffIntoDatabase = (data) => {
+    return new Promise((resolve, reject) => {
+        const query = 'INSERT INTO Staff (staff_id, Name, Role, dept_id, Email, Password, Phone , resetToken, resetTokenExpires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        db.query(query, [data.staff_id, data.Name, data.Role, data.dept_id, data.Email, data.hashedPassword, data.Phone, data.resetToken, data.resetTokenExpires], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+
+/**
+ * Clears all records from the specified table.
+ * @function clearTable
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise} - Resolves when the table is cleared or rejects with an error.
+ */
+const clearTable = (tableName) => {
+    return new Promise((resolve, reject) => {
+        const query = `DELETE FROM ${tableName}`;
+        db.query(query, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+
+/**
+ * Fetches a staff member by email.
+ * @function getStaffByEmail
+ * @param {string} email - The staff member's email.
+ * @returns {Promise&lt;Object>} - Resolves with the staff member's data or rejects with an error.
+ */
+const getStaffByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM Staff WHERE email = ?";
+        db.query(sql, [email], (err, result) => {
+            if (err) return reject(err);
+            resolve(result[0]);
+        });
+    });
+};
+
+/**
+ * Fetches a staff member by reset token.
+ * @function getStaffByResetToken
+ * @param {string} token - The reset token.
+ * @returns {Promise&lt;Object>} - Resolves with the staff member's data or rejects with an error.
+ */
+const getStaffByResetToken = (token) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT * FROM Staff WHERE resetToken = ? AND resetTokenExpires > NOW()";
+        db.query(sql, [token], (err, result) => {
+            if (err) return reject(err);
+            resolve(result[0]);
+        });
+    });
+};
+
+/**
+ * Fetches the department of a staff member by their ID.
+ * @function getDepartmentByStaffId
+ * @param {string} staff_id - The staff member's ID.
+ * @returns {Promise&lt;Object|null>} - Resolves with the department data or null if not found.
+ */
+const getDepartmentByStaffId = (staff_id) => {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT Department.* 
+            FROM Staff 
+            INNER JOIN Department ON Staff.dept_id = Department.dept_id 
+            WHERE Staff.staff_id = ?`;
+        db.query(sql, [staff_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result.length > 0 ? result[0] : null);
+        });
+    });
+};
+
+/**
+ * Fetches all staff members by department ID.
+ * @function getStaffByDepartmentId
+ * @param {string} dept_id - The department ID.
+ * @returns {Promise&lt;Array>} - Resolves with an array of staff members.
+ */
+const getStaffByDepartmentId = (dept_id) => {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT * FROM Staff WHERE dept_id = ?`;
+        db.query(sql, [dept_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
+
+/**
+ * Fetches a staff member by their ID.
+ * @function getStaffById
+ * @param {string} staff_id - The staff member's ID.
+ * @returns {Promise&lt;Object>} - Resolves with the staff member's data.
+ */
+const getStaffById = (staff_id) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM Staff WHERE staff_id = ?';
+        db.query(sql, [staff_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result[0]);
+        });
+    });
+};
+
+/**
+ * Updates a staff member's profile by their ID.
+ * @function updateStaffById
+ * @param {string} staff_id - The staff member's ID.
+ * @param {Object} updatedData - The updated staff data.
+ * @returns {Promise} - Resolves when the update is successful.
+ */
+const updateStaffById = (staff_id, updatedData) => {
+    return new Promise((resolve, reject) => {
+        const { Name, Role, Email, Phone } = updatedData;
+        const sql = 'UPDATE Staff SET Name = ?, Role = ?, Email = ?, Phone = ? WHERE staff_id = ?';
+        db.query(sql, [Name, Role, Email, Phone, staff_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
+
+/**
+ * Adds a new staff member to a department.
+ * @function addNewStaffToDepartment
+ * @param {string} dept_id - The department ID.
+ * @param {Object} staffData - The staff data.
+ * @param {string} hashedPassword - The hashed password.
+ * @returns {Promise} - Resolves when the staff member is added.
+ */
+const addNewStaffToDepartment = (dept_id, staffData, hashedPassword) => {
+    return new Promise((resolve, reject) => {
+        const { Name, Role, Email, Phone } = staffData;
+        const sql = `
+            INSERT INTO Staff (Name, Role, dept_id, Email, Phone, Password) 
+            VALUES (?, ?, ?, ?, ?, ?)`;
+        db.query(sql, [Name, Role, dept_id, Email, Phone, hashedPassword], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
+
+/**
+ * Deletes a staff member by their ID.
+ * @function deleteDepartmentStaffById
+ * @param {string} staff_id - The staff member's ID.
+ * @returns {Promise} - Resolves when the staff member is deleted.
+ */
+const deleteDepartmentStaffById = (staff_id) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'DELETE FROM Staff WHERE staff_id = ?';
+        db.query(sql, [staff_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
+
+module.exports = {
+    uploadStaffAsXML,
+    getStaffByEmail,
+    getStaffByResetToken,
+    getDepartmentByStaffId,
+    getStaffByDepartmentId,
+    getStaffById,
+    updateStaffById,
+    addNewStaffToDepartment,
+    deleteDepartmentStaffById
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-staffController.html">staffController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Oct 30 2024 20:38:09 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

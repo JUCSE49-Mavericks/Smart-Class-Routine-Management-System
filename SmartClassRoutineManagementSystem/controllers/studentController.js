@@ -1,17 +1,26 @@
+/**
+ * @author Jannati Tajrimin Mitu
+ * @module studentController
+ */
 const bcrypt = require('bcryptjs');
 const xml2js = require('xml2js');
 const db = require('../config/db');
-
+/**
+ * Uploads student data from XML input, clears the existing student table, 
+ * and inserts new student records into the database.
+ * @async
+ * @function uploadStudentAsXML
+ * @param {Object} req - The request object containing XML data in `req.body`.
+ * @param {Object} res - The response object.
+ */
 const uploadStudentAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData);
-
     xml2js.parseString(xmlData, async (err, result) => {
         if (err) {
             console.error('Error parsing XML:', err);
             return res.status(400).send('Invalid XML data');
         }
-
         const rows = result.root.row;
         try {
             await clearTable('Student');
@@ -28,7 +37,6 @@ const uploadStudentAsXML = async (req, res) => {
                 const Phone = row.Phone && row.Phone[0];
                 const resetToken = row.resetToken && row.resetToken[0];
                 const resetTokenExpires = row.resetTokenExpires && row.resetTokenExpires[0];
-
                 if (Name && Gender && session_id && Class_roll && Exam_roll && Registration_no && Email && Password && Phone) {
                     const hashedPassword = await bcrypt.hash(Password, 10);
                     await insertXmlStudentIntoDatabase({
@@ -56,7 +64,12 @@ const uploadStudentAsXML = async (req, res) => {
         }
     });
 };
-
+/**
+ * Inserts a student record into the database.
+ * @function insertXmlStudentIntoDatabase
+ * @param {Object} data - The student data object.
+ * @returns {Promise<Object>} - Resolves with query results or rejects with an error.
+ */
 const insertXmlStudentIntoDatabase = (data) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO Student (student_id, Name, Gender, session_id, Class_roll, Exam_roll, Registration_no, Email, Password, Phone, resetToken, resetTokenExpires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
@@ -69,7 +82,12 @@ const insertXmlStudentIntoDatabase = (data) => {
         });
     });
 };
-
+/**
+ * Clears all records from the specified table.
+ * @function clearTable
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise} - Resolves when the table is cleared or rejects with an error.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;
@@ -82,7 +100,12 @@ const clearTable = (tableName) => {
         });
     });
 };
-
+/**
+ * Fetches a student by their email.
+ * @function getStudentByEmail
+ * @param {string} email - The student's email.
+ * @returns {Promise<Object>} - Resolves with the student's data or rejects with an error.
+ */
 const getStudentByEmail = (email) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Student WHERE Email = ?";
@@ -92,7 +115,12 @@ const getStudentByEmail = (email) => {
         });
     });
 };
-
+/**
+ * Fetches a student by their reset token.
+ * @function getStudentByResetToken
+ * @param {string} token - The reset token.
+ * @returns {Promise<Object>} - Resolves with the student's data or rejects with an error.
+ */
 const getStudentByResetToken = (token) => {
     
     return new Promise((resolve, reject) => {
@@ -103,7 +131,12 @@ const getStudentByResetToken = (token) => {
         });
     });
 };
-
+/**
+ * Fetches session details by a student's ID.
+ * @function getSessionByStudentId
+ * @param {string} student_id - The student's ID.
+ * @returns {Promise<Object|null>} - Resolves with session details or null if not found.
+ */
 const getSessionByStudentId = (student_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -122,6 +155,12 @@ const getSessionByStudentId = (student_id) => {
         });
     });
 };
+/**
+ * Fetches session details by a student's ID.
+ * @function getStudentsBySessionId
+ * @param {string} session_id - The session's ID.
+ * @returns {Promise<Object|null>} - Resolves with session details or null if not found.
+ */
 const getStudentsBySessionId = (session_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -134,8 +173,13 @@ const getStudentsBySessionId = (session_id) => {
         });
     });
 };
-
-
+/**
+ * Updates a student's profile.
+ * @function updateStudentProfile
+ * @param {integer} student_id - The student's ID.
+ * @param {Object} updatedData - The updated profile data.
+ * @returns {Promise<Object>} - Resolves with the update result or rejects with an error.
+ */
 const updateStudentProfile = (student_id, updatedData) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -144,7 +188,6 @@ const updateStudentProfile = (student_id, updatedData) => {
             WHERE student_id = ?`;
         
         const { Name, Gender, Class_roll, Exam_roll, Registration_no, Email, Phone } = updatedData;
-
         db.query(sql, [Name, Gender, Class_roll, Exam_roll, Registration_no, Email, Phone, student_id], (err, result) => {
             if (err) {
                 return reject(err);
@@ -153,11 +196,15 @@ const updateStudentProfile = (student_id, updatedData) => {
         });
     });
 };
-
+/**
+ * Retrieves a student record by ID from the database.
+ * @function getStudentById
+ * @param {integer} student_id - The student's ID.
+ * @returns {Promise<null>} - A promise that resolves with the student object if found
+ */
 const getStudentById = (student_id) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM Student WHERE student_id = ?';
-
         db.query(sql, [student_id], (err, result) => {
             if (err) {
                 return reject(err);
@@ -170,7 +217,12 @@ const getStudentById = (student_id) => {
         });
     });
 };
-
+/**
+ * Deletes a student by their ID.
+ * @function deleteStudentById
+ * @param {integer} student_id - The student's ID.
+ * @returns {Promise<Object>} - Resolves with a success message or error if not found.
+ */
 const deleteStudentById = (student_id) => {
     return new Promise((resolve, reject) => {
         const sql = 'DELETE FROM Student WHERE student_id = ?';
@@ -187,7 +239,22 @@ const deleteStudentById = (student_id) => {
         });
     });
 };
-
+/**
+ * Adds a new student to the database.
+ *
+ * @param {Object} studentData - An object containing the student's information.
+ * @param {string} studentData.Name - The name of the student.
+ * @param {string} studentData.Gender - The gender of the student.
+ * @param {number} studentData.session_id - The session ID of the student.
+ * @param {number} studentData.Class_roll - The class roll number of the student.
+ * @param {number} studentData.Exam_roll - The exam roll number of the student.
+ * @param {number} studentData.Registration_no - The registration number of the student.
+ * @param {string} studentData.Email - The email of the student.
+ * @param {string} studentData.Password - The plain password of the student (unused in the query).
+ * @param {string} studentData.Phone - The phone number of the student.
+ * @param {string} hashedPassword - The hashed version of the student's password.
+ * @returns {Promise<Object>} A promise that resolves with a success message and the newly added student's ID. It rejects with an error if the operation fails.
+ */
 const addNewStudent = (studentData, hashedPassword) => {
     return new Promise((resolve, reject) => {
         const { Name, Gender, session_id, Class_roll, Exam_roll, Registration_no, Email, Password, Phone } = studentData;
@@ -203,7 +270,6 @@ const addNewStudent = (studentData, hashedPassword) => {
         });
     });
 };
-
 module.exports = {
     uploadStudentAsXML,
     getStudentByEmail,

@@ -1,34 +1,116 @@
-const db = require('../config/db');
+const pool = require('../config/db');  // Import database pool
 
-// Function to create the classRoutine table
-const createclassRoutineTable = () => {
-    const query = `
-        CREATE TABLE IF NOT EXISTS classRoutine (
-        
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            Dept_id INT,  -- Added dept_id column
-            Teacher_id INT, -- Added Teacher_id column
-            Day VARCHAR(50) NOT NULL,
-            Year VARCHAR(10) NOT NULL,
-            Time VARCHAR(50) NOT NULL,
-            Course VARCHAR(255) NOT NULL,
-            Room VARCHAR(255) NOT NULL,  
-            FOREIGN KEY (Dept_id) REFERENCES department(dept_id),
-            FOREIGN KEY (Teacher_id) REFERENCES teacher(teacher_id)
-        );
-    `;
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error creating table:', err);
-            throw err;
+/**
+ * ClassRoutineModel handles database operations related to the class routine, 
+ * including deleting and inserting routine entries.
+ */
+class ClassRoutineModel {
+   /**
+     * Deletes all routine entries associated with a specified department ID before
+     * inserting a new routine.
+     * @async
+     * @param {number} deptId - The department ID whose entries should be deleted.
+     * @throws {Error} If there is an issue with the database deletion.
+     */
+    async deleteEntriesByDeptId(deptId) {
+        const query = 'DELETE FROM classRoutine WHERE deptId = ?';
+
+        try {
+            await new Promise((resolve, reject) => {
+                pool.query(query, [deptId], (error, results) => {
+                    if (error) {
+                        console.error("Database deletion error in deleteEntriesByDeptId:", error);
+                        return reject(error);
+                    }
+                    resolve(results);
+                });
+            });
+            // console.log(`Deleted previous routine entries for Dept_id ${deptId}`);
+        } catch (error) {
+            console.error('Failed to delete routine entries:', error);
+            throw new Error('Database deletion failed');
         }
-        console.log('classRoutine table created or already exists');
-    });
-};
+    }
+
+  
+
+        /**
+     * Inserts a single routine entry into the `classRoutine` table.
+     * @async
+     * @param {Object} entry - The routine entry to insert.
+     * @param {number} entry.deptId - Department ID of the entry.
+     * @param {number} entry.teacherId - Teacher's unique ID.
+     * @param {string} entry.teacherName - Name of the teacher.
+     * @param {string} entry.day - Day of the class.
+     * @param {string} entry.class - Class year or grade.
+     * @param {Object} entry.time - Object containing start and end times.
+     * @param {string} entry.time.start - Start time of the class.
+     * @param {string} entry.time.end - End time of the class.
+     * @param {string} entry.courseTitle - Title of the course.
+     * @param {string} entry.room - Room where the class will be held.
+     * @throws {Error} If there is an issue with the database insertion.
+     */
+    async insertRoutineEntry(entry) {
+        // Debugging log to check the entry
+        // console.log('Attempting to insert entry:', entry);
+
+        const query = `
+            INSERT INTO classRoutine (
+                deptId, teacherId, teacher, day, year, startTime, endTime, course, room
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const values = [
+            entry.Dept_id,
+            entry.Teacher_id,
+            entry.teacher_name,
+            entry.day,
+            entry.class,
+            entry.time.start,
+            entry.time.end,
+            entry.course_title,
+            entry.room
+        ];
+        
+
+
+        try {
+            await new Promise((resolve, reject) => {
+                pool.query(query, values, (error, results) => {
+                    if (error) {
+                        console.error("Database insertion error in insertRoutineEntry:", error);
+                        return reject(error);
+                    }
+                    resolve(results);
+                });
+            });
+            // console.log(`Inserted routine entry for course ID ${entry.course_id}`);
+        } catch (error) {
+            console.error('Failed to insert routine entry:', error);
+            throw new Error('Database insertion failed');
+        }
+    }
 
 
 
 
-module.exports = {
-    createclassRoutineTable
-};
+        /**
+     * Inserts an entire routine, deleting previous entries for the department first.
+     * @async
+     * @param {Array<Object>} routine - Array of routine entries to insert.
+     * @param {number} deptId - Department ID whose existing entries should be deleted.
+     * @throws {Error} If there is an issue with deletion or insertion.
+     */
+    async insertRoutine(routine, deptId) {
+        // Delete previous entries for the given department ID
+        await this.deleteEntriesByDeptId(deptId);
+
+        // Insert new routine entries
+        for (const entry of routine) {
+            // console.log('Insering entry:', entry);
+            await this.insertRoutineEntry(entry);
+        }
+    }
+}
+
+module.exports = new ClassRoutineModel();

@@ -5,10 +5,12 @@ const createClassRepresentativeTable = () => {
     const query = `
         CREATE TABLE IF NOT EXISTS ClassRepresentative (
             cr_id INT AUTO_INCREMENT PRIMARY KEY,
-            student_id INT NOT NULL,
             exam_year_id INT NOT NULL,
+            student_id INT NOT NULL,
+            role ENUM('Male', 'Female') NOT NULL,
+            FOREIGN KEY (exam_year_id) REFERENCES ExamYear(exam_year_id),
             FOREIGN KEY (student_id) REFERENCES Student(student_id),
-            FOREIGN KEY (exam_year_id) REFERENCES ExamYear(exam_year_id)
+            UNIQUE (exam_year_id, role)
         );
     `;
     db.query(query, (err, results) => {

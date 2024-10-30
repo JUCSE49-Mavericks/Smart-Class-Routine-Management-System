@@ -10,6 +10,7 @@ const viewClassRoutineController = require('../controllers/viewClassRoutineContr
 router.get('/class-routine', viewClassRoutineController.getClassRoutine);
 router.get('/teachers', viewClassRoutineController.getTeachers);  // Controller should have a getTeachers function
 router.get('/courses', viewClassRoutineController.getCourses);    // Add route for fetching courses
+//router.get('/rooms',viewClassRoutineController.getRooms);
 router.get('/', viewClassRoutineController.getRoutines); // Handles general /api/routines endpoint with viewMode
 
 module.exports = router;

@@ -1,8 +1,18 @@
 const db = require('../config/db'); // Ensure this path points to your database configuration
 
+/**
+ * @module RoutineService
+ * @class RoutineService
+ * Service for managing and retrieving class routine and course data from the database.
+ */
 class RoutineService {
-
-    // Fetch all courses
+    /**
+     * Fetch all courses.
+     * @async
+     * @method getAllCourses
+     * @returns {Promise<Array>} List of all courses.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getAllCourses() {
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM courses';
@@ -13,7 +23,13 @@ class RoutineService {
         });
     }
 
-    // Fetch all routines from the class_routine table with course and teacher information
+    /**
+     * Fetch all routines from the class_routine table with course and teacher information.
+     * @async
+     * @method getAllRoutines
+     * @returns {Promise<Array>} List of all routines.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getAllRoutines() {
         return new Promise((resolve, reject) => {
             const query = `
@@ -31,7 +47,14 @@ class RoutineService {
         });
     }
 
-    // Fetch routines by a specific day
+    /**
+     * Fetch routines by a specific day.
+     * @async
+     * @method getRoutinesByDay
+     * @param {string} day - The day to filter routines.
+     * @returns {Promise<Array>} List of routines for the specified day.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getRoutinesByDay(day) {
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM class_routine WHERE day = ?';
@@ -42,7 +65,14 @@ class RoutineService {
         });
     }
 
-    // Fetch routines for a specific year
+    /**
+     * Fetch routines for a specific year.
+     * @async
+     * @method getRoutinesByYear
+     * @param {number} year - The year to filter routines.
+     * @returns {Promise<Array>} List of routines for the specified year.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getRoutinesByYear(year) {
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM class_routine WHERE year = ?';
@@ -53,7 +83,15 @@ class RoutineService {
         });
     }
 
-    // Fetch routines by start time and end time
+    /**
+     * Fetch routines by start time and end time.
+     * @async
+     * @method getRoutinesByTimeRange
+     * @param {string} startTime - The start time for filtering.
+     * @param {string} endTime - The end time for filtering.
+     * @returns {Promise<Array>} List of routines within the specified time range.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getRoutinesByTimeRange(startTime, endTime) {
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM class_routine WHERE start_time >= ? AND end_time <= ?';
@@ -64,7 +102,14 @@ class RoutineService {
         });
     }
 
-    // Fetch routines by course type (lab/theory)
+    /**
+     * Fetch routines by course type (lab/theory).
+     * @async
+     * @method getRoutinesByCourseType
+     * @param {string} courseType - The course type to filter routines.
+     * @returns {Promise<Array>} List of routines for the specified course type.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getRoutinesByCourseType(courseType) {
         return new Promise((resolve, reject) => {
             const query = `
@@ -80,7 +125,14 @@ class RoutineService {
         });
     }
 
-    // Fetch routines by room
+    /**
+     * Fetch routines by room.
+     * @async
+     * @method getRoutinesByRoom
+     * @param {string} room - The room to filter routines.
+     * @returns {Promise<Array>} List of routines for the specified room.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getRoutinesByRoom(room) {
         return new Promise((resolve, reject) => {
             const query = 'SELECT * FROM class_routine WHERE room = ?';
@@ -91,7 +143,14 @@ class RoutineService {
         });
     }
 
-    // Fetch routines by teacher
+    /**
+     * Fetch routines by teacher.
+     * @async
+     * @method getRoutinesByTeacher
+     * @param {string} teacherName - The name of the teacher to filter routines.
+     * @returns {Promise<Array>} List of routines for the specified teacher.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getRoutinesByTeacher(teacherName) {
         return new Promise((resolve, reject) => {
             const query = `
@@ -107,13 +166,19 @@ class RoutineService {
         });
     }
 
-    // Fetch all teachers
+    /**
+     * Fetch all teachers.
+     * @async
+     * @method getAllTeachers
+     * @returns {Promise<Array>} List of all teacher names.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getAllTeachers() {
         return new Promise((resolve, reject) => {
             const query = 'SELECT teacher_name FROM teachers';
             db.query(query, (error, results) => {
                 if (error) {
-                    console.error('Error in getAllTeachers:', error); // Add detailed error logging
+                    console.error('Error in getAllTeachers:', error); // Detailed error logging
                     return reject(error);
                 }
                 const teachers = results.map(result => result.teacher_name);
@@ -122,7 +187,20 @@ class RoutineService {
         });
     }
 
-    // Fetch filtered routines based on multiple criteria
+    /**
+     * Fetch filtered routines based on multiple criteria.
+     * @async
+     * @method getFilteredRoutines
+     * @param {Object} filters - The filters to apply.
+     * @param {string} [filters.day] - The day to filter routines.
+     * @param {number} [filters.year] - The year to filter routines.
+     * @param {Object} [filters.durationRange] - The duration range for filtering.
+     * @param {string} [filters.courseType] - The course type to filter routines.
+     * @param {string} [filters.room] - The room to filter routines.
+     * @param {string} [filters.teacher] - The teacher to filter routines.
+     * @returns {Promise<Array>} List of filtered routines.
+     * @throws {Error} If there is an error in the database query.
+     */
     static async getFilteredRoutines(filters) {
         return new Promise((resolve, reject) => {
             const { day, year, durationRange, courseType, room, teacher } = filters;
@@ -172,12 +250,8 @@ class RoutineService {
             } else {
                 queryParams.push(null, null);
             }
-            if (durationRange) {
-                const { start, end } = durationRange; // Assume durationRange is an object with start and end properties
-                query += ' AND class_routine.start_time >= ? AND class_routine.end_time <= ?';
-                queryParams.push(start, end);
-            }
 
+            // Execute the query
             db.query(query, queryParams, (err, results) => {
                 if (err) return reject(err);
                 resolve(results);

@@ -1,5 +1,22 @@
 // controllers/classRepresentativeController.js
+
+/**
+ * Controller for fetching class representative data based on exam year ID.
+ * @module classRepresentativeController
+ */
+
 const { getClassRepresentativeByExamYearId } = require('../models/classRepresentativeModel');
+
+/**
+ * Fetches the class representative by a given exam year ID.
+ * Sends the representative data as a JSON response if found, otherwise sends a 404 error.
+ * @async
+ * @function fetchClassRepresentativeByExamYearId
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} Responds with JSON data for the class representative or an error message.
+ * @throws {Error} Database error if there's an issue fetching the data.
+ */
 
 const fetchClassRepresentativeByExamYearId = async (req, res) => {
     const exam_year_id = req.params.exam_year_id;

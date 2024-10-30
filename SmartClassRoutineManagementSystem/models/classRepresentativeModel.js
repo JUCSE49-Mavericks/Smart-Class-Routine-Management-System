@@ -1,5 +1,22 @@
 // models/classRepresentativeModel.js
+
+/**
+ * Model for managing ClassRepresentative table and data.
+ * @module models/classRepresentativeModel
+ */
+
 const db = require('../config/db');
+
+/**
+ * Creates the ClassRepresentative table in the database if it doesn't already exist.
+ * The table contains the class representative's ID, exam year ID, student ID, and role (Male or Female).
+ * Sets up foreign key relationships with the ExamYear and Student tables.
+ *
+ * @function createClassRepresentativeTable
+ * @throws {Error} If there is an issue creating the table.
+ */
+
+
 
 const createClassRepresentativeTable = () => {
     const query = `
@@ -21,6 +38,17 @@ const createClassRepresentativeTable = () => {
         console.log('ClassRepresentative table created or already exists');
     });
 };
+
+/**
+ * Fetches class representatives based on the given exam year ID.
+ *
+ * @function getClassRepresentativeByExamYearId
+ * @param {number} exam_year_id - The ID of the exam year to search for.
+ * @returns {Promise<Object[]>} Resolves to an array of class representative records.
+ * @throws {Error} If there is an issue fetching the data.
+ */
+
+
 
 const getClassRepresentativeByExamYearId = (exam_year_id) => {
     const query = `

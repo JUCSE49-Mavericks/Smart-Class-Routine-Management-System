@@ -11,7 +11,7 @@ const fetchClassRepresentativeByExamYearId = async (req, res) => {
             return res.status(404).json({ error: 'Class Representative not found' });
         }
 
-        console.log(results);
+        // console.log(results);
 
         res.json(results);
     } catch (error) {

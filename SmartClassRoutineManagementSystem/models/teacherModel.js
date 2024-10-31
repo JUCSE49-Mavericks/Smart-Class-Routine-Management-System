@@ -36,9 +36,13 @@ const updateProfileImage = (teacher_id, profileImage, callback) => {
     db.query(query, [profileImage, teacher_id], callback);
 };
 
-// Function to get all teachers from the database
+// Function to get all teachers from the database along with their department names
 const getAllTeachers = () => {
-    const query = 'SELECT * FROM Teacher';
+    const query = `
+        SELECT Teacher.*, Department.Dept_Name 
+        FROM Teacher 
+        JOIN Department ON Teacher.dept_id = Department.dept_id
+    `;
 
     return new Promise((resolve, reject) => {
         db.query(query, (error, results) => {
@@ -50,6 +54,7 @@ const getAllTeachers = () => {
         });
     });
 };
+
 
 module.exports = {
     createXmlDataTeacherTable,

@@ -24,7 +24,7 @@ const createExamCommitteeTable = () => {
 const getTeachersByExamYearId = (exam_year_id) => {
     // console.log('holla');
     const query = `
-      SELECT t.teacher_id, t.Name, t.Designation, t.Email, t.Phone, t.Abvr, d.Dept_Name
+      SELECT t.teacher_id, t.Name, t.Designation
       FROM Teacher t
       JOIN Department d ON t.dept_id = d.dept_id
       JOIN Session s ON s.dept_id = d.dept_id

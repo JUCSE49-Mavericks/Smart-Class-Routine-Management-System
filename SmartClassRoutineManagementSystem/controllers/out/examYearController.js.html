@@ -1,4 +1,32 @@
-//controllers/examYearController.js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: examYearController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: examYearController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//controllers/examYearController.js
 
 /**
  * @module controllers/examYearController
@@ -25,7 +53,7 @@ const {
  * @async
  * @param {Object} req - The request object containing XML data in the body.
  * @param {Object} res - The response object used to send a response.
- * @returns {Promise<void>} Resolves when the XML data is imported successfully.
+ * @returns {Promise&lt;void>} Resolves when the XML data is imported successfully.
  */
 const uploadExamYearAsXML = async (req, res) => {
     const xmlData = req.body;
@@ -41,17 +69,17 @@ const uploadExamYearAsXML = async (req, res) => {
             await clearTable('ExamYear'); // Clear the table before inserting new data
 
             for (const row of rows) {
-                const exam_year_id = row.exam_year_id && row.exam_year_id[0];
-                const session_id = row.session_id && row.session_id[0];
-                const Education_level = row.Education_level && row.Education_level[0];
-                const Exam_year = row.Exam_year && row.Exam_year[0];
-                const Year = row.Year && row.Year[0];
-                const Semester = row.Semester && row.Semester[0];
-                const Start_date = row.Start_date && row.Start_date[0];
-                const End_date = row.End_date && row.End_date[0];
+                const exam_year_id = row.exam_year_id &amp;&amp; row.exam_year_id[0];
+                const session_id = row.session_id &amp;&amp; row.session_id[0];
+                const Education_level = row.Education_level &amp;&amp; row.Education_level[0];
+                const Exam_year = row.Exam_year &amp;&amp; row.Exam_year[0];
+                const Year = row.Year &amp;&amp; row.Year[0];
+                const Semester = row.Semester &amp;&amp; row.Semester[0];
+                const Start_date = row.Start_date &amp;&amp; row.Start_date[0];
+                const End_date = row.End_date &amp;&amp; row.End_date[0];
 
                 // Check if all required fields are present
-                if (session_id && Education_level && Exam_year && Year && Semester && Start_date && End_date) {
+                if (session_id &amp;&amp; Education_level &amp;&amp; Exam_year &amp;&amp; Year &amp;&amp; Semester &amp;&amp; Start_date &amp;&amp; End_date) {
                     // const hashedPassword = await bcrypt.hash(Password, 10);
                     await insertXmlExamYearIntoDatabase({ exam_year_id, session_id, Education_level, Exam_year, Year, Semester, Start_date, End_date });
                 } else {
@@ -72,7 +100,7 @@ const uploadExamYearAsXML = async (req, res) => {
  * 
  * @function insertXmlExamYearIntoDatabase
  * @param {Object} row - The exam year data to insert.
- * @returns {Promise<void>} Resolves when the data is inserted successfully.
+ * @returns {Promise&lt;void>} Resolves when the data is inserted successfully.
  */
 const insertXmlExamYearIntoDatabase = (row) => {
     return new Promise((resolve, reject) => {
@@ -93,7 +121,7 @@ const insertXmlExamYearIntoDatabase = (row) => {
  * 
  * @function getExamYearsByDepartmentId
  * @param {number} dept_id - The department ID.
- * @returns {Promise<Array>} Resolves with an array of exam years.
+ * @returns {Promise&lt;Array>} Resolves with an array of exam years.
  */
 const getExamYearsByDepartmentId = (dept_id) => {
     return new Promise((resolve, reject) => {
@@ -124,7 +152,7 @@ const getExamYearsByDepartmentId = (dept_id) => {
  * 
  * @function clearTable
  * @param {string} tableName - The name of the table to clear.
- * @returns {Promise<void>} Resolves when the table is cleared.
+ * @returns {Promise&lt;void>} Resolves when the table is cleared.
  */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
@@ -145,7 +173,7 @@ const clearTable = (tableName) => {
  * 
  * @function getExamYearsBySessionId
  * @param {number} session_id - The session ID.
- * @returns {Promise<Array>} Resolves with an array of exam years.
+ * @returns {Promise&lt;Array>} Resolves with an array of exam years.
  */
 const getExamYearsBySessionId = (session_id) => {
     return new Promise((resolve, reject) => {
@@ -167,7 +195,7 @@ const getExamYearsBySessionId = (session_id) => {
  * @function addNewExamYear
  * @param {Object} req - The request object containing exam year data in the body.
  * @param {Object} res - The response object used to send a response.
- * @returns {Promise<void>} Resolves when the exam year is added successfully.
+ * @returns {Promise&lt;void>} Resolves when the exam year is added successfully.
  */
 const addNewExamYear = (req, res) => {
     const { Year, Semester, Exam_year, Education_level, Start_date, End_date, session_id } = req.body;
@@ -191,7 +219,7 @@ const addNewExamYear = (req, res) => {
  * @function deleteExamYear
  * @param {Object} req - The request object containing the exam year ID in the parameters.
  * @param {Object} res - The response object used to send a response.
- * @returns {Promise<void>} Resolves when the exam year is deleted successfully.
+ * @returns {Promise&lt;void>} Resolves when the exam year is deleted successfully.
  */
 const deleteExamYear = (req, res) => {
     const { exam_year_id } = req.params;
@@ -215,7 +243,7 @@ const deleteExamYear = (req, res) => {
  * @async
  * @param {Object} req - The request object containing the exam year ID in the parameters.
  * @param {Object} res - The response object used to send a response.
- * @returns {Promise<void>} Resolves with the exam year details.
+ * @returns {Promise&lt;void>} Resolves with the exam year details.
  */
 const fetchExamYearById = async (req, res) => {
     const exam_year_id = req.params.exam_year_id;
@@ -244,7 +272,7 @@ const fetchExamYearById = async (req, res) => {
  * @async
  * @param {Object} req - The request object containing the exam year ID in the parameters.
  * @param {Object} res - The response object used to send a response.
- * @returns {Promise<void>} Resolves with the exam committee details.
+ * @returns {Promise&lt;void>} Resolves with the exam committee details.
  */
 const fetchExamCommitteeByExamYearId = async (req, res) => {
     const exam_year_id = req.params.exam_year_id;
@@ -275,3 +303,26 @@ module.exports = {
     fetchExamYearById,
     fetchExamCommitteeByExamYearId
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_examYearController.html">controllers/examYearController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Nov 01 2024 17:17:08 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

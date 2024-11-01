@@ -1,6 +1,23 @@
+/**
+ * @module models/departmentChairmanModel
+ */
 
 const db = require('../config/db');
 
+
+/**
+ * Creates the DepartmentChairman table if it does not already exist.
+ * The table associates department IDs with teacher IDs, establishing a
+ * many-to-many relationship between departments and their chairpersons.
+ * 
+ * The primary key for this table is a composite key consisting of 
+ * department ID and teacher ID. Both fields reference the corresponding
+ * IDs in the Department and Teacher tables.
+ * 
+ * @function createChairmanToDepartmentTable
+ * @returns {Promise<void>} - A promise that resolves when the table creation is complete.
+ * @throws {Error} Throws an error if the table creation fails.
+ */
 const createChairmanToDepartmentTable = () => {
     const query = `
         CREATE TABLE IF NOT EXISTS DepartmentChairman (

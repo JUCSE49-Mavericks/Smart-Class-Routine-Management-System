@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: DeptController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: DeptController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @module controllers/DeptController
  */
 
@@ -17,7 +45,7 @@ const { getDepartmentBySessionId } = require('./sessionController');
  * @async
  * @param {Object} req - The request object, containing the XML data in the body.
  * @param {Object} res - The response object used to send a response.
- * @returns {Promise<void>} Resolves when the data is successfully imported.
+ * @returns {Promise&lt;void>} Resolves when the data is successfully imported.
  */
 const uploadDeptAsXML = async (req, res) => {
     const xmlData = req.body;
@@ -34,15 +62,15 @@ const uploadDeptAsXML = async (req, res) => {
             await clearTable('Department'); // Clear the table before inserting new data
 
             for (const row of rows) {
-                const dept_id = row.dept_id && row.dept_id[0];
-                const Dept_Name = row.Dept_Name && row.Dept_Name[0];
-                const Descript = row.Descript && row.Descript[0];
-                const Phone = row.Phone && row.Phone[0];
-                const Fax = row.Fax && row.Fax[0];
-                const Email = row.Email && row.Email[0];
+                const dept_id = row.dept_id &amp;&amp; row.dept_id[0];
+                const Dept_Name = row.Dept_Name &amp;&amp; row.Dept_Name[0];
+                const Descript = row.Descript &amp;&amp; row.Descript[0];
+                const Phone = row.Phone &amp;&amp; row.Phone[0];
+                const Fax = row.Fax &amp;&amp; row.Fax[0];
+                const Email = row.Email &amp;&amp; row.Email[0];
 
                 // Check if all required fields are present
-                if (Dept_Name && Descript && Phone && Fax && Email) {
+                if (Dept_Name &amp;&amp; Descript &amp;&amp; Phone &amp;&amp; Fax &amp;&amp; Email) {
                     await insertXmlDeptIntoDatabase({ dept_id, Dept_Name, Descript, Phone, Fax, Email });
                 } else {
                     console.warn('Skipping incomplete row:', row);
@@ -67,7 +95,7 @@ const uploadDeptAsXML = async (req, res) => {
  * @param {string} row.Phone - The phone number of the department.
  * @param {string} row.Fax - The fax number of the department.
  * @param {string} row.Email - The email of the department.
- * @returns {Promise<void>} Resolves when the insert operation is complete.
+ * @returns {Promise&lt;void>} Resolves when the insert operation is complete.
  */
 const insertXmlDeptIntoDatabase = (row) => {
     return new Promise((resolve, reject) => {
@@ -87,7 +115,7 @@ const insertXmlDeptIntoDatabase = (row) => {
  * Retrieves all departments from the database.
  * 
  * @function getAllDepartments
- * @returns {Promise<Array>} A promise that resolves to an array of department objects.
+ * @returns {Promise&lt;Array>} A promise that resolves to an array of department objects.
  */
 const getAllDepartments = () => {
     return new Promise((resolve, reject) => {
@@ -110,7 +138,7 @@ const getAllDepartments = () => {
  * 
  * @function getDepartmentById
  * @param {string} dept_id - The ID of the department to retrieve.
- * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ * @returns {Promise&lt;Object|null>} A promise that resolves to the department object or null if not found.
  */
 const getDepartmentById = (dept_id) => {
     return new Promise((resolve, reject) => {
@@ -133,7 +161,7 @@ const getDepartmentById = (dept_id) => {
  * 
  * @function getDepartmentByTeacherId
  * @param {string} teacher_id - The ID of the teacher.
- * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ * @returns {Promise&lt;Object|null>} A promise that resolves to the department object or null if not found.
  */
 const getDepartmentByTeacherId = (teacher_id) => {
     return new Promise((resolve, reject) => {
@@ -163,7 +191,7 @@ const getDepartmentByTeacherId = (teacher_id) => {
  * 
  * @function getDepartmentByStudentId
  * @param {string} student_id - The ID of the student.
- * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ * @returns {Promise&lt;Object|null>} A promise that resolves to the department object or null if not found.
  */
 const getDepartmentByStudentId = (student_id) => {
     return new Promise((resolve, reject) => {
@@ -193,7 +221,7 @@ const getDepartmentByStudentId = (student_id) => {
  * 
  * @function getDepartmentByStaffId
  * @param {string} staff_id - The ID of the staff member.
- * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ * @returns {Promise&lt;Object|null>} A promise that resolves to the department object or null if not found.
  */
 const getDepartmentByStaffId = (staff_id) => {
     return new Promise((resolve, reject) => {
@@ -224,7 +252,7 @@ const getDepartmentByStaffId = (staff_id) => {
  * 
  * @function clearTable
  * @param {string} tableName - The name of the table to clear.
- * @returns {Promise<void>} Resolves when the table is cleared.
+ * @returns {Promise&lt;void>} Resolves when the table is cleared.
  */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
@@ -244,7 +272,7 @@ const clearTable = (tableName) => {
  * Retrieves department IDs and names for dropdowns or selection.
  * 
  * @function getDeptIdAndNames
- * @returns {Promise<Array>} A promise that resolves to an array of department ID and name pairs.
+ * @returns {Promise&lt;Array>} A promise that resolves to an array of department ID and name pairs.
  */
 const getDeptIdAndNames = () => {
     return new Promise((resolve, reject) => {
@@ -265,3 +293,26 @@ module.exports = {
     getDepartmentByStudentId,
     getDepartmentByStaffId
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_DeptController.html">controllers/DeptController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Nov 01 2024 17:09:38 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

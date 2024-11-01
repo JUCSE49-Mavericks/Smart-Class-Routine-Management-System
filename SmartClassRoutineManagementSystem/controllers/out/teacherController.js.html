@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: teacherController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: teacherController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @module teacherController
  * @description Controller for managing teacher-related operations, including
  * uploading teacher data from XML, handling image uploads, and managing teacher
@@ -19,7 +47,7 @@ const path = require('path');
  * @function uploadTeacherAsXML
  * @param {Object} req - The request object containing XML data in the body.
  * @param {Object} res - The response object to send the result.
- * @returns {Promise<void>} - A promise that resolves when the import is complete.
+ * @returns {Promise&lt;void>} - A promise that resolves when the import is complete.
  */
 const uploadTeacherAsXML = async (req, res) => {
     const xmlData = req.body;
@@ -35,19 +63,19 @@ const uploadTeacherAsXML = async (req, res) => {
         try {
             await clearTable('Teacher');
             for (const row of rows) {
-                const teacher_id = row.teacher_id && row.teacher_id[0];
-                const Name = row.Name && row.Name[0];
-                const Designation = row.Designation && row.Designation[0];
-                const dept_id = row.dept_id && row.dept_id[0];
-                const Abvr = row.Abvr && row.Abvr[0];
-                const Email = row.Email && row.Email[0];
-                const Password = row.Password && row.Password[0];
-                const Phone = row.Phone && row.Phone[0];
-                const resetToken = row.resetToken && row.resetToken[0];
-                const resetTokenExpires = row.resetTokenExpires && row.resetTokenExpires[0];
+                const teacher_id = row.teacher_id &amp;&amp; row.teacher_id[0];
+                const Name = row.Name &amp;&amp; row.Name[0];
+                const Designation = row.Designation &amp;&amp; row.Designation[0];
+                const dept_id = row.dept_id &amp;&amp; row.dept_id[0];
+                const Abvr = row.Abvr &amp;&amp; row.Abvr[0];
+                const Email = row.Email &amp;&amp; row.Email[0];
+                const Password = row.Password &amp;&amp; row.Password[0];
+                const Phone = row.Phone &amp;&amp; row.Phone[0];
+                const resetToken = row.resetToken &amp;&amp; row.resetToken[0];
+                const resetTokenExpires = row.resetTokenExpires &amp;&amp; row.resetTokenExpires[0];
 
 
-                if (Name && Designation && dept_id && Abvr && Email && Password && Phone) {
+                if (Name &amp;&amp; Designation &amp;&amp; dept_id &amp;&amp; Abvr &amp;&amp; Email &amp;&amp; Password &amp;&amp; Phone) {
                     const hashedPassword = await bcrypt.hash(Password, 10);
                     await insertXmlTeacherIntoDatabase({
                         teacher_id,
@@ -88,7 +116,7 @@ const uploadTeacherAsXML = async (req, res) => {
  * @param {string} data.Phone - The phone number of the teacher.
  * @param {string} data.resetToken - The reset token for password recovery.
  * @param {Date} data.resetTokenExpires - The expiration date for the reset token.
- * @returns {Promise<void>} - A promise that resolves when the insertion is complete.
+ * @returns {Promise&lt;void>} - A promise that resolves when the insertion is complete.
  */
 const insertXmlTeacherIntoDatabase = (data) => {
     return new Promise((resolve, reject) => {
@@ -108,7 +136,7 @@ const insertXmlTeacherIntoDatabase = (data) => {
  * Clear all records from a specified database table.
  * @function clearTable
  * @param {string} tableName - The name of the table to clear.
- * @returns {Promise<void>} - A promise that resolves when the table is cleared.
+ * @returns {Promise&lt;void>} - A promise that resolves when the table is cleared.
  */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
@@ -128,7 +156,7 @@ const clearTable = (tableName) => {
  * Get a teacher by their email address.
  * @function getTeacherByEmail
  * @param {string} email - The email address of the teacher.
- * @returns {Promise<Object|null>} - A promise that resolves to the teacher object or null if not found.
+ * @returns {Promise&lt;Object|null>} - A promise that resolves to the teacher object or null if not found.
  */
 const getTeacherByEmail = (email) => {
     return new Promise((resolve, reject) => {
@@ -145,7 +173,7 @@ const getTeacherByEmail = (email) => {
  * Get a teacher by their reset token.
  * @function getTeacherByResetToken
  * @param {string} token - The reset token of the teacher.
- * @returns {Promise<Object|null>} - A promise that resolves to the teacher object or null if not found.
+ * @returns {Promise&lt;Object|null>} - A promise that resolves to the teacher object or null if not found.
  */
 const getTeacherByResetToken = (token) => {
     return new Promise((resolve, reject) => {
@@ -161,7 +189,7 @@ const getTeacherByResetToken = (token) => {
 /**
  * Get the designations available for teachers from the database.
  * @function getTeacherDesignations
- * @returns {Promise<Array<string>>} - A promise that resolves to an array of designations.
+ * @returns {Promise&lt;Array&lt;string>>} - A promise that resolves to an array of designations.
  */
 const getTeacherDesignations = () => {
     return new Promise((resolve, reject) => {
@@ -181,7 +209,7 @@ const getTeacherDesignations = () => {
  * Get all teachers by their department ID.
  * @function getTeachersByDeptId
  * @param {number} dept_id - The ID of the department.
- * @returns {Promise<Array>} - A promise that resolves to an array of teachers.
+ * @returns {Promise&lt;Array>} - A promise that resolves to an array of teachers.
  */
 const getTeachersByDeptId = (dept_id) => {
     return new Promise((resolve, reject) => {
@@ -205,7 +233,7 @@ const getTeachersByDeptId = (dept_id) => {
  * Get a teacher by their ID.
  * @function getTeacherById
  * @param {number} teacher_id - The ID of the teacher.
- * @returns {Promise<Object|null>} - A promise that resolves to the teacher object or null if not found.
+ * @returns {Promise&lt;Object|null>} - A promise that resolves to the teacher object or null if not found.
  */
 const getTeacherById = (teacher_id) => {
     return new Promise((resolve, reject) => {
@@ -235,7 +263,7 @@ const getTeacherById = (teacher_id) => {
  * @param {string} updateData.Abvr - The new abbreviation for the teacher's designation.
  * @param {string} updateData.Email - The new email address of the teacher.
  * @param {string} updateData.Phone - The new phone number of the teacher.
- * @returns {Promise<void>} - A promise that resolves when the update is complete.
+ * @returns {Promise&lt;void>} - A promise that resolves when the update is complete.
  */
 const updateTeacherById = (teacher_id, updateData) => {
     return new Promise((resolve, reject) => {
@@ -259,7 +287,7 @@ const updateTeacherById = (teacher_id, updateData) => {
  * Get the department associated with a specific teacher.
  * @function getDepartmentByTeacherId
  * @param {number} teacher_id - The ID of the teacher.
- * @returns {Promise<Object|null>} - A promise that resolves to the department object or null if not found.
+ * @returns {Promise&lt;Object|null>} - A promise that resolves to the department object or null if not found.
  */
 const getDepartmentByTeacherId = (teacher_id) => {
     return new Promise((resolve, reject) => {
@@ -305,7 +333,7 @@ function checkFileType(file, cb) {
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
+    if (mimetype &amp;&amp; extname) {
         return cb(null, true);
     } else {
         cb('Error: Images Only!');
@@ -318,7 +346,7 @@ function checkFileType(file, cb) {
  * @function uploadImage
  * @param {Object} req - The request object containing the image file.
  * @param {Object} res - The response object to send the result.
- * @returns {Promise<void>} - A promise that resolves when the image upload is complete.
+ * @returns {Promise&lt;void>} - A promise that resolves when the image upload is complete.
  */
 const uploadTeacherImage = (req, res) => {
     const teacher_id = req.params.id;
@@ -351,7 +379,7 @@ const uploadTeacherImage = (req, res) => {
  * @param {string} data.Abvr - The abbreviation for the teacher.
  * @param {string} data.Email - The email address of the teacher.
  * @param {string} data.Phone - The phone number of the teacher.
- * @returns {Promise<Object>} - A promise that resolves to the result of the database operation.
+ * @returns {Promise&lt;Object>} - A promise that resolves to the result of the database operation.
  */
 const updateTeacherProfile = (teacher_id, data) => {
     return new Promise((resolve, reject) => {
@@ -377,7 +405,7 @@ const updateTeacherProfile = (teacher_id, data) => {
  * @param {string} teacher.Email - The email address of the teacher.
  * @param {string} teacher.Phone - The phone number of the teacher.
  * @param {string} teacher.hashedPassword - The hashed password of the teacher.
- * @returns {Promise<Object>} - A promise that resolves to the result of the database operation.
+ * @returns {Promise&lt;Object>} - A promise that resolves to the result of the database operation.
  */
 const addNewTeacher = ({ Name, Designation, dept_id, Abvr, Email, Phone, hashedPassword }) => {
     
@@ -396,7 +424,7 @@ const addNewTeacher = ({ Name, Designation, dept_id, Abvr, Email, Phone, hashedP
 /**
  * Deletes a teacher from the database by their ID.
  * @param {number} teacher_id - The ID of the teacher to delete.
- * @returns {Promise<Object>} - A promise that resolves to the result of the database operation.
+ * @returns {Promise&lt;Object>} - A promise that resolves to the result of the database operation.
  */
 const deleteTeacherById = (teacher_id) => {
     return new Promise((resolve, reject) => {
@@ -415,7 +443,7 @@ const deleteTeacherById = (teacher_id) => {
  * Controller to handle fetching all teachers from the database.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @returns {Promise<void>} - A promise that resolves when the response has been sent.
+ * @returns {Promise&lt;void>} - A promise that resolves when the response has been sent.
  */
 const fetchAllTeachers = async (req, res) => {
     try {
@@ -449,3 +477,26 @@ module.exports = {
     deleteTeacherById,
     fetchAllTeachers
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-teacherController.html">teacherController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Nov 01 2024 17:35:55 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

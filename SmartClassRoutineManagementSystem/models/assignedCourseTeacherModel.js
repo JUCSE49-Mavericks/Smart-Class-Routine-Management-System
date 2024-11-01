@@ -10,7 +10,8 @@ const createAssignedCourseTeacherTable = () => {
             FOREIGN KEY (course_id) REFERENCES Course(course_id),
             FOREIGN KEY (teacher_id) REFERENCES Teacher(teacher_id),
             FOREIGN KEY (exam_year_id) REFERENCES ExamYear(exam_year_id),
-            UNIQUE (course_id, teacher_id)
+            UNIQUE (course_id, teacher_id),
+            UNIQUE (course_id)
         );
     `;
     db.query(query, (err, results) => {
@@ -23,13 +24,13 @@ const createAssignedCourseTeacherTable = () => {
 };
 
 
-const updateAssignedCourseTeacher = (course_id, teacher_id) => {
-    const checkQuery = 'SELECT * FROM AssignedCourseTeacher WHERE course_id = ?';
-    const insertQuery = 'INSERT INTO AssignedCourseTeacher (course_id, teacher_id) VALUES (?, ?)';
-    const updateQuery = 'UPDATE AssignedCourseTeacher SET teacher_id = ? WHERE course_id = ?';
-    
+const updateAssignedCourseTeacher = (assigned_course_teacher_id, teacher_id) => {
+    const checkQuery = 'SELECT * FROM AssignedCourseTeacher WHERE assigned_course_teacher_id = ?';
+    const insertQuery = 'INSERT INTO AssignedCourseTeacher (assigned_course_teacher_id, teacher_id) VALUES (?, ?)';
+    const updateQuery = 'UPDATE AssignedCourseTeacher SET teacher_id = ? WHERE assigned_course_teacher_id = ?';
+    // console.log('holla');
     return new Promise((resolve, reject) => {
-        db.query(checkQuery, [course_id], (err, results) => {
+        db.query(checkQuery, [assigned_course_teacher_id], (err, results) => {
             if (err) {
                 console.error('Error checking for existing course:', err);
                 return reject(err);
@@ -37,7 +38,7 @@ const updateAssignedCourseTeacher = (course_id, teacher_id) => {
 
             if (results.length > 0) {
                 // Course exists, update teacher_id
-                db.query(updateQuery, [teacher_id, course_id], (updateErr, updateResults) => {
+                db.query(updateQuery, [teacher_id, assigned_course_teacher_id], (updateErr, updateResults) => {
                     if (updateErr) {
                         console.error('Error updating teacher for course:', updateErr);
                         return reject(updateErr);
@@ -46,7 +47,7 @@ const updateAssignedCourseTeacher = (course_id, teacher_id) => {
                 });
             } else {
                 // Course does not exist, insert new row
-                db.query(insertQuery, [course_id, teacher_id], (insertErr, insertResults) => {
+                db.query(insertQuery, [assigned_course_teacher_id, teacher_id], (insertErr, insertResults) => {
                     if (insertErr) {
                         console.error('Error inserting new course-teacher assignment:', insertErr);
                         return reject(insertErr);
@@ -109,9 +110,80 @@ const getAssignedCourseTeachersByExamYearId = (exam_year_id) => {
 };
 
 
+const getCoursesByExamYearId = (exam_year_id) => {
+    // console.log(exam_year_id);
+    const query = `
+        SELECT 
+            act.course_id,
+            act.assigned_course_teacher_id,
+            act.teacher_id,
+            c.Course_title,
+            c.Course_code,
+            c.Couorse_credit
+        FROM 
+            AssignedCourseTeacher AS act
+        INNER JOIN 
+            Course AS c 
+        ON 
+            act.course_id = c.course_id 
+        WHERE 
+            act.exam_year_id = ? AND c.exam_year_id = ?
+    `;
+    
+    return new Promise((resolve, reject) => {
+        db.query(query, [exam_year_id, exam_year_id], (err, results) => {
+            if (err) {
+                console.log(err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+};
+
+
+const uploadCSVAssignedCourseTeacherModel = (course_id, teacher_id) => {
+    const checkQuery = 'SELECT * FROM AssignedCourseTeacher WHERE course_id = ?';
+    const insertQuery = 'INSERT INTO AssignedCourseTeacher (course_id, teacher_id) VALUES (?, ?)';
+    const updateQuery = 'UPDATE AssignedCourseTeacher SET teacher_id = ? WHERE course_id = ?';
+    // console.log('holla');
+    return new Promise((resolve, reject) => {
+        db.query(checkQuery, [course_id], (err, results) => {
+            if (err) {
+                console.error('Error checking for existing course:', err);
+                return reject(err);
+            }
+
+            if (results.length > 0) {
+                // Course exists, update teacher_id
+                db.query(updateQuery, [teacher_id, course_id], (updateErr, updateResults) => {
+                    if (updateErr) {
+                        console.error('Error updating teacher for course:', updateErr);
+                        return reject(updateErr);
+                    }
+                    resolve({ message: 'Teacher updated for existing course', results: updateResults });
+                });
+            } else {
+                // Course does not exist, insert new row
+                db.query(insertQuery, [course_id, teacher_id], (insertErr, insertResults) => {
+                    if (insertErr) {
+                        console.error('Error inserting new course-teacher assignment:', insertErr);
+                        return reject(insertErr);
+                    }
+                    resolve({ message: 'New course-teacher assignment added', results: insertResults });
+                });
+            }
+        });
+    });
+};
+
+
+
 module.exports = {
     createAssignedCourseTeacherTable,
     updateAssignedCourseTeacher,
     addAssignedCourseTeacherObject,
-    getAssignedCourseTeachersByExamYearId
+    getAssignedCourseTeachersByExamYearId,
+    getCoursesByExamYearId,
+    uploadCSVAssignedCourseTeacherModel,
 }

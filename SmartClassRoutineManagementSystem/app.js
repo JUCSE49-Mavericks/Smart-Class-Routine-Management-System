@@ -82,7 +82,7 @@ const teacherImageUpload = require('./controllers/teacherImageUpload');
 const courseRoutes = require('./routes/courseRoutes');
 const classRepresentativeRoutes = require('./routes/classRepresentativeRoutes');
 const assignedCourseTeacherRoutes = require('./routes/assignedCourseTeacherRoutes');
-
+const examCommitteeRoutes = require('./routes/examCommitteeRoutes')
 
 app.use('/api/auth', authRoutes);
 app.use('/api', superUserRoutes);
@@ -104,6 +104,7 @@ app.use('/', teacherImageUpload);
 app.use('/api', courseRoutes);
 app.use('/api', classRepresentativeRoutes);
 app.use('/api', assignedCourseTeacherRoutes);
+app.use('/api', examCommitteeRoutes);
 
 
 

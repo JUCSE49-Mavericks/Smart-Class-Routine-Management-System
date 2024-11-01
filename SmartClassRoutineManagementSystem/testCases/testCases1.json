@@ -1,0 +1,91 @@
+{
+    "teacherDetails": [
+        {
+            "teacher_id": 1,
+            "preferredTimes": [
+                { "start": "09:00", "end": "12:00" }, 
+                { "start": "10:00", "end": "13:00" },
+                null,
+                { "start": "09:00", "end": "13:00" },
+                { "start": "13:00", "end": "15:00" }
+            ]
+        }
+    ],
+    "departmentData": {
+        "courses": [
+            {
+                "course_id": 404,
+                "course_title": "Software Engineering & ISD Lab",
+                "teacher_id": 1,
+                "classes_per_week": 1,
+                "slots": 2
+            }
+        ]
+    },
+    "modifiedDepartmentData": {
+        "teacherDetails": [
+            {
+                "teacher_id": 1,
+                "Name": "John Doe",
+                "preferredTimes": []
+            }
+        ]
+    },
+    "conflictDepartmentData": {
+        "courses": [
+            {
+                "course_id": 404,
+                "course_title": "Software Engineering & ISD Lab",
+                "teacher_id": 1,
+                "classes_per_week": 1,
+                "slots": 1,
+                "room_type": "Lab",
+                "class": "4-1"
+            },
+            {
+                "course_id": 312,
+                "course_title": "OOAD",
+                "teacher_id": 1,
+                "classes_per_week": 1,
+                "slots": 1,
+                "room_type": "Lab",
+                "class": "3-1"
+            }
+        ]
+    },
+    "mockScheduleData": {
+        "schedule": [
+            {
+                "course_id": 404,
+                "teacher_id": 1,
+                "day": "Monday",
+                "time": { "start": "09:00", "end": "10:00" },
+                "room": "Lab 203"
+            },
+            {
+                "course_id": 404,
+                "teacher_id": 1,
+                "day": "Monday",
+                "time": { "start": "10:00", "end": "11:00" },
+                "room": "Lab 203"
+            }
+        ]
+    },
+    "mockClassroomDetails": [
+        {
+            "room_id": 1,
+            "room_type": "Lab",
+            "room_name": "203"
+        },
+        {
+            "room_id": 2,
+            "room_type": "Lab",
+            "room_name": "204"
+        },
+        {
+            "room_id": 3,
+            "room_type": "Lecture Hall",
+            "room_name": "101"
+        }
+    ]
+}

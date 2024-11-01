@@ -45,14 +45,14 @@ describe('DataProcessController', function () {
     it('should retrieve teacher details by department ID', async function () {
         this.timeout(5000);
         const mockTeachers = [
-            { teacher_id: 1, Name: 'John Doe' },
-            { teacher_id: 2, Name: 'Jane Doe' },
+            { teacher_id: 1, Name: 'Dr. MMA' },
+            { teacher_id: 2, Name: 'Dr GM' },
         ];
         queryStub.yields(null, mockTeachers); // Mock query response
 
         const teachers = await controller.getTeacherDetailsByDepartmentId(2);
         expect(teachers).to.be.an('array').with.length(2);
-        expect(teachers[0]).to.have.property('Name', 'John Doe');
+        expect(teachers[0]).to.have.property('Name', 'Dr. MMA');
     });
 
 

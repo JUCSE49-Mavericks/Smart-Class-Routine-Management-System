@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const RoutineInputProcessor = require('../../controllers/ROUTINE/routineInputProcessor');
+const RoutineInputProcessor = require('../../controllers/ROUTINE/routineInputProcessorController');
 const DataProcessController = require('../../controllers/ROUTINE/routineDataProcessController');
 const RoutineGenerateController = require('../../controllers/ROUTINE/routineGeneratorController');
 

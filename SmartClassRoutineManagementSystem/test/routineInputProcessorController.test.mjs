@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
-import RoutineInputProcessor from '../controllers/ROUTINE/routineInputProcessor.js';
+import RoutineInputProcessor from '../controllers/ROUTINE/routineInputProcessorController.js';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;

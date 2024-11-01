@@ -160,7 +160,10 @@ class RoutineInputProcessor {
     }
 
     /**
-     * Checks if the first time is before the second time.
+     *Throughout the scheduling process, this function is used to check:
+     *       If the current time for a slot is before the designated lunch time.
+     *      If a slot's end time is before the overall end time of the schedule.
+     *       This ensures that the generated schedule respects the start and end times, as well as the lunch break.
      * 
      * @param {string} time1 - The first time in HH:MM format.
      * @param {string} time2 - The second time in HH:MM format.

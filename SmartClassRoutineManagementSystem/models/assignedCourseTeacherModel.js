@@ -62,9 +62,7 @@ const updateAssignedCourseTeacher = (course_id, teacher_id) => {
 const addAssignedCourseTeacherObject = (course_id, exam_year_id) => {
     const checkQuery = 'SELECT * FROM AssignedCourseTeacher WHERE course_id = ?';
     const insertQuery = 'INSERT INTO AssignedCourseTeacher (course_id, exam_year_id) VALUES (?, ?)';
-    // console.log(course_id);
-    // console.log(teacher_id);
-    // console.log(exam_year_id);
+    
     return new Promise((resolve, reject) => {
         db.query(checkQuery, [course_id], (err, results) => {
             if (err) {

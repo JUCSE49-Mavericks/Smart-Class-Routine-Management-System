@@ -2,6 +2,12 @@ const bcrypt = require('bcryptjs');
 const xml2js = require('xml2js');
 const db = require('../config/db');
 
+/**
+ * Uploads staff data from XML and imports it into the database.
+ * 
+ * @param {Object} req - The request object containing XML data.
+ * @param {Object} res - The response object for sending responses.
+ */
 const uploadStaffAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData);
@@ -26,6 +32,7 @@ const uploadStaffAsXML = async (req, res) => {
                 const resetToken = row.resetToken && row.resetToken[0];
                 const resetTokenExpires = row.resetTokenExpires && row.resetTokenExpires[0];
 
+                // Ensure all required fields are present before inserting
                 if (staff_id && Name && Role && dept_id && Email && Password && Phone) {
                     const hashedPassword = await bcrypt.hash(Password, 10);
                     await insertXmlStaffIntoDatabase({
@@ -51,9 +58,15 @@ const uploadStaffAsXML = async (req, res) => {
     });
 };
 
+/**
+ * Inserts staff data into the database.
+ * 
+ * @param {Object} data - Staff data to be inserted.
+ * @returns {Promise} - A promise that resolves when the insertion is complete.
+ */
 const insertXmlStaffIntoDatabase = (data) => {
     return new Promise((resolve, reject) => {
-        const query = 'INSERT INTO Staff (staff_id, Name, Role, dept_id, Email, Password, Phone , resetToken, resetTokenExpires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Staff (staff_id, Name, Role, dept_id, Email, Password, Phone, resetToken, resetTokenExpires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         db.query(query, [data.staff_id, data.Name, data.Role, data.dept_id, data.Email, data.hashedPassword, data.Phone, data.resetToken, data.resetTokenExpires], (err, results) => {
             if (err) {
                 reject(err);
@@ -64,6 +77,12 @@ const insertXmlStaffIntoDatabase = (data) => {
     });
 };
 
+/**
+ * Clears the specified table in the database.
+ * 
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise} - A promise that resolves when the table is cleared.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;
@@ -77,7 +96,12 @@ const clearTable = (tableName) => {
     });
 };
 
-
+/**
+ * Retrieves staff information by email.
+ * 
+ * @param {string} email - The email of the staff member.
+ * @returns {Promise} - A promise that resolves to the staff member's data.
+ */
 const getStaffByEmail = (email) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Staff WHERE email = ?";
@@ -88,6 +112,12 @@ const getStaffByEmail = (email) => {
     });
 };
 
+/**
+ * Retrieves staff information by reset token.
+ * 
+ * @param {string} token - The reset token for the staff member.
+ * @returns {Promise} - A promise that resolves to the staff member's data.
+ */
 const getStaffByResetToken = (token) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Staff WHERE resetToken = ? AND resetTokenExpires > NOW()";
@@ -98,7 +128,12 @@ const getStaffByResetToken = (token) => {
     });
 };
 
-//Get Department of Staff
+/**
+ * Retrieves department information based on staff ID.
+ * 
+ * @param {string} staff_id - The ID of the staff member.
+ * @returns {Promise} - A promise that resolves to the department details.
+ */
 const getDepartmentByStaffId = (staff_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -117,6 +152,12 @@ const getDepartmentByStaffId = (staff_id) => {
     });
 };
 
+/**
+ * Retrieves staff members by department ID.
+ * 
+ * @param {string} dept_id - The ID of the department.
+ * @returns {Promise} - A promise that resolves to a list of staff members.
+ */
 const getStaffByDepartmentId = (dept_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -139,7 +180,12 @@ const getStaffByDepartmentId = (dept_id) => {
     });
 };
 
-// Function to fetch staff profile by staff_id
+/**
+ * Retrieves a staff member by their ID.
+ * 
+ * @param {string} staff_id - The ID of the staff member.
+ * @returns {Promise} - A promise that resolves to the staff member's data.
+ */
 const getStaffById = (staff_id) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM Staff WHERE staff_id = ?';
@@ -150,7 +196,13 @@ const getStaffById = (staff_id) => {
     });
 };
 
-// Function to update staff profile by staff_id
+/**
+ * Updates a staff member's profile by their ID.
+ * 
+ * @param {string} staff_id - The ID of the staff member.
+ * @param {Object} updatedData - The data to update.
+ * @returns {Promise} - A promise that resolves when the update is complete.
+ */
 const updateStaffById = (staff_id, updatedData) => {
     return new Promise((resolve, reject) => {
         const { Name, Role, Email, Phone } = updatedData;
@@ -162,10 +214,17 @@ const updateStaffById = (staff_id, updatedData) => {
     });
 };
 
-// Database operation function to add a new staff member
+/**
+ * Adds a new staff member to a specified department.
+ * 
+ * @param {string} dept_id - The ID of the department.
+ * @param {Object} staffData - The staff data to be added.
+ * @param {string} hashedPassword - The hashed password for the staff member.
+ * @returns {Promise} - A promise that resolves when the addition is complete.
+ */
 const addNewStaffToDepartment = (dept_id, staffData, hashedPassword) => {
     return new Promise((resolve, reject) => {
-        const { Name, Role, Email, Phone, Password} = staffData;
+        const { Name, Role, Email, Phone } = staffData;
         const sql = `
             INSERT INTO Staff (Name, Role, dept_id, Email, Phone, Password) 
             VALUES (?, ?, ?, ?, ?, ?)
@@ -177,7 +236,12 @@ const addNewStaffToDepartment = (dept_id, staffData, hashedPassword) => {
     });
 };
 
-// Database operation function to delete a staff member
+/**
+ * Deletes a staff member by their ID.
+ * 
+ * @param {string} staff_id - The ID of the staff member to delete.
+ * @returns {Promise} - A promise that resolves when the deletion is complete.
+ */
 const deleteDepartmentStaffById = (staff_id) => {
     return new Promise((resolve, reject) => {
         const sql = `

@@ -1,6 +1,11 @@
+// models/examYearModel.js
 
 const db = require('../config/db');
 
+/**
+ * Creates the ExamYear table in the database if it does not already exist.
+ * The ExamYear table stores information about exam years associated with specific sessions and education levels.
+ */
 const createXmlDataExamYearTable = () => {
     const query = `
         CREATE TABLE IF NOT EXISTS ExamYear (
@@ -15,10 +20,11 @@ const createXmlDataExamYearTable = () => {
             FOREIGN KEY (session_id) REFERENCES Session(session_id)
         );    
     `;
+
     db.query(query, (err, results) => {
         if (err) {
-            console.error('Error creating xml_teacher_data table:', err);
-            throw err;
+            console.error('Error creating ExamYear table:', err);
+            throw err; // Rethrow the error for further handling if necessary
         }
         console.log('ExamYear table created or already exists');
     });
@@ -26,4 +32,4 @@ const createXmlDataExamYearTable = () => {
 
 module.exports = {
     createXmlDataExamYearTable
-}
+};

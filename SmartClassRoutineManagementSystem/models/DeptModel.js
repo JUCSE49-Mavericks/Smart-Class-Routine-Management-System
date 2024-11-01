@@ -1,6 +1,41 @@
+/**
+ * @author Sadia Hossain
+ */
+// Import database configuration
 const db = require('../config/db');
 
+/**
+ * @file Department Table Creation
+ * @description This module defines a function to create the 'Department' table
+ * in the database if it does not already exist. The table includes columns for
+ * department ID, name, description, phone, fax, and email.
+ * 
+ * @module DepartmentTable
+ * @since 1.0.0
+ * @see {@link ../config/db} for database configuration.
+ */
+
+/**
+ * Creates the 'Department' table in the database if it does not already exist.
+ * The table stores department information including name, description, and contact details.
+ *
+ * @function createXmlDataDeptTable
+ * @memberof module:DepartmentTable
+ * @returns {void} This function does not return a value.
+ * @throws {Error} Will throw an error if the table creation fails.
+ * 
+ * @example
+ * // To create the Department table:
+ * createXmlDataDeptTable();
+ */
 const createXmlDataDeptTable = () => {
+    /**
+     * SQL query to create the 'Department' table with fields for
+     * department name, description, and contact information.
+     * 
+     * @constant {string} query
+     * @private
+     */
     const query = `
         CREATE TABLE IF NOT EXISTS Department (
             dept_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -9,17 +44,28 @@ const createXmlDataDeptTable = () => {
             Phone VARCHAR(255),
             Fax VARCHAR(255),
             Email VARCHAR(255)
-        )
+        );
     `;
+
+    /**
+     * Executes the SQL query to create the Department table.
+     * If successful, logs a message; otherwise logs the error and throws an exception.
+     *
+     * @param {Error|null} err - Error object if an error occurs, otherwise null.
+     * @param {Object} results - Results of the query execution, which are logged on success.
+     * @callback queryCallback
+     * @private
+     */
     db.query(query, (err, results) => {
         if (err) {
-            console.error('Error creating xml_dept_data table:', err);
+            console.error('Error creating Department table:', err);
             throw err;
         }
         console.log('Department table created or already exists');
     });
 };
 
+// Export the function for external use
 module.exports = {
     createXmlDataDeptTable
-}
+};

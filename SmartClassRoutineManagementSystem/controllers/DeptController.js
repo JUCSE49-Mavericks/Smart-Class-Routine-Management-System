@@ -6,7 +6,13 @@ const path = require('path');
 const db = require('../config/db');
 const { getDepartmentBySessionId } = require('./sessionController');
 
-// Function to handle uploading department data as XML
+/**
+ * Handles uploading department data as XML.
+ * Parses the XML data and imports it into the Department table.
+ *
+ * @param {Object} req - The request object containing XML data.
+ * @param {Object} res - The response object used to send the response.
+ */
 const uploadDeptAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData); // Log incoming data for debugging
@@ -44,7 +50,12 @@ const uploadDeptAsXML = async (req, res) => {
     });
 };
 
-// Function to insert department data into the database
+/**
+ * Inserts a new department record into the database.
+ *
+ * @param {Object} row - The department data to be inserted.
+ * @returns {Promise} A promise that resolves when the insert operation is complete.
+ */
 const insertXmlDeptIntoDatabase = (row) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO Department (dept_id, Dept_Name, Descript, Phone, Fax, Email) VALUES (?, ?, ?, ?, ?, ?)';
@@ -58,36 +69,45 @@ const insertXmlDeptIntoDatabase = (row) => {
     });
 };
 
+/**
+ * Retrieves all departments from the database.
+ *
+ * @returns {Promise} A promise that resolves with the list of departments.
+ */
 const getAllDepartments = () => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM Department';
         
         db.query(sql, (err, result) => {
             if (err) return reject(err);
-            if (result.length > 0) {
-                resolve(result); // Return the list of departments
-            } else {
-                resolve([]); // Return an empty array if no departments are found
-            }
+            resolve(result.length > 0 ? result : []); // Return the list of departments or an empty array
         });
     });
 };
 
+/**
+ * Retrieves a department by its ID.
+ *
+ * @param {string} dept_id - The ID of the department to retrieve.
+ * @returns {Promise} A promise that resolves with the department object or null if not found.
+ */
 const getDepartmentById = (dept_id) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM Department WHERE dept_id = ?';
         
         db.query(sql, [dept_id], (err, result) => {
             if (err) return reject(err);
-            if (result.length > 0) {
-                resolve(result[0]); // Return the department object
-            } else {
-                resolve(null); // Return null if no department is found
-            }
+            resolve(result.length > 0 ? result[0] : null); // Return the department object or null
         });
     });
 };
 
+/**
+ * Retrieves the department associated with a given teacher ID.
+ *
+ * @param {string} teacher_id - The ID of the teacher.
+ * @returns {Promise} A promise that resolves with the department object or null if not found.
+ */
 const getDepartmentByTeacherId = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -101,17 +121,17 @@ const getDepartmentByTeacherId = (teacher_id) => {
                 console.error('Error fetching department details:', err);
                 return reject(err);
             }
-
-            if (result.length > 0) {
-                resolve(result[0]);
-            } else {
-                resolve(null); // No department found
-            }
+            resolve(result.length > 0 ? result[0] : null); // Return the department object or null
         });
     });
 };
 
-
+/**
+ * Retrieves the department associated with a given student ID.
+ *
+ * @param {string} student_id - The ID of the student.
+ * @returns {Promise} A promise that resolves with the department object or null if not found.
+ */
 const getDepartmentByStudentId = (student_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -125,15 +145,17 @@ const getDepartmentByStudentId = (student_id) => {
             if (err) {
                 return reject(err);
             }
-            if (result.length > 0) {
-                resolve(result[0]); // Return the department object
-            } else {
-                resolve(null); // No department found
-            }
+            resolve(result.length > 0 ? result[0] : null); // Return the department object or null
         });
     });
 };
 
+/**
+ * Retrieves the department associated with a given staff ID.
+ *
+ * @param {string} staff_id - The ID of the staff member.
+ * @returns {Promise} A promise that resolves with the department object or null if not found.
+ */
 const getDepartmentByStaffId = (staff_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -147,18 +169,17 @@ const getDepartmentByStaffId = (staff_id) => {
                 console.error('Error fetching department details:', err);
                 return reject(err);
             }
-
-            if (result.length > 0) {
-                resolve(result[0]);
-            } else {
-                resolve(null); // No department found
-            }
+            resolve(result.length > 0 ? result[0] : null); // Return the department object or null
         });
     });
 };
 
-
-// Function to clear the specified table
+/**
+ * Clears all records from the specified table.
+ *
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise} A promise that resolves when the clear operation is complete.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;
@@ -172,6 +193,11 @@ const clearTable = (tableName) => {
     });
 };
 
+/**
+ * Retrieves department IDs and names for selection purposes.
+ *
+ * @returns {Promise} A promise that resolves with an array of department ID and name pairs.
+ */
 const getDeptIdAndNames = () => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT dept_id, Dept_Name FROM Department";

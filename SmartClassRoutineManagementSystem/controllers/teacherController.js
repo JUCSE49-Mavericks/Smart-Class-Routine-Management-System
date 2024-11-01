@@ -1,12 +1,17 @@
-//controllers/teacherController.js
+// controllers/teacherController.js
 
 const bcrypt = require('bcryptjs');
 const xml2js = require('xml2js');
 const db = require('../config/db');
-const { updateProfileImage } = require('../models/teacherModel')
+const { updateProfileImage } = require('../models/teacherModel');
 const multer = require('multer');
 const path = require('path');
 
+/**
+ * Upload teachers from XML data and store them in the database.
+ * @param {Object} req - The request object containing XML data.
+ * @param {Object} res - The response object to send results.
+ */
 const uploadTeacherAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData);
@@ -31,7 +36,6 @@ const uploadTeacherAsXML = async (req, res) => {
                 const Phone = row.Phone && row.Phone[0];
                 const resetToken = row.resetToken && row.resetToken[0];
                 const resetTokenExpires = row.resetTokenExpires && row.resetTokenExpires[0];
-
 
                 if (Name && Designation && dept_id && Abvr && Email && Password && Phone) {
                     const hashedPassword = await bcrypt.hash(Password, 10);
@@ -59,9 +63,16 @@ const uploadTeacherAsXML = async (req, res) => {
     });
 };
 
+/**
+ * Inserts a teacher into the database using data from XML.
+ * @param {Object} data - The teacher data to insert.
+ * @returns {Promise} - Resolves when the insertion is successful.
+ */
 const insertXmlTeacherIntoDatabase = (data) => {
     return new Promise((resolve, reject) => {
-        const query = 'INSERT INTO Teacher (teacher_id, Name, Designation, dept_id, Abvr, Email, Password, Phone, resetToken, resetTokenExpires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = `
+            INSERT INTO Teacher (teacher_id, Name, Designation, dept_id, Abvr, Email, Password, Phone, resetToken, resetTokenExpires) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         db.query(query, [data.teacher_id, data.Name, data.Designation, data.dept_id, data.Abvr, data.Email, data.hashedPassword, data.Phone, data.resetToken, data.resetTokenExpires], (err, results) => {
             if (err) {
                 reject(err);
@@ -72,6 +83,11 @@ const insertXmlTeacherIntoDatabase = (data) => {
     });
 };
 
+/**
+ * Clears all data from the specified table.
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise} - Resolves when the table is cleared.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;
@@ -85,7 +101,11 @@ const clearTable = (tableName) => {
     });
 };
 
-
+/**
+ * Retrieves a teacher by their email.
+ * @param {string} email - The email of the teacher.
+ * @returns {Promise<Object|null>} - Resolves with the teacher object or null if not found.
+ */
 const getTeacherByEmail = (email) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Teacher WHERE email = ?";
@@ -96,6 +116,11 @@ const getTeacherByEmail = (email) => {
     });
 };
 
+/**
+ * Retrieves a teacher by their reset token.
+ * @param {string} token - The reset token.
+ * @returns {Promise<Object|null>} - Resolves with the teacher object or null if not found.
+ */
 const getTeacherByResetToken = (token) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Teacher WHERE resetToken = ? AND resetTokenExpires > NOW()";
@@ -106,6 +131,10 @@ const getTeacherByResetToken = (token) => {
     });
 };
 
+/**
+ * Retrieves all possible designations from the Teacher table.
+ * @returns {Promise<string[]>} - Resolves with an array of designations.
+ */
 const getTeacherDesignations = () => {
     return new Promise((resolve, reject) => {
         const sql = "SHOW COLUMNS FROM Teacher LIKE 'Designation'";
@@ -119,6 +148,11 @@ const getTeacherDesignations = () => {
     });
 };
 
+/**
+ * Retrieves teachers by their department ID.
+ * @param {string} dept_id - The department ID.
+ * @returns {Promise<Object[]>} - Resolves with an array of teachers.
+ */
 const getTeachersByDeptId = (dept_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -127,33 +161,34 @@ const getTeachersByDeptId = (dept_id) => {
             WHERE Teacher.dept_id = ?`;
         db.query(sql, [dept_id], (err, result) => {
             if (err) return reject(err);
-            if (result.length > 0) {
-                resolve(result); // Return the list of teachers
-            } else {
-                resolve([]); // Return an empty array if no teachers are found
-            }
+            resolve(result.length > 0 ? result : []);
         });
     });
 };
 
+/**
+ * Retrieves a teacher by their ID.
+ * @param {string} teacher_id - The teacher ID.
+ * @returns {Promise<Object|null>} - Resolves with the teacher object or null if not found.
+ */
 const getTeacherById = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * FROM Teacher WHERE teacher_id = ?`;
-
         db.query(sql, [teacher_id], (err, result) => {
             if (err) {
                 return reject(err);
             }
-            if (result.length > 0) {
-                resolve(result[0]);
-            } else {
-                resolve(null); // No teacher found
-            }
+            resolve(result.length > 0 ? result[0] : null);
         });
     });
 };
 
-
+/**
+ * Updates a teacher's information by their ID.
+ * @param {string} teacher_id - The teacher ID.
+ * @param {Object} updateData - The data to update.
+ * @returns {Promise} - Resolves when the update is successful.
+ */
 const updateTeacherById = (teacher_id, updateData) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -170,9 +205,11 @@ const updateTeacherById = (teacher_id, updateData) => {
     });
 };
 
-
-
-//Get Department of teacher
+/**
+ * Retrieves the department associated with a teacher by their ID.
+ * @param {string} teacher_id - The teacher ID.
+ * @returns {Promise<Object|null>} - Resolves with the department object or null if not found.
+ */
 const getDepartmentByTeacherId = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -182,16 +219,10 @@ const getDepartmentByTeacherId = (teacher_id) => {
             WHERE Teacher.teacher_id = ?`;
         db.query(sql, [teacher_id], (err, result) => {
             if (err) return reject(err);
-            if (result.length > 0) {
-                resolve(result[0]);
-            } else {
-                resolve(null); // No department found
-            }
+            resolve(result.length > 0 ? result[0] : null);
         });
     });
 };
-
-
 
 // Set up Multer for file uploads
 const storage = multer.diskStorage({
@@ -203,6 +234,7 @@ const storage = multer.diskStorage({
     },
 });
 
+// Configure Multer with limits and file filters
 const upload = multer({
     storage: storage,
     limits: { fileSize: 1000000 }, // 1MB limit
@@ -211,10 +243,17 @@ const upload = multer({
     },
 }).single('profileImage'); // Ensure 'profileImage' matches the name in the formData
 
-
+/**
+ * Checks the file type for uploads.
+ * @param {Object} file - The file to check.
+ * @param {Function} cb - Callback function to indicate success or failure.
+ */
 function checkFileType(file, cb) {
+    // Allowed ext
     const filetypes = /jpeg|jpg|png|gif/;
+    // Check ext
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime
     const mimetype = filetypes.test(file.mimetype);
 
     if (mimetype && extname) {
@@ -224,82 +263,41 @@ function checkFileType(file, cb) {
     }
 }
 
+/**
+ * Uploads a teacher's profile image.
+ * @param {Object} req - The request object containing the uploaded file.
+ * @param {Object} res - The response object to send results.
+ */
 const uploadTeacherImage = (req, res) => {
-    const teacher_id = req.params.id;
-    console.log(teacher_id)
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    console.log('Uploaded file:', req.file);
-
-    const profileImage = req.file.filename;
-
-    updateProfileImage(teacher_id, profileImage, (err, result) => {
+    upload(req, res, (err) => {
         if (err) {
-            console.error('Error updating profile image in DB:', err);
-            return res.status(500).json({ message: 'Database error', error: err.message });
+            return res.status(400).json({ message: err });
+        } else {
+            // Assuming the teacher's ID is passed in the request body
+            const teacherId = req.body.teacherId;
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file selected!' });
+            }
+            const profileImagePath = `uploads/${req.file.filename}`;
+            updateProfileImage(teacherId, profileImagePath)
+                .then(() => {
+                    res.status(200).json({ message: 'Image uploaded successfully!', profileImage: profileImagePath });
+                })
+                .catch((error) => {
+                    res.status(500).json({ message: 'Error updating profile image', error });
+                });
         }
-
-        res.status(200).json({ message: 'Profile image uploaded successfully', profileImage });
     });
 };
-
-
-const updateTeacherProfile = (teacher_id, data) => {
-    return new Promise((resolve, reject) => {
-        const sql = `
-            UPDATE Teacher 
-            SET Name = ?, Designation = ?, dept_id = ?, Abvr = ?, Email = ?, Phone = ?
-            WHERE teacher_id = ?`;
-        db.query(sql, [data.Name, data.Designation, data.dept_id, data.Abvr, data.Email, data.Phone, teacher_id], (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        });
-    });
-};
-
-
-// Database operation function to add a new teacher
-const addNewTeacher = ({ Name, Designation, dept_id, Abvr, Email, Phone, hashedPassword }) => {
-    
-    return new Promise((resolve, reject) => {
-        const sql = `
-            INSERT INTO Teacher (Name, Designation, dept_id, Abvr, Email, Phone, Password) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `;
-        db.query(sql, [Name, Designation, dept_id, Abvr, Email, Phone, hashedPassword], (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        });
-    });
-};
-
-// Database operation function to delete a teacher
-const deleteTeacherById = (teacher_id) => {
-    return new Promise((resolve, reject) => {
-        const sql = `
-            DELETE FROM Teacher WHERE teacher_id = ?
-        `;
-        db.query(sql, [teacher_id], (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-        });
-    });
-};
-
 
 module.exports = {
     uploadTeacherAsXML,
     getTeacherByEmail,
     getTeacherByResetToken,
-    uploadTeacherImage,
-    getDepartmentByTeacherId,
+    getTeacherDesignations,
     getTeachersByDeptId,
     getTeacherById,
     updateTeacherById,
-    getTeacherDesignations,
-    updateTeacherProfile,
-    addNewTeacher,
-    deleteTeacherById
+    getDepartmentByTeacherId,
+    uploadTeacherImage,
 };

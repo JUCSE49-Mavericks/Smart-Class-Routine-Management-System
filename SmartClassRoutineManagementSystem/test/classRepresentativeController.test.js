@@ -1,64 +1,134 @@
-// test/classRepresentativeController.test.js
+// Import required modules
 
 const chai = require('chai');
 const sinon = require('sinon');
-const expect = chai.expect;
-const { fetchClassRepresentativeByExamYearId } = require('../controllers/classRepresentativeController');
-const { getClassRepresentativeByExamYearId } = require('../models/classRepresentativeModel');
+const db = require('../config/db'); // Adjust the path as needed
+const { fetchClassRepresentativeByExamYearId} = require('../controllers/classRepresentativeController');
+const { createClassRepresentativeTable, getClassRepresentativeByExamYearId } = require('../models/classRepresentativeModel')
 
-//chai.use(require('chai-http'));
+const { expect } = chai;
 
-describe('Class Representative Controller', () => {
-    let req, res, sandbox;
+// Group tests for createClassRepresentativeTable
+describe('createClassRepresentativeTable', () => {
+    let queryStub;
 
+    // Set up the query stub before each test
     beforeEach(() => {
-        sandbox = sinon.createSandbox();
-        req = { params: { exam_year_id: '2023' } };
-        res = {
-            status: sinon.stub().returnsThis(),
-            json: sinon.stub()
-        };
+        queryStub = sinon.stub(db, 'query');
     });
 
+    // Restore the original function after each test
     afterEach(() => {
-        sandbox.restore();
+        queryStub.restore();
+    });
+
+    it('should execute the query to create the ClassRepresentative table', (done) => {
+        // Simulate successful execution by calling the callback with no error
+        queryStub.callsFake((query, callback) => {
+            callback(null, { message: 'Success' });
+        });
+
+        // Call the function
+        createClassRepresentativeTable();
+
+        // Assertions
+        expect(queryStub.calledOnce).to.be.true;
+        expect(queryStub.firstCall.args[0]).to.include('CREATE TABLE IF NOT EXISTS ClassRepresentative');
+        
+        done();
+    });
+
+    it('should handle an error during table creation', (done) => {
+        // Simulate an error
+        const error = new Error('Database error');
+        queryStub.callsFake((query, callback) => {
+            callback(error);
+        });
+
+        try {
+            createClassRepresentativeTable();
+        } catch (err) {
+            // Assertions
+            expect(err).to.equal(error);
+            expect(queryStub.calledOnce).to.be.true;
+            expect(queryStub.firstCall.args[0]).to.include('CREATE TABLE IF NOT EXISTS ClassRepresentative');
+        }
+        
+        done();
+    });
+});
+
+
+describe('fetchClassRepresentativeByExamYearId', () => {
+    let req, res;
+    let queryStub;
+
+    // Set up request and response mocks
+    beforeEach(() => {
+        req = {
+            params: {
+                exam_year_id: 2024 // Example exam year ID
+            }
+        };
+
+        res = {
+            json: sinon.spy(),
+            status: sinon.stub().returnsThis()
+        };
+
+        queryStub = sinon.stub(db, 'query'); // Stub the db.query method
+    });
+
+    // Restore the original function after each test
+    afterEach(() => {
+        queryStub.restore();
     });
 
     it('should return class representative data when found', async () => {
-        // Mock data
-        const mockResults = [{ id: 1, name: 'John Doe', exam_year_id: '2023' }];
-        
-        // Stub the model function to return mock data
-        sandbox.stub(getClassRepresentativeByExamYearId).resolves(mockResults);
+        // Arrange: Simulate successful database response
+        const mockResults = [{ id: 1, name: 'John Doe', exam_year_id: 2024 }];
+        queryStub.callsFake((query, params, callback) => {
+            callback(null, mockResults);
+        });
 
-        // Call the controller function
+        // Act: Call the function
         await fetchClassRepresentativeByExamYearId(req, res);
 
-        // Assertions
-        expect(res.json.calledOnceWith(mockResults)).to.be.true;
+        // Assert: Check that the response is correct
+        expect(res.json.calledOnce).to.be.true;
+        expect(res.json.firstCall.args[0]).to.deep.equal(mockResults);
     });
 
-    it('should return 404 when class representative not found', async () => {
-        // Stub the model function to return an empty array
-        sandbox.stub(getClassRepresentativeByExamYearId).resolves([]);
+    it('should return 404 when no class representative is found', async () => {
+        // Arrange: Simulate an empty database response
+        queryStub.callsFake((query, params, callback) => {
+            callback(null, []);
+        });
 
-        // Call the controller function
+        // Act: Call the function
         await fetchClassRepresentativeByExamYearId(req, res);
 
-        // Assertions
-        expect(res.status.calledOnceWith(404)).to.be.true;
-        expect(res.json.calledOnceWith({ error: 'Class Representative not found' })).to.be.true;
+        // Assert: Check that a 404 response is sent
+        expect(res.status.calledOnce).to.be.true;
+        expect(res.status.firstCall.args[0]).to.equal(404);
+        expect(res.json.calledOnce).to.be.true;
+        expect(res.json.firstCall.args[0]).to.deep.equal({ error: 'Class Representative not found' });
     });
 
-    it('should return 500 and error message on database error', async () => {
-        // Stub the model function to throw an error
-        sandbox.stub(getClassRepresentativeByExamYearId).rejects(new Error('Database error'));
+    it('should return 500 when there is a database error', async () => {
+        // Arrange: Simulate a database error
+        const dbError = new Error('Database error');
+        queryStub.callsFake((query, params, callback) => {
+            callback(dbError);
+        });
 
-        // Call the controller function
+        // Act: Call the function
         await fetchClassRepresentativeByExamYearId(req, res);
 
-        // Assertions
-        expect(res.status.calledOnceWith(500)).to.be.true;
-        expect(res.json.calledOnceWith({ error: 'Database error' })).to.be.true;
+        // Assert: Check that a 500 response is sent
+        expect(res.status.calledOnce).to.be.true;
+        expect(res.status.firstCall.args[0]).to.equal(500);
+        expect(res.json.calledOnce).to.be.true;
+        expect(res.json.firstCall.args[0]).to.deep.equal({ error: 'Database error' });
     });
 });

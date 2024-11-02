@@ -1,0 +1,289 @@
+const pool = require('../../config/db');  // Import database pool
+
+/**
+ * Controller for processing data related to departments, teachers, courses, and scheduling preferences
+ * of teachers.
+ */
+class DataProcessController {
+
+    async processDepartmentData(departmentName) {
+        console.log(`Starting data processing for department: ${departmentName}`);
+
+        try {
+     
+
+            // Step 1: Retrieve department ID based on department name
+            const deptId = await this.getDepartmentId(departmentName);
+            if (!deptId) {
+                console.error(`No department ID found for department: ${departmentName}`);
+                throw new Error(`Department ${departmentName} not found.`);
+            }
+            console.log(`Department ID for ${departmentName}: ${deptId}`);
+
+            // Step 2: Retrieve teacher details based on department ID
+            const teacherDetails = await this.getTeacherDetailsByDepartmentId(deptId);
+            console.log(`Teacher details for department ID ${deptId}:`, teacherDetails);
+
+            
+            // Step 3: Retrieve and construct course information based on teachers and courses
+            const courses = await this.getCoursesForTeachers(teacherDetails);
+            console.log(`Courses for teachers in department ${departmentName}:`, courses);
+            
+            return { deptId, teacherDetails, courses };
+
+        } catch (error) {
+            console.error('Error processing department data:', error);
+            throw new Error('Failed to process department data.');
+        }
+    }
+
+    async getDepartmentId(departmentName) {
+        try {
+            const trimmedDepartmentName = departmentName.trim();
+            const query = 'SELECT dept_id FROM department WHERE LOWER(Dept_Name) = LOWER(?)';
+            console.log(`Executing query: ${query} with value: ${trimmedDepartmentName}`);
+
+            const results = await new Promise((resolve, reject) => {
+                pool.query(query, [trimmedDepartmentName], (err, results) => {
+                    if (err) {
+                        console.error('Database query error:', err);
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+
+            return results[0]?.dept_id || null;
+        } catch (error) {
+            console.error(`Error retrieving department ID for ${departmentName}:`, error);
+            throw error;
+        }
+    }
+    async getTeacherDetailsByDepartmentId(deptId) {
+        try {
+            const query = 'SELECT teacher_id, Name FROM Teacher WHERE dept_id = ?';
+            console.log(`Fetching teachers for department ID: ${deptId}`);
+    
+            const results = await new Promise((resolve, reject) => {
+                pool.query(query, [deptId], (err, results) => {
+                    if (err) {
+                        console.error('Database query error:', err);
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+    
+            const teacherDetails = await Promise.all(results.map(async (teacher) => {
+                console.log(`Selected Teacher - ID: ${teacher.teacher_id}, Name: ${teacher.Name}`);
+                const preferredTimes = await this.getPreferredTimesForTeacher(teacher.teacher_id);
+                return { 
+                    teacher_id: teacher.teacher_id, 
+                    Name: teacher.Name, 
+                    preferredTimes: preferredTimes 
+                };
+            }));
+    
+            // Log the full details of the teachers, including preferred times
+            console.log('Teacher details:', JSON.stringify(teacherDetails, null, 2));
+    
+            return teacherDetails;
+        } catch (error) {
+            console.error(`Error retrieving teacher details for department ID ${deptId}:`, error);
+            throw error;
+        }
+    }
+    
+    
+
+    
+/**
+     * Retrieves course details for each teacher in the specified department.
+     * @param {Array} teacherDetails - Array of objects containing teacher IDs and names.
+     * @returns {Promise<Array>} - Array of course objects with properties for each required field.
+     */
+async getCoursesForTeachers(teacherDetails) {
+    const courseDetailsArray = [];
+
+    for (const teacher of teacherDetails) {
+        const { teacher_id, Name: teacher_name } = teacher;
+        console.log(`Processing courses for teacher ID ${teacher_id}, Name: ${teacher_name}`);
+
+        // a) Retrieve course IDs from assignedcourseteachers
+        const assignedCourses = await this.getAssignedCourses(teacher_id);
+        
+        for (const course_id of assignedCourses) {
+            // b) Get course title and code from course table
+            const { course_title, course_code } = await this.getCourseDetails(course_id);
+            
+            // c) Get additional course information from coursefrequencydistribution
+            const courseFrequencyDetails = await this.getCourseFrequencyDetails(course_id);
+            const { classroom_id, room_type } = await this.getClassroomDetails(course_id);
+           
+            
+                // Create a course object with the specified fields
+                const courseDetail = {
+                    course_id,
+                    teacher_id,
+                    teacher_name,
+                    course_title,
+                    course_code,
+                    class: courseFrequencyDetails.class,
+                    slots: courseFrequencyDetails.slots,
+                    classes_per_week: courseFrequencyDetails.classes_per_week,
+                    classroom_id,  
+                    room_type,
+                };
+            console.log(`Adding course:`, courseDetail);
+            
+            // Add the course object to the array
+            courseDetailsArray.push(courseDetail);
+        }
+    }
+    
+    return courseDetailsArray;
+}
+
+/**
+ * Retrieves assigned course IDs for a specific teacher.
+ * @param {number} teacherId - The ID of the teacher.
+ * @returns {Promise<Array>} - Array of course IDs assigned to the teacher.
+ */
+async getAssignedCourses(teacherId) {
+    const query = 'SELECT course_id FROM assignedcourseteachers WHERE teacher_id = ?';
+    console.log(`Fetching assigned courses for teacher ID: ${teacherId}`);
+
+    return new Promise((resolve, reject) => {
+        pool.query(query, [teacherId], (err, results) => {
+            if (err) {
+                console.error('Database query error in getAssignedCourses:', err);
+                return reject(err);
+            }
+            const courseIds = results.map(row => row.course_id);
+            console.log(`Assigned courses for teacher ID ${teacherId}:`, courseIds);
+            resolve(courseIds);
+        });
+    });
+}
+
+/**
+ * Retrieves course title and code for a specific course.
+ * @param {number} courseId - The ID of the course.
+ * @returns {Promise<Object>} - Object containing courseTitle and courseCode.
+ */
+async getCourseDetails(courseId) {
+    const query = 'SELECT course_title, Course_code FROM course WHERE course_id = ?';
+    console.log(`Fetching course details for course ID: ${courseId}`);
+
+    return new Promise((resolve, reject) => {
+        pool.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Database query error in getCourseDetails:', err);
+                return reject(err);
+            }
+            const { course_title, Course_code: course_code } = results[0] || {};
+            resolve({ course_title, course_code });
+        });
+    });
+}
+
+/**
+ * Retrieves class, slots, classes_per_week, and classroom id for a specific course.
+ * @param {number} course Id - The ID of the course.
+ * @returns {Promise<Object>} - Object containing class, slots, classesPerWeek, and classroomId.
+ */
+async getCourseFrequencyDetails(courseId) {
+    const query = 'SELECT class, slots, classes_Per_Week FROM coursefrequencydistribution WHERE course_id = ?';
+    console.log(`Fetching frequency details for course ID: ${courseId}`);
+
+    return new Promise((resolve, reject) => {
+        pool.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Database query error in getCourseFrequencyDetails:', err);
+                return reject(err);
+            }
+            const { class: className, slots, classes_Per_Week: classes_per_week } = results[0] || {};
+            resolve({ class: className, slots, classes_per_week });
+        });
+    });
+}
+
+/**
+     * Retrieves classroom Id and room type from the room_required and classroomtype tables based on courseId.
+     * @param {number} courseId - The ID of the course.
+     * @returns {Promise<Object>} - Object containing classroom_id and room_type for the specified courseId.
+     */
+async getClassroomDetails(courseId) {
+    const query = `
+        SELECT rr.id AS classroom_id, ct.room_type
+        FROM room_required rr
+        JOIN classroomtype ct ON rr.id = ct.id
+        WHERE rr.course_id = ?`;
+
+    console.log(`Fetching classroom details for course ID: ${courseId}`);
+
+    return new Promise((resolve, reject) => {
+        pool.query(query, [courseId], (err, results) => {
+            if (err) {
+                console.error('Database query error in getClassroomDetails:', err);
+                return reject(err);
+            }
+            const { classroom_id, room_type } = results[0] || {};
+            console.log(`Classroom details for course ID ${courseId}:`, { classroom_id, room_type });
+            resolve({ classroom_id, room_type });
+        });
+    });
+}
+
+/**
+ * Retrieves preferred start and end times for each weekday for a specific teacher.
+ * @param {number} teacherId - The ID of the teacher.
+ * @returns {Promise<Array>} - Array of objects with preferred times by weekday.
+ */
+async getPreferredTimesForTeacher(teacherId) {
+    const query = `
+        SELECT 
+            Sunday_Preferred_Start_Time, Sunday_Preferred_End_Time,
+            Monday_Preferred_Start_Time, Monday_Preferred_End_Time,
+            Tuesday_Preferred_Start_Time, Tuesday_Preferred_End_Time,
+            Wednesday_Preferred_Start_Time, Wednesday_Preferred_End_Time,
+            Thursday_Preferred_Start_Time, Thursday_Preferred_End_Time
+        FROM 
+            preferred_days  
+        WHERE 
+            teacher_id = ?`;
+
+    console.log(`Fetching preferred times for teacher ID: ${teacherId}`);
+
+    return new Promise((resolve, reject) => {
+        pool.query(query, [teacherId], (err, results) => {
+            if (err) {
+                console.error('Database query error in getPreferredTimesForTeacher:', err);
+                return reject(err);
+            }
+            if (results.length > 0) {
+                const row = results[0];
+                // Structure preferred times as an array of objects
+                const preferredTimes = [
+                    { day: "Sunday", start: row.Sunday_Preferred_Start_Time, end: row.Sunday_Preferred_End_Time },
+                    { day: "Monday", start: row.Monday_Preferred_Start_Time, end: row.Monday_Preferred_End_Time },
+                    { day: "Tuesday", start: row.Tuesday_Preferred_Start_Time, end: row.Tuesday_Preferred_End_Time },
+                    { day: "Wednesday", start: row.Wednesday_Preferred_Start_Time, end: row.Wednesday_Preferred_End_Time },
+                    { day: "Thursday", start: row.Thursday_Preferred_Start_Time, end: row.Thursday_Preferred_End_Time }
+                ];
+
+                console.log("Fetched preferred times:", preferredTimes); // Log the preferred times
+                resolve(preferredTimes);
+            } else {
+                console.log(`No preferred times found for teacher ID: ${teacherId}`);
+                resolve([]); // Return an empty array if no results
+            }
+        });
+    });
+}
+
+
+    
+}
+
+module.exports = DataProcessController;

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: classRoutineModel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: classRoutineModel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const pool = require('../config/db');  // Import database pool
+
+/**
+ * ClassRoutineModel handles database operations related to the class routine, 
+ * including deleting and inserting routine entries.
+ */
+class ClassRoutineModel {
+   /**
+     * Deletes all routine entries associated with a specified department ID before
+     * inserting a new routine.
+     * @async
+     * @param {number} deptId - The department ID whose entries should be deleted.
+     * @throws {Error} If there is an issue with the database deletion.
+     */
+    async deleteEntriesByDeptId(deptId) {
+        const query = 'DELETE FROM classRoutine WHERE deptId = ?';
+
+        try {
+            await new Promise((resolve, reject) => {
+                pool.query(query, [deptId], (error, results) => {
+                    if (error) {
+                        console.error("Database deletion error in deleteEntriesByDeptId:", error);
+                        return reject(error);
+                    }
+                    resolve(results);
+                });
+            });
+            // console.log(`Deleted previous routine entries for Dept_id ${deptId}`);
+        } catch (error) {
+            console.error('Failed to delete routine entries:', error);
+            throw new Error('Database deletion failed');
+        }
+    }
+
+  
+
+        /**
+     * Inserts a single routine entry into the `classRoutine` table.
+     * @async
+     * @param {Object} entry - The routine entry to insert.
+     * @param {number} entry.deptId - Department ID of the entry.
+     * @param {number} entry.teacherId - Teacher's unique ID.
+     * @param {string} entry.teacherName - Name of the teacher.
+     * @param {string} entry.day - Day of the class.
+     * @param {string} entry.class - Class year or grade.
+     * @param {Object} entry.time - Object containing start and end times.
+     * @param {string} entry.time.start - Start time of the class.
+     * @param {string} entry.time.end - End time of the class.
+     * @param {string} entry.courseTitle - Title of the course.
+     * @param {string} entry.room - Room where the class will be held.
+     * @throws {Error} If there is an issue with the database insertion.
+     */
+    async insertRoutineEntry(entry) {
+        // Debugging log to check the entry
+        // console.log('Attempting to insert entry:', entry);
+
+        const query = `
+            INSERT INTO classRoutine (
+                deptId, teacherId, teacher, day, year, startTime, endTime, course, room
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const values = [
+            entry.Dept_id,
+            entry.Teacher_id,
+            entry.teacher_name,
+            entry.day,
+            entry.class,
+            entry.time.start,
+            entry.time.end,
+            entry.course_title,
+            entry.room
+        ];
+        
+
+
+        try {
+            await new Promise((resolve, reject) => {
+                pool.query(query, values, (error, results) => {
+                    if (error) {
+                        console.error("Database insertion error in insertRoutineEntry:", error);
+                        return reject(error);
+                    }
+                    resolve(results);
+                });
+            });
+            // console.log(`Inserted routine entry for course ID ${entry.course_id}`);
+        } catch (error) {
+            console.error('Failed to insert routine entry:', error);
+            throw new Error('Database insertion failed');
+        }
+    }
+
+
+
+
+        /**
+     * Inserts an entire routine, deleting previous entries for the department first.
+     * @async
+     * @param {Array&lt;Object>} routine - Array of routine entries to insert.
+     * @param {number} deptId - Department ID whose existing entries should be deleted.
+     * @throws {Error} If there is an issue with deletion or insertion.
+     */
+    async insertRoutine(routine, deptId) {
+        // Delete previous entries for the given department ID
+        await this.deleteEntriesByDeptId(deptId);
+
+        // Insert new routine entries
+        for (const entry of routine) {
+            // console.log('Insering entry:', entry);
+            await this.insertRoutineEntry(entry);
+        }
+    }
+}
+
+module.exports = new ClassRoutineModel();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClassRoutineModel.html">ClassRoutineModel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Oct 31 2024 02:11:33 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

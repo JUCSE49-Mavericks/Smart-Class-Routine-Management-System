@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const routineGeneratorController = require('../controllers/routineGeneratorControllerTest');
 const app = express();
-const port = 5001;
+// const port = 5001;
 const db = require('../config/db');
 
 // Use CORS middleware

@@ -1,0 +1,373 @@
+const pool = require('../../config/db');  // Import database pool
+const ClassRoutineModel = require('../../models/classRoutineModel');//
+
+
+/**
+ * Controller for generating class schedules based on department, teacher, and classroom details.
+ */
+
+class RoutineGenerateController {
+
+        /**
+     * Generates the final response for a given schedule by combining schedule data, department data, 
+     * classroom details, and the generated routine.
+     * @async
+     * @param {Object} scheduleData - The schedule information including slots and department info.
+     * @param {Object} departmentData - The department information, including teachers and courses.
+     * @returns {Promise<Object>} - The complete schedule response including routine and classroom details.
+     */
+    async generateFinalResponse(scheduleData, departmentData) {
+        // Fetch classroom details based on department ID
+        const classroomDetails = await this.getClassroomDetailsByDeptId(departmentData.deptId);
+        console.log("GENERATOR",scheduleData);
+        // Combine responses
+        const finalResponse = {
+            scheduleData,
+            departmentData,
+            classroomDetails,
+            routine: await this.generateRoutine(scheduleData, departmentData, classroomDetails)
+        };
+
+        // Log the expanded response
+        // this.logExpandedResponse(finalResponse);
+
+        return finalResponse;
+    }
+
+
+        /**
+     * Retrieves classroom details based on the department ID.
+     * @async
+     * @param {number} deptId - The department ID for which to fetch classroom details.
+     * @returns {Promise<Array<Object>>} - Array of classroom objects with room type, count, and room list.
+     * @throws {Error} - Throws an error if there is an issue with the database query.
+     */
+    async getClassroomDetailsByDeptId(deptId) {
+        try {
+            const query = 'SELECT room_type, room_count, Rooms FROM classroomtype WHERE dept_id = ?';
+            console.log(`Fetching classroom details for department ID: ${deptId}`);
+
+            const results = await new Promise((resolve, reject) => {
+                pool.query(query, [deptId], (error, results) => {
+                    if (error) {
+                        console.error("Database query error in getClassroomDetailsByDeptId:", error);
+                        return reject(error);
+                    }
+                    // Convert the Rooms field to an array if it exists
+                    const formattedResults = results.map(row => ({
+                        room_type: row.room_type,
+                        room_count: row.room_count,
+                        Rooms: row.Rooms ? row.Rooms.split(',').map(room => room.trim()) : [] // Split and trim to array
+                    }));
+                    resolve(formattedResults);
+                });
+            });
+
+            // console.log("Classroom details fetched:", results);
+            return results;
+        } catch (error) {
+            console.error('Error fetching classroom details:', error);
+            throw new Error('Failed to fetch classroom details.');
+        }
+    }
+
+   
+
+      /**
+     * Generates a routine for courses based on schedule, department, and classroom information.
+     * @async
+     * @param {Object} scheduleData - Schedule details including available slots.
+     * @param {Object} departmentData - Department details including teacher and course info.
+     * @param {Array<Object>} classroomDetails - Array of classroom objects with room type, count, and room list.
+     * @returns {Promise<Array<Object>>} - The generated routine.
+     */
+
+      async generateRoutine(scheduleData, departmentData, classroomDetails) {
+        const { teacherDetails, courses } = departmentData;
+        const routine = [];
+        
+        const preferredTimesMap = this.mapPreferredTimes(teacherDetails);
+        const roomAllocation = this.allocateRooms(courses, classroomDetails);
+        
+        // Sort slots by start time to ensure earliest slots are considered first
+        const validSlots = scheduleData.slots
+            .map(slot => ({
+                start: slot.startTime,
+                end: slot.endTime
+            }))
+            .sort((a, b) => a.start.localeCompare(b.start));
+        
+        for (let course of courses) {
+            const { teacher_id, classes_per_week, class: courseClass, slots: courseSlots, year } = course; // Include year
+            const teacher = teacherDetails.find(t => t.teacher_id === teacher_id);
+            const preferredTimes = preferredTimesMap[teacher_id];
+            
+            if (!preferredTimes || preferredTimes.length === 0) continue;
+    
+            let allocatedClasses = 0;
+    
+            // Iterate over each day in the teacher’s preferred times
+            for (const day of Object.keys(preferredTimes)) {
+                if (allocatedClasses >= classes_per_week) break;
+    
+                const times = preferredTimes[day];
+    
+                // Check if any valid slot fits within the teacher's preferred times
+                for (const validSlot of validSlots) {
+                    const isWithinPreferredTime = times.some(preferred => {
+                        return validSlot.start >= preferred.start && validSlot.end <= preferred.end;
+                    });
+    
+                    if (isWithinPreferredTime && allocatedClasses < classes_per_week) {
+                        const isCourseAssigned = routine.some(entry =>
+                            entry.teacher_id === teacher_id &&
+                            entry.course_id === course.course_id &&
+                            entry.day === day &&
+                            entry.year === year // Check for the same year
+                        );
+    
+                        if (!isCourseAssigned) {
+                            if (courseSlots === 2) {
+                                // Find the next consecutive slot for 2-slot courses
+                                const nextSlot = validSlots.find(slot => slot.start === validSlot.end);
+                                if (
+                                    nextSlot &&
+                                    this.isTimeSlotAvailable(routine, day, validSlot) &&
+                                    this.isTimeSlotAvailable(routine, day, nextSlot)
+                                ) {
+                                    // Assign both consecutive slots
+                                    routine.push({
+                                        Dept_id: departmentData.deptId,
+                                        Teacher_id: teacher_id,
+                                        course_id: course.course_id,
+                                        course_title: course.course_title,
+                                        teacher_id,
+                                        teacher_name: teacher.Name,
+                                        class: courseClass,
+                                        day,
+                                        time: validSlot,
+                                        room: roomAllocation[course.course_id],
+                                        
+                                    });
+                                    allocatedClasses++;
+    
+                                    routine.push({
+                                        Dept_id: departmentData.deptId,
+                                        Teacher_id: teacher_id,
+                                        course_id: course.course_id,
+                                        course_title: course.course_title,
+                                        teacher_id,
+                                        teacher_name: teacher.Name,
+                                        class: courseClass,
+                                        day,
+                                        time: nextSlot,
+                                        room: roomAllocation[course.course_id],
+                                       
+                                    });
+                                    allocatedClasses++;
+                                }
+                            } else {
+                                // Assign single-slot courses if available
+                                if (this.isTimeSlotAvailable(routine, day, validSlot)) {
+                                    routine.push({
+                                        Dept_id: departmentData.deptId,
+                                        Teacher_id: teacher_id,
+                                        course_id: course.course_id,
+                                        course_title: course.course_title,
+                                        teacher_id,
+                                        teacher_name: teacher.Name,
+                                        class: courseClass,
+                                        day,
+                                        time: validSlot,
+                                        room: roomAllocation[course.course_id],
+                                       
+                                    });
+                                    allocatedClasses++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+        
+        console.log("Generated routine:", routine);
+    
+        // Insert the routine into the database using the ClassRoutineModel
+        await ClassRoutineModel.insertRoutine(routine, departmentData.deptId, departmentData.departmentName);
+        return routine;
+    }
+    
+    
+    
+    
+    
+    
+    
+     /**
+     * Maps teachers' preferred times to their respective days.
+     * @param {Array<Object>} teacherDetails - Array of teacher objects with their preferred times.
+     * @returns {Object} - Mapping of teacher IDs to their preferred times.
+     */
+
+    mapPreferredTimes(teacherDetails) {
+        const preferredTimesMap = {};
+    
+        teacherDetails.forEach(teacher => {
+            preferredTimesMap[teacher.teacher_id] = {};
+    
+            // Assuming preferredTimes is an array of objects with day-specific times
+            preferredTimesMap[teacher.teacher_id].Sunday = teacher.preferredTimes[0] ? [{
+                start: teacher.preferredTimes[0].start,
+                end: teacher.preferredTimes[0].end,
+            }] : [];
+            preferredTimesMap[teacher.teacher_id].Monday = teacher.preferredTimes[1] ? [{
+                start: teacher.preferredTimes[1].start,
+                end: teacher.preferredTimes[1].end,
+            }] : [];
+            preferredTimesMap[teacher.teacher_id].Tuesday = teacher.preferredTimes[2] ? [{
+                start: teacher.preferredTimes[2].start,
+                end: teacher.preferredTimes[2].end,
+            }] : [];
+            preferredTimesMap[teacher.teacher_id].Wednesday = teacher.preferredTimes[3] ? [{
+                start: teacher.preferredTimes[3].start,
+                end: teacher.preferredTimes[3].end,
+            }] : [];
+            preferredTimesMap[teacher.teacher_id].Thursday = teacher.preferredTimes[4] ? [{
+                start: teacher.preferredTimes[4].start,
+                end: teacher.preferredTimes[4].end,
+            }] : [];
+        });
+    
+        return preferredTimesMap;
+    }
+    
+
+
+     /**
+     * Allocates rooms for courses based on the room type specified in each course.
+     * @param {Array<Object>} courses - List of courses to be scheduled.
+     * @param {Array<Object>} classroomDetails - List of classroom types and their availability.
+     * @returns {Object} - Room allocation map for each course.
+     */
+     allocateRooms(courses, classroomDetails) {
+        const roomAllocation = {};
+        const roomCount = {};
+    
+        // Initialize room counts based on classroom details
+        classroomDetails.forEach(classroom => {
+            const { room_type, room_count, Rooms } = classroom;
+            roomCount[room_type] = {
+                allocated: 0,
+                total: room_count,
+                roomList: Rooms
+            };
+        });
+    
+        // Allocate rooms based on course requirements
+        courses.forEach(course => {
+            const { room_type } = course; // Room type required for this course
+            let allocated = false;
+    
+            // Attempt to allocate preferred room type
+            if (roomCount[room_type] && roomCount[room_type].allocated < roomCount[room_type].total) {
+                const roomDetails = roomCount[room_type].roomList[roomCount[room_type].allocated];
+                roomAllocation[course.course_id] = roomDetails;
+                roomCount[room_type].allocated++;
+                allocated = true;
+            }
+    
+            // Fallback to any available room type if preferred is unavailable
+            if (!allocated) {
+                for (const type in roomCount) {
+                    if (roomCount[type].allocated < roomCount[type].total) {
+                        const roomDetails = roomCount[type].roomList[roomCount[type].allocated];
+                        roomAllocation[course.course_id] = roomDetails;
+                        roomCount[type].allocated++;
+                        break;
+                    }
+                }
+            }
+        });
+    
+        return roomAllocation;
+    }
+    
+    
+    /**
+     * Checks if a specific time slot on a given day is available in the routine.
+     * @param {Array<Object>} routine - The current generated routine.
+     * @param {string} day - The day for which to check availability.
+     * @param {Object} time - The time slot to check.
+     * @returns {boolean} - True if the time slot is available, false otherwise.
+     */
+    isTimeSlotAvailable(routine, day, time) {
+        return !routine.some(entry => entry.day === day && entry.time.start === time.start && entry.time.end === time.end);
+    }
+
+
+    
+
+     /**
+     * Logs an expanded version of the final response for debugging purposes.
+     * @param {Object} finalResponse - The complete response object containing all schedule details.
+     */
+    // Helper function to log detailed response
+    logExpandedResponse(finalResponse) {
+        // console.log("Final schedule response:");
+
+        // console.log(`Department: ${finalResponse.scheduleData.department}`);
+        
+        // console.log("Slots:");
+        // finalResponse.scheduleData.slots.forEach((slot, index) => {
+        //     console.log(`  Slot ${index + 1}:`, slot);
+        // });
+        
+        // console.log("Lunch Break:", finalResponse.scheduleData.lunchBreak);
+
+        // console.log(`Department ID: ${finalResponse.departmentData.deptId}`);
+        
+        // console.log("Teacher Details:");
+        // finalResponse.departmentData.teacherDetails.forEach((teacher, index) => {
+        //     console.log(`  Teacher ${index + 1}:`);
+        //     console.log(`    ID: ${teacher.teacher_id}`);
+        //     console.log(`    Name: ${teacher.Name}`);
+
+        //     if (teacher.preferredTimes && teacher.preferredTimes.length > 0) {
+        //         console.log("    Preferred Times:");
+        //         Object.entries(teacher.preferredTimes[0]).forEach(([day, times]) => {
+        //             console.log(`      ${day}: Start - ${times.start}, End - ${times.end}`);
+        //         });
+        //     } else {
+        //         console.log("    Preferred Times: Not available");
+        //     }
+        // });
+
+        // console.log("Courses:");
+        // finalResponse.departmentData.courses.forEach((course, index) => {
+        //     console.log(`  Course ${index + 1}:`);
+        //     console.log(`    ID: ${course.course_id}`);
+        //     console.log(`    Title: ${course.course_title}`);
+        //     console.log(`    Code: ${course.course_code}`);
+        //     console.log(`    Teacher ID: ${course.teacher_id}`);
+        //     console.log(`    Teacher Name: ${course.teacher_name}`);
+        //     console.log(`    Class: ${course.class}`);
+        //     console.log(`    Slots: ${course.slots}`);
+        //     console.log(`    Classes per Week: ${course.classes_per_week}`);
+        //     console.log(`    Classroom ID: ${course.classroom_id}`);
+        //     console.log(`    Room Type: ${course.room_type}`);
+        // });
+
+        // Log classroom details
+        // console.log("Classroom Details:");
+        // finalResponse.classroomDetails.forEach((classroom, index) => {
+        //     console.log(`  Room ${index + 1}:`);
+        //     console.log(`    Room Type: ${classroom.room_type}`);
+        //     console.log(`    Room Count: ${classroom.room_count}`);
+        //     console.log(`    Rooms: ${classroom.Rooms.join(', ')}`); // Join for easier readability
+        // });
+    }
+}
+
+module.exports = RoutineGenerateController;

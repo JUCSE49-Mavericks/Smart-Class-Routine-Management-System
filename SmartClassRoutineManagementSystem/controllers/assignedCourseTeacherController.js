@@ -91,50 +91,30 @@ const fetchCoursesByExamYearId = async (req, res) => {
 };
 
 
-
 /**
- * Processes CSV data for bulk insertion or update of course-teacher assignments.
+ * Handles CSV data upload, processes it for bulk course-teacher assignments, and sends the response.
  * @async
- * @function processCSVData
- * @param {Array<Object>} csvData - Array of objects representing CSV rows, with `course_id` and `teacher_id`.
- * @returns {Promise<Object>} - Resolves with success message and results, or throws an error.
- */
-const processCSVData = async (csvData) => {
-    // console.log('Hello hello');
-    // console.log(csvData);
-    const promises = csvData.map((row) => {
-        const { course_id, teacher_id } = row; // Adjust based on your CSV structure
-        return uploadCSVAssignedCourseTeacherModel(course_id, teacher_id);
-    });
-
-    try {
-        const results = await Promise.all(promises);
-        return { message: 'All records processed successfully', results };
-    } catch (error) {
-        console.error('Error processing records:', error);
-        throw new Error('Error processing records');
-    }
-};
-
-/**
- * Handles CSV data upload and processes it for bulk course-teacher assignments.
  * @function uploadCSVAssignedCourseTeacher
  * @param {Object} req - Express request object containing `csvData` in the body.
  * @param {Object} res - Express response object.
- * @returns {void} - Sends JSON response with a success message or error details.
+ * @returns {Promise<void>} - Sends JSON response with a success message or error details.
  */
-const uploadCSVAssignedCourseTeacher = (req, res) => {
+const uploadCSVAssignedCourseTeacher = async (req, res) => {
     const csvData = req.body.csvData; // Assume this is an array of objects representing CSV rows
-    // console.log('hello');
-    // console.log(csvData);
-    processCSVData(csvData)
-        .then(response => {
-            res.status(200).json(response);
-        })
-        .catch(err => {
-            res.status(500).json({ message: err.message });
-        });
+    console.log(csvData);
+    try {
+        const promises = csvData.map(({ course_id, teacher_id }) => 
+            uploadCSVAssignedCourseTeacherModel(course_id, teacher_id)
+        );
+
+        const results = await Promise.all(promises);
+        res.status(200).json({ message: 'All records processed successfully', results });
+    } catch (error) {
+        console.error('Error processing records:', error);
+        res.status(500).json({ message: 'Error processing records' });
+    }
 };
+
 
 
 module.exports = {
@@ -142,5 +122,6 @@ module.exports = {
     insertAssignedCourseTeacherObject,
     getAssignedCourseTeachers,
     fetchCoursesByExamYearId,
-    uploadCSVAssignedCourseTeacher
+    uploadCSVAssignedCourseTeacher,
+    // processCSVData
 };

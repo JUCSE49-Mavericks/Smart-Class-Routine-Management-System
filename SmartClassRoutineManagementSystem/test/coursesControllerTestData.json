@@ -1,0 +1,31 @@
+{
+    "fetchCoursesByExamYearId": {
+      "req": {
+        "params": {
+          "exam_year_id": 2023
+        }
+      },
+      "responses": {
+        "success": {
+          "status": 200,
+          "data": [
+            { "course_id": 1, "assigned_course_teacher_id": 1, "teacher_id": 2, "Course_title": "Mathematics", "Course_code": "MATH101", "Course_credit": 3 }
+          ]
+        },
+        "databaseError": {
+          "status": 500,
+          "error": "Database error",
+          "message": "Error retrieving data"
+        }
+      }
+    },
+    "getCoursesByExamYearId": {
+      "responses": {
+        "success": [
+          { "course_id": 1, "assigned_course_teacher_id": 1, "teacher_id": 2, "Course_title": "Mathematics", "Course_code": "MATH101", "Course_credit": 3 }
+        ],
+        "databaseError": "Database error"
+      }
+    }
+  }
+  

@@ -54,7 +54,7 @@ createScheduleTable();
 createHolidayTable();
 
 
-createclassRoutineTable();
+// createclassRoutineTable();
 
 
 // Routes

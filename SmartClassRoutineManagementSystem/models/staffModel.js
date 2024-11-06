@@ -1,47 +1,53 @@
-// models/staffModel.js
-
+// Import the database configuration
 const db = require('../config/db');
 
 /**
- * Creates the Staff table in the database if it does not already exist.
- * 
- * The Staff table stores information about the staff members of the institution, 
- * including their roles, contact details, and department affiliation.
- * 
+ * Creates the Staff table if it does not already exist.
+ * This table stores staff information, including staff ID, name, role, department ID,
+ * email, password, phone, and reset token details. It establishes a foreign key relationship
+ * with the Department table via dept_id.
+ *
  * @function createXmlDataStaffTable
- * @returns {void} This function does not return a value. It creates the Staff table in the database.
- * 
- * @throws {Error} Throws an error if the table creation fails, which can be caught and handled by the calling function.
- * 
+ * @async
+ * @returns {void} Does not return anything but logs status or errors to the console.
+ * @throws {Error} Throws an error if the table creation query fails.
+ *
  * @example
- * // Call the function to create the Staff table
+ * // Call the function to ensure the Staff table exists
  * createXmlDataStaffTable();
+ *
+ * @see {@link ../config/db} for the database configuration.
  */
 const createXmlDataStaffTable = () => {
     const query = `
         CREATE TABLE IF NOT EXISTS Staff (
-            staff_id INT AUTO_INCREMENT PRIMARY KEY,     // Unique identifier for each staff member
-            Name VARCHAR(255) NOT NULL,                  // Name of the staff member, cannot be null
-            Role VARCHAR(255),                            // Role of the staff member within the institution
-            dept_id INT,                                  // Department ID to which the staff member belongs
-            Email VARCHAR(255),                           // Email address of the staff member
-            Password VARCHAR(700),                        // Hashed password for staff member authentication
-            Phone VARCHAR(255),                           // Contact phone number of the staff member
-            resetToken VARCHAR(255),                      // Token used for password reset functionality
-            resetTokenExpires DATETIME,                   // Expiration date and time of the reset token
-            FOREIGN KEY (dept_id) REFERENCES Department(dept_id) // Foreign key referencing the Department table
+            staff_id INT AUTO_INCREMENT PRIMARY KEY,
+            Name VARCHAR(255) NOT NULL,
+            Role VARCHAR(255),
+            dept_id INT,
+            Email VARCHAR(255),
+            Password VARCHAR(700),
+            Phone VARCHAR(255),
+            resetToken VARCHAR(255),
+            resetTokenExpires DATETIME,
+            FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
         );
     `;
 
+    // Execute the query to create the table
     db.query(query, (err, results) => {
         if (err) {
-            console.error('Error creating Staff table:', err); // Updated error message for clarity
-            throw err; // Rethrow the error for further handling if necessary
+            console.error('Error creating Staff table:', err);
+            throw err; // Throw an error to ensure it’s caught by upstream handlers
         }
         console.log('Staff table created or already exists');
     });
 };
 
+/**
+ * @module StaffTable
+ * @description Module responsible for creating and managing the Staff table.
+ */
 module.exports = {
     createXmlDataStaffTable
 };

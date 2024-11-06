@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="createXmlDataStaffTable"><span class="type-signature"></span>createXmlDataStaffTable<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="createXmlDataTeacherTable"><span class="type-signature">(async) </span>createXmlDataTeacherTable<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -112,7 +112,7 @@
 
 
 <div class="description">
-    Creates the Staff table in the database if it does not already exist.The Staff table stores information about the staff members of the institution, including their roles, contact details, and department affiliation.
+    Creates the Teacher table if it does not already exist.This table stores teacher information, including teacher ID, name, profile image,designation, department ID, abbreviation, email, password, phone, and reset token details.It establishes a foreign key relationship with the Department table via dept_id.
 </div>
 
 
@@ -156,7 +156,253 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="staffModel.js.html">staffModel.js</a>, <a href="staffModel.js.html#line5">line 5</a>
+        <a href="teacherModel.js.html">teacherModel.js</a>, <a href="teacherModel.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>../config/db for the database configuration.</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Throws an error if the table creation query fails.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Does not return anything but logs status or errors to the console.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// Call the function to ensure the Teacher table existscreateXmlDataTeacherTable();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateProfileImage"><span class="type-signature">(async) </span>updateProfileImage<span class="signature">(teacher_id, profileImage, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the profile image for a specific teacher in the Teacher table.This function takes a teacher's ID and the new profile image path to update the teacher's record.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>teacher_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the teacher whose profile image is to be updated.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profileImage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new profile image path to be saved.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback function to handle the query results.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="teacherModel.js.html">teacherModel.js</a>, <a href="teacherModel.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -186,7 +432,7 @@
 <dl>
     <dt>
         <div class="param-desc">
-        Throws an error if the table creation fails, which can be caught and handled by the calling function.
+        Throws an error if the update query fails.
         </div>
     </dt>
     <dd></dd>
@@ -214,7 +460,7 @@
 
         
 <div class="param-desc">
-    This function does not return a value. It creates the Staff table in the database.
+    Executes the update query and calls the callback function with the results.
 </div>
 
 
@@ -238,7 +484,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// Call the function to create the Staff tablecreateXmlDataStaffTable();</code></pre>
+    <pre class="prettyprint"><code>// Call the function to update a teacher's profile imageupdateProfileImage(1, 'path/to/new/image.jpg', (err, result) => {    if (err) {        console.error('Error updating profile image:', err);    } else {        console.log('Profile image updated successfully');    }});</code></pre>
 
 
 
@@ -258,13 +504,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createXmlDataStaffTable">createXmlDataStaffTable</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-TeacherModel.html">TeacherModel</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createXmlDataTeacherTable">createXmlDataTeacherTable</a></li><li><a href="global.html#updateProfileImage">updateProfileImage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Nov 01 2024 22:46:12 GMT+0600 (Bangladesh Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Nov 07 2024 00:02:26 GMT+0600 (Bangladesh Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

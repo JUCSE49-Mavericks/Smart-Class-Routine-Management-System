@@ -4,7 +4,7 @@ const pool = require('../config/db');  // Import database pool
  * ClassRoutineModel handles database operations related to the class routine, 
  * including deleting and inserting routine entries.
  */
-class ClassRoutineModel {
+class MakeupClassRoutineModel {
    /**
      * Deletes all routine entries associated with a specified department ID before
      * inserting a new routine.
@@ -113,4 +113,4 @@ class ClassRoutineModel {
     }
 }
 
-module.exports = new ClassRoutineModel();
+module.exports = new MakeupClassRoutineModel();

@@ -2,31 +2,37 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import RoutineInputProcessor from '../controllers/ROUTINE/routineInputProcessorController.js';
+import fs from 'fs/promises'; // Import fs/promises for async file operations
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+// Set up Chai
 chai.use(chaiAsPromised);
 const { expect } = chai;
 
+// Define __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Read test inputs from JSON file
+const inputFilePath = join(__dirname, '../testCases/scheduleInput.json');
+
 describe('RoutineInputProcessor', function() {
     let routineInputProcessor;
+    let scheduleInputs;
 
     before(async function() {
+        // Read schedule input data
+        const data = await fs.readFile(inputFilePath, 'utf8');
+        scheduleInputs = JSON.parse(data); // Parse the JSON data
         routineInputProcessor = new RoutineInputProcessor();
         console.log('Connected to mock database');
     });
 
     beforeEach(function() {
-        // Stub database methods if necessary
-        sinon.stub(routineInputProcessor, 'createSchedule').resolves({
-            department: 'Computer Science',
-            slots: [
-                { slotNumber: 1, startTime: '09:00', endTime: '10:00', duration: 60 },
-                { slotNumber: 2, startTime: '10:00', endTime: '11:00', duration: 60 },
-                { slotNumber: 3, startTime: '11:00', endTime: '12:00', duration: 60 },
-                { slotNumber: 4, startTime: '13:00', endTime: '14:00', duration: 60 },
-                { slotNumber: 5, startTime: '14:00', endTime: '15:00', duration: 60 },
-            ],
-            lunchBreak: { duration: 30, startTime: '12:00', endTime: '12:30' }
-        });
+        // Stub the createSchedule method with mock response from JSON
+        const mockResponse = scheduleInputs.mockResponse; // Use mock response from JSON
+        sinon.stub(routineInputProcessor, 'createSchedule').resolves(mockResponse);
     });
 
     afterEach(function() {
@@ -35,15 +41,7 @@ describe('RoutineInputProcessor', function() {
     });
 
     it('should generate timeslots with valid parameters', async function() {
-        const scheduleDetails = {
-            department: 'Computer Science',
-            slotCount: 5,
-            slotDuration: 60,
-            startTime: '09:00',
-            endTime: '17:00',
-            lunchDuration: 30,
-            lunchTime: '12:00'
-        };
+        const scheduleDetails = scheduleInputs.validInputs[0]; // Use the first valid input from JSON
 
         const result = await routineInputProcessor.processSchedule(scheduleDetails);
         
@@ -53,13 +51,7 @@ describe('RoutineInputProcessor', function() {
     });
 
     it('should throw an error when missing required parameters', async function() {
-        const scheduleDetails = {
-            department: 'Computer Science & Engineering',
-            slotCount: 5,
-            slotDuration: 60,
-            lunchDuration: 30,
-            lunchTime: '12:00'
-        };
+        const scheduleDetails = scheduleInputs.invalidInputs[0]; // Use the first invalid input from JSON
 
         await expect(routineInputProcessor.processSchedule(scheduleDetails)).to.be.rejectedWith('Missing required parameters.');
     });

@@ -18,10 +18,15 @@ const mockDataPath = join(__dirname, '../testCases/testCases1.json');
 const mockData = JSON.parse(fs.readFileSync(mockDataPath, 'utf8'));
 
 describe('RoutineGenerateController - generateRoutine', () => {
+    
+        /** @type {RoutineGenerateController} */
+
     let routineGenerateController;
     
 
-
+    /**
+     * Test case to verify correct mapping of preferred times for teachers.
+     */
     it('should map preferred times for teachers correctly', () => {
         console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
         const routineGenController = new RoutineGenerateController();
@@ -118,7 +123,7 @@ describe('RoutineGenerateController - generateRoutine', () => {
         {
             room_type: 'Lab',
             room_count: 2,
-            Rooms: ['Lab1', 'Lab2'],
+            Rooms: ['203', '302'],
         },
     ];
 
@@ -128,7 +133,9 @@ describe('RoutineGenerateController - generateRoutine', () => {
     });
 
 
-
+    /**
+     * Test case to verify assignment of consecutive slots for courses that require multiple slots.
+     */
 
     it('should assign consecutive slots for a 2-slot course', async () => {
         console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
@@ -200,6 +207,10 @@ describe('RoutineGenerateController - generateRoutine', () => {
     });
     
 
+    /**
+     * Test case to verify that courses are skipped if no preferred times are set.
+     */
+
     it('should skip a course from allocating on that day if no preferred times are available for the course TEACHER i.e preferred time is NULL', async () => {
         console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
         const modifiedDepartmentData = {
@@ -207,7 +218,7 @@ describe('RoutineGenerateController - generateRoutine', () => {
             teacherDetails: [
                 {
                     teacher_id: 1,
-                    Name: 'John Doe',
+                    Name: 'Dr. Md. Musfique Anwar',
                     preferredTimes: [], // No preferred times
                 },
             ],
@@ -227,7 +238,9 @@ describe('RoutineGenerateController - generateRoutine', () => {
 
 
   
-
+    /**
+     * Test case to verify that a teacher is not assigned to different classes at the same time slot.
+     */
     it('should handle cases so that the same TEACHER is not assigned to two different classes at the same TIME SLOT', async () => {
         console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
         const modifiedDepartmentData = {
@@ -346,6 +359,16 @@ describe('RoutineGenerateController - generateRoutine', () => {
 
    
 });
+
+/**
+ * Helper function to check if a time slot falls within a preferred time range.
+ *
+ * @param {string} startTime - The start time of the slot.
+ * @param {string} endTime - The end time of the slot.
+ * @param {string} preferredStart - The preferred start time.
+ * @param {string} preferredEnd - The preferred end time.
+ * @returns {boolean} - True if the slot is within the preferred time range, false otherwise.
+ */
 
 // Helper function to check if a time slot falls within a preferred time range
 function isWithinTimeRange(startTime, endTime, preferredStart, preferredEnd) {

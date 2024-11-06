@@ -1,0 +1,33 @@
+{
+    "validInputs": [
+        {
+            "department": "Computer Science & Engineering",
+            "slotCount": 5,
+            "slotDuration": 80,
+            "startTime": "09:00",
+            "endTime": "17:00",
+            "lunchDuration": 60,
+            "lunchTime": "13:00"
+        }
+    ],
+    "invalidInputs": [
+        {
+            "department": "Computer Science & Engineering",
+            "slotCount": 5,
+            "slotDuration": 60,
+            "lunchDuration": 30,
+            "lunchTime": "12:00"
+        }
+    ],
+    "mockResponse": {
+        "department": "Computer Science & Engineering",
+        "slots": [
+            { "slotNumber": 1, "startTime": "09:00", "endTime": "10:20", "duration": 80 },
+            { "slotNumber": 2, "startTime": "10:20", "endTime": "11:40", "duration": 80 },
+            { "slotNumber": 3, "startTime": "11:40", "endTime": "13:00", "duration": 80 },
+            { "slotNumber": 4, "startTime": "14:00", "endTime": "15:20", "duration": 80 },
+            { "slotNumber": 5, "startTime": "15:20", "endTime": "16:40", "duration": 80 }
+        ],
+        "lunchBreak": { "duration": 60, "startTime": "13:00", "endTime": "14:00" }
+    }
+}

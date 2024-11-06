@@ -1,0 +1,43 @@
+{
+    "department": [
+      {
+        "dept_id": 1,
+        "department_name": "Computer Science & Engineering"
+      }
+    ],
+    "session": [
+      {
+        "session_id": 2,
+        "session_name": "2019-2020"
+      }
+    ],
+    "examYear": [
+      {
+        "exam_year_id": 3,
+        "year_name": "2024"
+      }
+    ],
+    "course": [
+      {
+        "course_id": 4,
+        "course_title": "Data Structures",
+        "course_code": "CS101"
+      }
+    ],
+    "chapters": [
+      { "Chapter": "Introduction" }
+    ],
+    "objectives": [
+      { "Objective": "Understand Algorithms" }
+    ],
+    "prerequisites": [
+      { "Prerequisite": "Basic Programming" }
+    ],
+    "recommended_books": [
+      { "Book_title": "Data Structures by Knuth" }
+    ],
+    "student_learning_outcomes": [
+      { "Outcome": "Problem Solving" }
+    ]
+  }
+  

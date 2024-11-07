@@ -34,7 +34,8 @@ const { createClassRepresentativeTable } = require('./models/classRepresentative
 
 const {createclassRoutineTable}=require('./models/classRoutineModel');
 const {createAssignedCourseTeacherTable} = require('./models/assignedCourseTeacherModel');
-
+const {createTimeSlotTable} = require('./models/scheduledClassModel');
+const { createScheduledClassTable } = require('./models/scheduledClassModel');
 
 
 createSuperUserTable();
@@ -60,7 +61,8 @@ createClassRepresentativeTable();
 createclassRoutineTable();
 
 createAssignedCourseTeacherTable();
-
+createTimeSlotTable();
+createScheduledClassTable();
 
 // Routes
 const superUserRoutes = require('./routes/superUserRoutes');

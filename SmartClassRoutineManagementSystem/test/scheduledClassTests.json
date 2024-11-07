@@ -1,0 +1,146 @@
+{
+    "tests": [
+        {
+            "testCase": "should confirm a scheduled class",
+            "description": "Confirm a scheduled class if it's scheduled and confirmation happens before 5 hours of the class time",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Scheduled",
+                "class_date": "2024-11-07",
+                "startTime": "2024-11-07 10:00:00",
+                "confirmationTime": "2024-11-07 05:00:00"
+            },
+            "expectedOutput": {
+                "status": "Confirmed"
+            },
+            "method": "confirmScheduledClass"
+        },
+        {
+            "testCase": "should not confirm a class if confirmation time is more than 5 hours before the class",
+            "description": "The confirmation must happen before 5 hours of the class start time",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Scheduled",
+                "class_date": "2024-11-07",
+                "startTime": "2024-11-07 10:00:00",
+                "confirmationTime": "2024-11-07 04:00:00"
+            },
+            "expectedOutput": {
+                "status": "Scheduled"
+            },
+            "method": "confirmScheduledClass"
+        },
+        {
+            "testCase": "should confirm a class exactly 5 hours before the start time",
+            "description": "Test that confirmation is allowed exactly 5 hours before the start time",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Scheduled",
+                "class_date": "2024-11-07",
+                "startTime": "2024-11-07 10:00:00",
+                "confirmationTime": "2024-11-07 05:00:00"
+            },
+            "expectedOutput": {
+                "status": "Confirmed"
+            },
+            "method": "confirmScheduledClass"
+        },
+        {
+            "testCase": "should not confirm a class if it has already been confirmed",
+            "description": "Check that a class can't be confirmed again if already confirmed",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Confirmed",
+                "class_date": "2024-11-07",
+                "startTime": "2024-11-07 10:00:00",
+                "confirmationTime": "2024-11-07 05:00:00"
+            },
+            "expectedOutput": {
+                "status": "Confirmed"
+            },
+            "method": "confirmScheduledClass"
+        },
+        {
+            "testCase": "should automatically update confirmed class to conducted after the class time has passed",
+            "description": "When the time passes, update the confirmed class status to conducted",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Confirmed",
+                "startTime": "2024-11-07 10:00:00",
+                "currentTime": "2024-11-07 11:00:00"
+            },
+            "expectedOutput": {
+                "status": "Conducted"
+            },
+            "method": "autoUpdateClassStatus"
+        },
+        {
+            "testCase": "should not update class status if the class time has not passed yet",
+            "description": "The class status should not be updated to 'Conducted' if the current time is before the class start time",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Confirmed",
+                "startTime": "2024-11-07 10:00:00",
+                "currentTime": "2024-11-07 09:00:00"
+            },
+            "expectedOutput": {
+                "status": "Confirmed"
+            },
+            "method": "autoUpdateClassStatus"
+        },
+        {
+            "testCase": "should delete the scheduled class if it is cancelled",
+            "description": "If a class is cancelled, the ScheduledClass row should be deleted",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Cancelled"
+            },
+            "expectedOutput": {
+                "status": "Deleted"
+            },
+            "method": "cancelScheduledClass"
+        },
+        {
+            "testCase": "should handle invalid startTime and endTime",
+            "description": "If the startTime is later than the endTime, return an error",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Scheduled",
+                "class_date": "2024-11-07",
+                "startTime": "2024-11-07 10:00:00",
+                "endTime": "2024-11-07 09:00:00"
+            },
+            "expectedOutput": {
+                "error": "Invalid class time"
+            },
+            "method": "validateClassTime"
+        },
+        {
+            "testCase": "should handle errors during confirmation",
+            "description": "Check error handling when class confirmation fails",
+            "input": {
+                "scheduled_class_id": 1,
+                "status": "Scheduled",
+                "class_date": "2024-11-07",
+                "startTime": "2024-11-07 10:00:00",
+                "confirmationTime": "2024-11-07 05:00:00"
+            },
+            "expectedOutput": {
+                "error": "Database error"
+            },
+            "method": "confirmScheduledClass"
+        },
+        {
+            "testCase": "should return an error if the scheduled class does not exist",
+            "description": "Ensure that confirming or canceling a non-existent class throws an error",
+            "input": {
+                "scheduled_class_id": 9999,
+                "status": "Scheduled"
+            },
+            "expectedOutput": {
+                "error": "Class not found"
+            },
+            "method": "confirmScheduledClass"
+        }
+    ]
+}

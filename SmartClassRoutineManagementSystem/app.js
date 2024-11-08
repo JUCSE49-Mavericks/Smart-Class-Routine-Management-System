@@ -32,6 +32,7 @@ const { createHolidayTable} = require('./models/holidaysModel');
 
 
 const {createclassRoutineTable}=require('./models/classRoutineModel');
+const { createRescheduleRequestTable } = require('./models/RescheduleModel');
 
 
 
@@ -55,6 +56,7 @@ createHolidayTable();
 
 
 createclassRoutineTable();
+createRescheduleRequestTable();
 
 
 // Routes
@@ -74,7 +76,7 @@ const syllabusFilterRoute = require('./routes/syllabusFilterRoutes');
 const dataFetch=require('./routes/DataFetch');
 const routineGenerator=require('./routes/routineGeneratorRoutes');
 const teacherImageUpload = require('./controllers/teacherImageUpload');
-
+const rescheduleRoutes = require('./routes/rescheduleRoutes');
 
 
 app.use('/api/auth', authRoutes);
@@ -93,6 +95,7 @@ app.use('/api', syllabusFilterRoute);
 app.use('/api', dataFetch);
 app.use('/api', routineGenerator);
 app.use('/', teacherImageUpload);
+app.use('/api', rescheduleRoutes);
 
 
 

@@ -1,0 +1,84 @@
+{
+    "fetchPendingRequests": [
+      {
+        "description": "Successfully fetches all pending reschedule requests",
+        "method": "GET",
+        "url": "/api/pending-rescheduling-requests",
+        "statusCode": 200,
+        "response": [
+          {
+            "reschedule_request_id": 1,
+            "original_time": "2024-11-10 22:03:57",
+            "requested_time": "2024-11-11 22:03:57",
+            "reason": "habijabi",
+            "course_id": 1,
+            "status": "pending",
+            "new_time": null,
+            "Course_title": "Course 1",
+            "Course_code": "CS101"
+          },
+          {
+            "reschedule_request_id": 2,
+            "original_time": "2024-11-15 09:00:00",
+            "requested_time": "2024-11-20 10:00:00",
+            "reason": "Teacher unavailable",
+            "course_id": 1,
+            "status": "pending",
+            "new_time": null,
+            "Course_title": "Course 1",
+            "Course_code": "CS101"
+          }
+        ]
+      },
+      {
+        "description": "Fails to fetch pending reschedule requests due to database error",
+        "method": "GET",
+        "url": "/api/pending-rescheduling-requests",
+        "statusCode": 500,
+        "response": {
+          "message": "Failed to retrieve pending rescheduling requests. Please try again later."
+        }
+      }
+    ],
+    "approveRequest": [
+      {
+        "description": "Successfully approves a reschedule request",
+        "method": "PUT",
+        "url": "/api/approve-reschedule-request/1",
+        "statusCode": 200,
+        "response": {
+          "message": "Rescheduling request approved successfully."
+        }
+      },
+      {
+        "description": "Fails to approve a non-existing reschedule request",
+        "method": "PUT",
+        "url": "/api/approve-reschedule-request/999",
+        "statusCode": 404,
+        "response": {
+          "message": "Reschedule request not found."
+        }
+      }
+    ],
+    "rejectRequest": [
+      {
+        "description": "Successfully rejects a reschedule request",
+        "method": "PUT",
+        "url": "/api/reject-reschedule-request/2",
+        "statusCode": 200,
+        "response": {
+          "message": "Rescheduling request rejected successfully."
+        }
+      },
+      {
+        "description": "Fails to reject a non-existing reschedule request",
+        "method": "PUT",
+        "url": "/api/reject-reschedule-request/999",
+        "statusCode": 404,
+        "response": {
+          "message": "Reschedule request not found."
+        }
+      }
+    ]
+  }
+  

@@ -1,43 +1,86 @@
 {
-    "department": [
-      {
-        "dept_id": 1,
-        "department_name": "Computer Science & Engineering"
-      }
-    ],
-    "session": [
-      {
-        "session_id": 2,
-        "session_name": "2019-2020"
-      }
-    ],
-    "examYear": [
-      {
-        "exam_year_id": 3,
-        "year_name": "2024"
-      }
-    ],
-    "course": [
-      {
+  "testCases": [
+    {
+      "description": "Fetch course data successfully",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
         "course_id": 4,
+        "course_code": "CSE 101",
         "course_title": "Data Structures",
-        "course_code": "CS101"
+        "course_type": null,
+        "contact_hour": null,
+        "rationale": null,
+        "chapters": ["Introduction"],
+        "objectives": ["Understand Algorithms"],
+        "prerequisites": ["Basic Programming"],
+        "recommended_books": [{ "Book_title": "Data Structures by Knuth" }],
+        "student_learning_outcomes": ["Problem Solving"]
       }
-    ],
-    "chapters": [
-      { "Chapter": "Introduction" }
-    ],
-    "objectives": [
-      { "Objective": "Understand Algorithms" }
-    ],
-    "prerequisites": [
-      { "Prerequisite": "Basic Programming" }
-    ],
-    "recommended_books": [
-      { "Book_title": "Data Structures by Knuth" }
-    ],
-    "student_learning_outcomes": [
-      { "Outcome": "Problem Solving" }
-    ]
-  }
-  
+    },
+    {
+      "description": "Department not found",
+      "input": {
+        "department": "",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Department not found"
+      }
+    },
+    {
+      "description": "Session not found",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Session not found"
+      }
+    },
+    {
+      "description": "Exam year not found",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Exam year not found"
+      }
+    },
+    {
+      "description": "Course not found",
+      "input": {
+        "department": "Computer Science",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": ""
+      },
+      "expectedOutput": {
+        "error": "Course not found"
+      }
+    },
+    {
+      "description": "Additional data fetch fails",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Failed to fetch chapters"
+      }
+    }
+  ]
+}

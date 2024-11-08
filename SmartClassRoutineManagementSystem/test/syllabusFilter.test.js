@@ -5,7 +5,6 @@ const path = require('path');
 const CourseDataFetcher = require('../controllers/syllabusFilterController.js'); // Update path as necessary
 const pool = require('../config/db.js'); // Update path as necessary
 
-
 /**
  * Unit tests for the CourseDataFetcher class.
  */
@@ -13,7 +12,6 @@ describe('CourseDataFetcher', () => {
   let courseDataFetcher;
   let queryStub;
   let testData; // Store the JSON data here after reading
-
 
   /**
    * Reads and parses test data from a JSON file.
@@ -27,8 +25,7 @@ describe('CourseDataFetcher', () => {
     return JSON.parse(data);
   };
 
-
-    /**
+  /**
    * Sets up test data and stubs the pool.query function before each test.
    * @async
    * @function beforeEach
@@ -42,8 +39,7 @@ describe('CourseDataFetcher', () => {
     courseDataFetcher = new CourseDataFetcher(pool);
   });
 
-
-    /**
+  /**
    * Restores stubbed functions after each test.
    * @function afterEach
    */
@@ -51,7 +47,6 @@ describe('CourseDataFetcher', () => {
     // Restore the stubbed functions
     sinon.restore();
   });
-
 
   /**
    * Tests the successful fetching of course data.
@@ -89,7 +84,6 @@ describe('CourseDataFetcher', () => {
     });
   });
 
-
   /**
    * Tests error handling when the specified department is not found.
    * @function
@@ -112,13 +106,12 @@ describe('CourseDataFetcher', () => {
     queryStub.onFirstCall().yields(null, testData.department); // Department data
     queryStub.onSecondCall().yields(null, []); // No session found
 
-    await courseDataFetcher.fetchCourseData('Computer Science', '2019-2020', '2024', 'Data Structures', (err, data) => {
+    await courseDataFetcher.fetchCourseData('Computer Science & Engineering', '2019-2020', '2024', 'Data Structures', (err, data) => {
       assert.notStrictEqual(err, null);
       assert.strictEqual(err.message, 'Session not found');
       assert.strictEqual(data, null);
     });
   });
-
 
   /**
    * Tests error handling when the specified exam year is not found.
@@ -129,13 +122,12 @@ describe('CourseDataFetcher', () => {
     queryStub.onSecondCall().yields(null, testData.session); // Session data
     queryStub.onThirdCall().yields(null, []); // No exam year found
 
-    await courseDataFetcher.fetchCourseData('Computer Science', '2019-2020', '2024', 'Data Structures', (err, data) => {
+    await courseDataFetcher.fetchCourseData('Computer Science & Engineering', '2019-2020', '2024', 'Data Structures', (err, data) => {
       assert.notStrictEqual(err, null);
       assert.strictEqual(err.message, 'Exam year not found');
       assert.strictEqual(data, null);
     });
   });
-
 
   /**
    * Tests error handling when the specified course is not found.
@@ -147,14 +139,14 @@ describe('CourseDataFetcher', () => {
     queryStub.onThirdCall().yields(null, testData.examYear); // Exam year data
     queryStub.onCall(3).yields(null, []); // No course found
 
-    await courseDataFetcher.fetchCourseData('Computer Science', '2019-2020', '2024', 'Nonexistent Course', (err, data) => {
+    await courseDataFetcher.fetchCourseData('Computer Science & Engineering', '2019-2020', '2024', 'Nonexistent Course', (err, data) => {
       assert.notStrictEqual(err, null);
       assert.strictEqual(err.message, 'Course not found');
       assert.strictEqual(data, null);
     });
   });
 
-    /**
+  /**
    * Tests error handling when fetching additional data (such as chapters) fails.
    * Simulates a failure during the data fetch process.
    * @function
@@ -166,7 +158,7 @@ describe('CourseDataFetcher', () => {
     queryStub.onCall(3).yields(null, [{ course_id: 4 }]);
     queryStub.onCall(4).yields(new Error('Failed to fetch chapters')); // Simulate failure
 
-    await courseDataFetcher.fetchCourseData('Computer Science', '2019-2020', '2024', 'Data Structures', (err, data) => {
+    await courseDataFetcher.fetchCourseData('Computer Science & Engineering', '2019-2020', '2024', 'Data Structures', (err, data) => {
       assert.notStrictEqual(err, null);
       assert.strictEqual(err.message, 'Failed to fetch chapters');
       assert.strictEqual(data, null);

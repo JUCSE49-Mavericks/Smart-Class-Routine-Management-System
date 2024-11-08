@@ -28,7 +28,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "test:coverage": "nyc mocha"
+    "test:coverage": "nyc mocha",
+    "lint": "eslint ."
 
   },
 

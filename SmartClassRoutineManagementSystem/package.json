@@ -27,7 +27,7 @@
     "sinon": "^19.0.2"
   },
   "scripts": {
-    "test": "mocha",
+   "test": "npx mocha --extension js,mjs 'test/**/*.{js,mjs}'", 
     "test:coverage": "nyc mocha",
     "lint": "eslint ."
 

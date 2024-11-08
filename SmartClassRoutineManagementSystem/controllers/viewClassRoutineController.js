@@ -1,15 +1,9 @@
-const RoutineService = require('../services/RoutineService');
+const RoutineService = require('../models/routineViewModel');
 
-/**
- * @module ViewClassRoutineController
- * @class
- * @description Controller for managing class routines.
- */
 class ViewClassRoutineController {
     /**
      * Fetches the class routine with filters.
      * @async
-     * @method
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      * @param {string} req.query.day - The day of the week for the routine.
@@ -43,7 +37,6 @@ class ViewClassRoutineController {
     /**
      * Fetches all teachers.
      * @async
-     * @method
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      * @returns {Promise<void>} A promise that resolves when the response is sent.
@@ -62,7 +55,6 @@ class ViewClassRoutineController {
     /**
      * Fetches all courses.
      * @async
-     * @method
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      * @returns {Promise<void>} A promise that resolves when the response is sent.
@@ -81,7 +73,6 @@ class ViewClassRoutineController {
     /**
      * Fetches all routines without filters (if needed).
      * @async
-     * @method
      * @param {Object} req - The request object.
      * @param {Object} res - The response object.
      * @returns {Promise<void>} A promise that resolves when the response is sent.

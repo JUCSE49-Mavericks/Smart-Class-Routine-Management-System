@@ -1,6 +1,5 @@
 name: Node.js CI
 
-# Run the workflow only on the classRoutine_AKILA branch
 on:
   push:
     branches:
@@ -22,17 +21,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Specify the Node.js version you want to use
+          node-version: '16'  # Adjust Node.js version if needed
 
-      # Step 3: Install dependencies
+      # Step 3: Install dependencies with a specified working directory
       - name: Install dependencies
         run: npm install
+        working-directory: ./SmartClassRoutineManagementSystem
 
-      # Step 4: Run lint (optional, if you have ESLint configured)
-      - name: Run linter
-        run: npm run lint
-        # Ensure you have a linting script in your package.json file, like "lint": "eslint ."
-
-      # Step 5: Run Mocha tests
+      # Step 4: Run Mocha tests in the specified directory
       - name: Run Mocha tests
         run: npm test
+        working-directory: ./SmartClassRoutineManagementSystem

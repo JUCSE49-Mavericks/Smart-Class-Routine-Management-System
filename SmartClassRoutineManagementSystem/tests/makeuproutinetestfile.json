@@ -1,0 +1,19 @@
+[
+  {
+      "courseName": "CSE-403",
+      "classesNeeded": 1,
+      "expectedSchedule": [
+          {
+              "day": "Thursday",
+              "slots": [
+                  { "start": "14:00", "end": "15:00" }
+              ]
+          }
+      ]
+  },
+  {
+      "courseName": "Physics",
+      "classesNeeded": 0,
+      "expectedError": "No makeup classes needed for course: Physics"
+  }
+]

@@ -1,79 +1,64 @@
-const fs = require('fs');
-const path = require('path');
-const { spawn } = require('child_process');
-const { PythonShell } = require('python-shell');
-const multer = require('multer');
+// controllers/makeupScheduleController.js
+const MakeupScheduleModel = require('../models/makeupclassRoutineModel');
+const { exec } = require('child_process');
 
-// Ensure 'uploads/' directory exists
-const uploadDir = path.join(__dirname, '../uploads_routine_csvfiles');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
-
-// Configure multer for file upload
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    },
-});
-
-const upload = multer({ storage });
-
-// Function to handle file upload and processing
-const uploadFile = async (req, res) => {
+/**
+ * Generates a makeup class schedule by calling the genetic algorithm in Python.
+ * @param {string} courseName - The name of the course.
+ */
+const generateMakeupSchedule = async (courseName) => {
     try {
-        if (!req.file) {
-            return res.status(400).send('No file uploaded.');
+        // Fetch the classes needed for this course from the database
+        const classesNeeded = await MakeupScheduleModel.getClassesNeeded(courseName);
+
+        // Ensure that classes are needed
+        if (classesNeeded === 0) {
+            throw new Error(`No makeup classes needed for course: ${courseName}`);
         }
 
-        if (req.file.mimetype !== 'text/csv') {
-            return res.status(400).send('Please upload a CSV file.');
-        }
+        return new Promise((resolve, reject) => {
+            const command = `python3 makeup_schedule_generator.py ${classesNeeded}`;
 
-            // Path to the uploaded file
-            const filePath = req.file.path;
-            console.log('Uploaded file path:', filePath);
-    
-            // Run Python script using child_process.spawn
-            const pythonProcess = spawn('python', [path.join(__dirname, '../python/schedule_generator.py'), filePath]);
-    
-            let scriptOutput = '';
-    
-            pythonProcess.stdout.on('data', (data) => {
-                scriptOutput += data.toString();
+            exec(command, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error executing Python script: ${error.message}`);
+                    return reject(error);
+                }
+                if (stderr) {
+                    console.error(`Python script error: ${stderr}`);
+                    return reject(stderr);
+                }
+
+                try {
+                    const schedule = JSON.parse(stdout.trim());
+                    resolve(schedule);
+                } catch (parseError) {
+                    reject(parseError);
+                }
             });
-    
-            pythonProcess.stderr.on('data', (data) => {
-            console.error('Python script error output:', data.toString());
-        });
-
-        pythonProcess.on('close', (code) => {
-            console.log(`Python script exited with code ${code}`);
-            try {
-                const schedule = JSON.parse(scriptOutput);
-
-                // Log the results to the Node.js console
-                console.log('Generated Schedule:', schedule);
-
-                // Delete the file after processing
-                fs.unlink(filePath, (err) => {
-                    if (err) console.error('Error deleting file:', err);
-                });
-
-                // Send the results back to the client as a JSON object
-                res.json(schedule);
-            } catch (parseError) {
-                console.error('JSON parse error:', parseError);
-                return res.status(500).send('Error parsing the schedule.');
-            }
         });
     } catch (error) {
-        console.error('Server error:', error);
-        res.status(500).send('Server error.');
+        throw new Error(`Failed to generate schedule: ${error.message}`);
     }
 };
 
-module.exports = { upload, uploadFile };
+// Example Express route handler
+const express = require('express');
+const router = express.Router();
+
+router.get('/generate-makeup-schedule', async (req, res) => {
+    const courseName = req.query.courseName;
+
+    if (!courseName) {
+        return res.status(400).json({ error: "Missing 'courseName' parameter" });
+    }
+
+    try {
+        const schedule = await generateMakeupSchedule(courseName);
+        res.json(schedule);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+module.exports = router;

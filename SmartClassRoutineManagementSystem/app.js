@@ -29,6 +29,7 @@ const { createXmlDataExamYearTable } = require('./models/examYearModel');
 const { createCourseTable, createPrerequisiteCourseTable, createCourseChapterTable, createCourseObjectiveTable, createStudentLearningOutcomesTable, createRecommendedBookTable } = require('./models/syllabusModel');
 const { createScheduleTable} = require('./models/RoutineModel');
 const { createHolidayTable} = require('./models/holidaysModel');
+const { createmakeupscheduleTable} = require('./models/makeupclassRoutineModel');
 
 
 const {createclassRoutineTable}=require('./models/classRoutineModel');
@@ -52,6 +53,7 @@ createStudentLearningOutcomesTable();
 createRecommendedBookTable();
 createScheduleTable();
 createHolidayTable();
+createmakeupscheduleTable();
 
 
 // createclassRoutineTable();

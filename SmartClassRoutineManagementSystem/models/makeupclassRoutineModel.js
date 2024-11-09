@@ -1,116 +1,75 @@
-const pool = require('../config/db');  // Import database pool
+const db = require('../config/db');
 
-/**
- * ClassRoutineModel handles database operations related to the class routine, 
- * including deleting and inserting routine entries.
- */
-class MakeupClassRoutineModel {
-   /**
-     * Deletes all routine entries associated with a specified department ID before
-     * inserting a new routine.
-     * @async
-     * @param {number} deptId - The department ID whose entries should be deleted.
-     * @throws {Error} If there is an issue with the database deletion.
+class MakeupScheduleModel {
+    /**
+     * Creates the Makeup_Schedule table if it does not exist.
      */
-    async deleteEntriesByDeptId(deptId) {
-        const query = 'DELETE FROM classRoutine WHERE deptId = ?';
-
-        try {
-            await new Promise((resolve, reject) => {
-                pool.query(query, [deptId], (error, results) => {
-                    if (error) {
-                        console.error("Database deletion error in deleteEntriesByDeptId:", error);
-                        return reject(error);
-                    }
-                    resolve(results);
-                });
-            });
-            // console.log(`Deleted previous routine entries for Dept_id ${deptId}`);
-        } catch (error) {
-            console.error('Failed to delete routine entries:', error);
-            throw new Error('Database deletion failed');
-        }
-    }
-
-  
-
-        /**
-     * Inserts a single routine entry into the `classRoutine` table.
-     * @async
-     * @param {Object} entry - The routine entry to insert.
-     * @param {number} entry.deptId - Department ID of the entry.
-     * @param {number} entry.teacherId - Teacher's unique ID.
-     * @param {string} entry.teacherName - Name of the teacher.
-     * @param {string} entry.day - Day of the class.
-     * @param {string} entry.class - Class year or grade.
-     * @param {Object} entry.time - Object containing start and end times.
-     * @param {string} entry.time.start - Start time of the class.
-     * @param {string} entry.time.end - End time of the class.
-     * @param {string} entry.courseTitle - Title of the course.
-     * @param {string} entry.room - Room where the class will be held.
-     * @throws {Error} If there is an issue with the database insertion.
-     */
-    async insertRoutineEntry(entry) {
-        // Debugging log to check the entry
-        // console.log('Attempting to insert entry:', entry);
-
+    static async createmakeupscheduleTable() {
         const query = `
-            INSERT INTO classRoutine (
-                deptId, teacherId, teacher, day, year, startTime, endTime, course, room
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            CREATE TABLE IF NOT EXISTS makeupschedule (
+                id SERIAL PRIMARY KEY,
+                course_name VARCHAR(255) NOT NULL,
+                course_type ENUM('Lab', 'Theory') NOT NULL,
+                teacher_name VARCHAR(255) NOT NULL,
+                year INT NOT NULL,
+                classes_performed INT DEFAULT 0,
+                threshold_classes INT NOT NULL
+            );
         `;
-
-        const values = [
-            entry.Dept_id,
-            entry.Teacher_id,
-            entry.teacher_name,
-            entry.day,
-            entry.class,
-            entry.time.start,
-            entry.time.end,
-            entry.course_title,
-            entry.room
-        ];
-        
-
-
         try {
-            await new Promise((resolve, reject) => {
-                pool.query(query, values, (error, results) => {
-                    if (error) {
-                        console.error("Database insertion error in insertRoutineEntry:", error);
-                        return reject(error);
-                    }
-                    resolve(results);
-                });
-            });
-            // console.log(`Inserted routine entry for course ID ${entry.course_id}`);
+            await db.query(query);
+            console.log('makeupschedule table created or already exists');
         } catch (error) {
-            console.error('Failed to insert routine entry:', error);
-            throw new Error('Database insertion failed');
+            console.error('Error creating makeupschedule table:', error);
+            throw error;
         }
     }
 
-
-
-
-        /**
-     * Inserts an entire routine, deleting previous entries for the department first.
-     * @async
-     * @param {Array<Object>} routine - Array of routine entries to insert.
-     * @param {number} deptId - Department ID whose existing entries should be deleted.
-     * @throws {Error} If there is an issue with deletion or insertion.
+    /**
+     * Inserts a new schedule entry into the makeupschedule table.
+     * @param {Object} entry - The schedule entry to insert.
      */
-    async insertRoutine(routine, deptId) {
-        // Delete previous entries for the given department ID
-        await this.deleteEntriesByDeptId(deptId);
-
-        // Insert new routine entries
-        for (const entry of routine) {
-            // console.log('Insering entry:', entry);
-            await this.insertRoutineEntry(entry);
+    static async insertEntry(entry) {
+        const query = `
+            INSERT INTO makeupschedule (
+                course_name, course_type, teacher_name, year, classes_performed, threshold_classes
+            ) VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        const values = [
+            entry.course_name, entry.course_type, entry.teacher_name,
+            entry.year, entry.classes_performed || 0, entry.threshold_classes
+        ];
+        try {
+            const [result] = await db.query(query, values);
+            return result.insertId;
+        } catch (error) {
+            console.error('Error inserting entry:', error);
+            throw error;
         }
     }
+    static async getClassesNeeded(courseName) {
+        const query = `
+            SELECT threshold_classes, classes_performed
+            FROM makeupschedule
+            WHERE course_name = ?
+        `;
+        try {
+            const [rows] = await db.query(query, [courseName]);
+            if (rows.length === 0) {
+                throw new Error('Course not found');
+            }
+
+            const { threshold_classes, classes_performed } = rows[0];
+            const classesNeeded = threshold_classes - classes_performed;
+
+            return classesNeeded > 0 ? classesNeeded : 0; // Ensure non-negative result
+        } catch (error) {
+            console.error('Error fetching class counts:', error);
+            throw error;
+        }
+    }
+
+    // Additional methods for updating, deleting, and retrieving entries can be added here.
 }
 
-module.exports = new MakeupClassRoutineModel();
+module.exports = MakeupScheduleModel;

@@ -1,101 +1,89 @@
 import chai from 'chai';
-import chaiHttp from 'chai-http';
 import sinon from 'sinon';
-import { uploadStudentAsXML } from '../controllers/studentController.js';
-import db from '../config/db.js';
 import xml2js from 'xml2js';
+import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
+import { uploadStudentAsXML } from '../controllers/studentController.js';
+import { clearTable, insertXmlStudentIntoDatabase } from '../models/studentModel.js';
 
 const { expect } = chai;
-chai.use(chaiHttp);
 
-describe('Upload Student as XML', () => {
+describe('uploadStudentAsXML', () => {
     let req, res;
     let testCases;
 
-    /**
-     * Load test cases from JSON file.
-     */
+    // Load test data from JSON file
     before(() => {
-        const testCasePath = path.resolve(__dirname, 'testfile.json');
-        testCases = JSON.parse(fs.readFileSync(testCasePath, 'utf-8'));
+        const testFilePath = path.resolve(__dirname, 'testfile.json');
+        testCases = JSON.parse(fs.readFileSync(testFilePath, 'utf-8'));
     });
 
-    /**
-     * Set up request and response objects, and stubs for database and XML parser before each test.
-     */
     beforeEach(() => {
-        req = { body: '' };
+        req = { body: '' }; // Mocked request object
         res = {
             status: sinon.stub().returnsThis(),
             send: sinon.stub()
         };
 
-        sinon.stub(db, 'query').yields(null, { affectedRows: 1 });
-        sinon.stub(xml2js, 'parseString').yields(null, { root: { row: [{}] } });
+        // Stub dependencies
+        sinon.stub(xml2js, 'parseString');
+        sinon.stub(clearTable);
+        sinon.stub(insertXmlStudentIntoDatabase);
+        sinon.stub(bcrypt, 'hash');
     });
 
-    /**
-     * Restore stubs after each test to clean up any modifications.
-     */
     afterEach(() => {
-        sinon.restore();
+        sinon.restore(); // Restore all stubs and mocks
     });
 
-    /**
-     * Test case: Should upload student data successfully.
-     * @param {Object} req.body - Request body containing student data.
-     * @param {Object} res - Response object to verify output.
-     */
-    it('should upload student data successfully', async () => {
+    it('should import XML data successfully', async () => {
         req.body = testCases.validStudentData.body;
+        xml2js.parseString.yields(null, { root: { row: [{ student_id: '2', Name: 'Sadia Hossain', Password: '1234' }] } });
+        clearTable.resolves();
+        bcrypt.hash.resolves('hashed_password');
+        insertXmlStudentIntoDatabase.resolves();
+
         await uploadStudentAsXML(req, res);
-        
+
+        expect(clearTable.calledOnceWith('Student')).to.be.true;
+        expect(insertXmlStudentIntoDatabase.calledOnce).to.be.true;
+        expect(bcrypt.hash.calledOnceWith('1234', 10)).to.be.true;
         expect(res.status.calledWith(testCases.validStudentData.expectedStatus)).to.be.true;
         expect(res.send.calledWith(testCases.validStudentData.expectedMessage)).to.be.true;
     });
 
-    /**
-     * Test case: Should handle XML parsing errors.
-     * @param {Object} req.body - Request body containing malformed XML data.
-     * @param {Object} res - Response object to verify error handling.
-     */
-    it('should handle XML parsing errors', async () => {
+    it('should handle invalid XML data', async () => {
         req.body = testCases.invalidXmlData.body;
         xml2js.parseString.yields(new Error('Parsing error'));
-        
+
         await uploadStudentAsXML(req, res);
-        
+
         expect(res.status.calledWith(testCases.invalidXmlData.expectedStatus)).to.be.true;
         expect(res.send.calledWith(testCases.invalidXmlData.expectedMessage)).to.be.true;
     });
 
-    /**
-     * Test case: Should skip incomplete data and respond accordingly.
-     * @param {Object} req.body - Request body containing incomplete student data.
-     * @param {Object} res - Response object to verify handling of incomplete data.
-     */
-    it('should skip incomplete data', async () => {
+    it('should skip incomplete student data', async () => {
         req.body = testCases.incompleteData.body;
-        
+        xml2js.parseString.yields(null, { root: { row: [{ student_id: '2', Name: 'Sadia Hossain' }] } });
+        clearTable.resolves();
+
         await uploadStudentAsXML(req, res);
-        
+
+        expect(insertXmlStudentIntoDatabase.notCalled).to.be.true;
         expect(res.status.calledWith(testCases.incompleteData.expectedStatus)).to.be.true;
         expect(res.send.calledWith(testCases.incompleteData.expectedMessage)).to.be.true;
     });
 
-    /**
-     * Test case: Should handle errors during database insertion.
-     * @param {Object} req.body - Request body with data causing database insertion error.
-     * @param {Object} res - Response object to verify error handling.
-     */
     it('should handle errors during database insertion', async () => {
         req.body = testCases.databaseError.body;
-        db.query.yields(new Error('Database error'));
-        
+        xml2js.parseString.yields(null, { root: { row: [{ student_id: '3', Name: 'John Doe', Password: 'password123' }] } });
+        clearTable.resolves();
+        bcrypt.hash.resolves('hashed_password');
+        insertXmlStudentIntoDatabase.rejects(new Error('Database error'));
+
         await uploadStudentAsXML(req, res);
-        
+
         expect(res.status.calledWith(testCases.databaseError.expectedStatus)).to.be.true;
         expect(res.send.calledWith(testCases.databaseError.expectedMessage)).to.be.true;
     });

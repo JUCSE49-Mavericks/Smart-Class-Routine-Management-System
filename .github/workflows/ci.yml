@@ -13,26 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Set CI environment variable to 'true'
-      - name: Set CI environment variable
-        run: echo "CI=true" >> $GITHUB_ENV
-
-      # 3. Set up Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '16'  # Use the required Node.js version
 
-      # 4. Install dependencies
       - name: Install dependencies
         run: npm install
         working-directory: ./SmartClassRoutineManagementSystem
 
-      # 5. Run tests
+      # Install Mocha globally to avoid permission issues
+      - name: Install Mocha globally
+        run: npm install -g mocha
+        working-directory: ./SmartClassRoutineManagementSystem
+
       - name: Run Mocha tests
-        run: npm test
+        run: mocha --extension js,mjs 'test/**/*.{js,mjs}'
         working-directory: ./SmartClassRoutineManagementSystem

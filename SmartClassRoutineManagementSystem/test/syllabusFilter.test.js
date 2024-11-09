@@ -201,7 +201,10 @@ describe('CourseDataFetcher', () => {
   });
 
 
-
+  /**
+   * Tests error handling for optional fields.
+   * @function
+   */
   it('should return empty response for optional fields', async () => {
     queryStub.onFirstCall().yields(null, testData.department);
     queryStub.onSecondCall().yields(null, testData.session);

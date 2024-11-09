@@ -16,7 +16,7 @@
 - Clone the project by running:
 
     ```bash
-    git clone https://github.com/YOUR_USERNAME/smart-class-routine-management.git
+    git clone https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System.git
     ```
 
 ### 2. **Navigate to the Project Directory**

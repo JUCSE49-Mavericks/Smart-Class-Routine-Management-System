@@ -46,7 +46,75 @@ function createScheduledClassTable() {
     });
 }
 
+
+// const getScheduledClassesByTeacherId = async (teacherId) => {
+//   const query = `
+//     SELECT 
+//       sc.scheduled_class_id,
+//       sc.class_date,
+//       sc.status,
+//       c.course_code,
+//       c.course_title,
+//       ts.startTime,
+//       ts.endTime,
+//       r.room_no
+//     FROM 
+//       ScheduledClass sc
+//     LEFT JOIN 
+//       Course c ON sc.course_id = c.course_id
+//     LEFT JOIN 
+//       TimeSlot ts ON sc.time_slot_id = ts.time_slot_id
+//     LEFT JOIN 
+//       Room r ON sc.room_id = r.room_id
+//     WHERE 
+//       sc.teacher_id = ?
+//     ORDER BY 
+//       sc.class_date, ts.startTime;
+//   `;
+  
+//   const [rows] = await db.execute(query, [teacherId]);
+//   return rows;
+// };
+
+// Function to fetch all Scheduled Classes by teacher_id
+function getScheduledClassesByTeacherId(teacherId, callback) {
+    const fetchQuery = `
+        SELECT 
+            sc.scheduled_class_id,
+            sc.class_date,
+            sc.status,
+            c.course_code,
+            c.course_title,
+            ts.startTime,
+            ts.endTime,
+            r.Room_no
+        FROM 
+            ScheduledClass sc
+        LEFT JOIN 
+            Course c ON sc.course_id = c.course_id
+        LEFT JOIN 
+            TimeSlot ts ON sc.time_slot_id = ts.time_slot_id
+        LEFT JOIN 
+            Room r ON sc.room_id = r.room_id
+        WHERE 
+            sc.teacher_id = ?
+        ORDER BY 
+            sc.class_date, ts.startTime;
+    `;
+
+    db.query(fetchQuery, [teacherId], (error, results) => {
+        if (error) {
+            console.error('Error fetching scheduled classes:', error);
+            return callback(error, null);
+        }
+        callback(null, results);
+    });
+}
+
+
+
 module.exports = {
     createTimeSlotTable,
-    createScheduledClassTable
+    createScheduledClassTable,
+    getScheduledClassesByTeacherId
 }

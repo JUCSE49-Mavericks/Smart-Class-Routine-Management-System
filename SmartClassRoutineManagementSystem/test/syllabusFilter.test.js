@@ -164,4 +164,60 @@ describe('CourseDataFetcher', () => {
       assert.strictEqual(data, null);
     });
   });
+
+
+
+  it('should handle multiple chapters and objectives', async () => {
+    queryStub.onFirstCall().yields(null, testData.department);
+    queryStub.onSecondCall().yields(null, testData.session);
+    queryStub.onThirdCall().yields(null, testData.examYear);
+    queryStub.onCall(3).yields(null, testData.multiChapterCourse);
+    queryStub.onCall(4).yields(null, testData.chapters);
+    queryStub.onCall(5).yields(null, testData.objectives);
+
+    await courseDataFetcher.fetchCourseData('Computer Science & Engineering', '2019-2020', '2024', 'Algorithms', (err, data) => {
+      assert.strictEqual(err, null);
+      assert.deepStrictEqual(data, {
+        course_id: 5,
+        course_code: 'CSE 102',
+        course_title: 'Algorithms',
+        course_type: 'Theory',
+        contact_hour: 3,
+        rationale: 'Foundational algorithms',
+        chapters: ['Sorting', 'Searching', 'Graphs'],
+        objectives: ['Design algorithms', 'Analyze complexity'],
+        prerequisites: ['Data Structures'],
+        recommended_books: [
+          { Book_title: 'Introduction to Algorithms by Cormen' },
+          { Book_title: 'Algorithms by Sedgewick' }
+        ],
+        student_learning_outcomes: ['Advanced Problem Solving', 'Efficiency in Coding']
+      });
+    });
+  });
+
+  it('should return empty response for optional fields', async () => {
+    queryStub.onFirstCall().yields(null, testData.department);
+    queryStub.onSecondCall().yields(null, testData.session);
+    queryStub.onThirdCall().yields(null, testData.examYear);
+    queryStub.onCall(3).yields(null, testData.emptyFieldsCourse);
+
+    await courseDataFetcher.fetchCourseData('Computer Science & Engineering', '2019-2020', '2024', 'Operating Systems', (err, data) => {
+      assert.strictEqual(err, null);
+      assert.deepStrictEqual(data, {
+        course_id: 6,
+        course_code: 'CSE 201',
+        course_title: 'Operating Systems',
+        course_type: 'Theory',
+        contact_hour: 3,
+        rationale: "Fundamental Knowledge on Linux",
+        chapters: ["Forking"],
+        objectives: ["Analyze complexity"],
+        prerequisites: [],
+        recommended_books: [],
+        student_learning_outcomes: ["Efficiency in Linux"]
+
+      });
+    });
+  });
 });

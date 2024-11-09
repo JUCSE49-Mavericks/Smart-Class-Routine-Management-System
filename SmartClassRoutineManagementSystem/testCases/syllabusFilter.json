@@ -25,7 +25,7 @@
     {
       "description": "Department not found",
       "input": {
-        "department": "",
+        "department": "fsfs",
         "session": "2019-2020",
         "examYear": "2024",
         "course": "Data Structures"
@@ -38,7 +38,7 @@
       "description": "Session not found",
       "input": {
         "department": "Computer Science & Engineering",
-        "session": "",
+        "session": "3dd",
         "examYear": "2024",
         "course": "Data Structures"
       },
@@ -51,7 +51,7 @@
       "input": {
         "department": "Computer Science & Engineering",
         "session": "2019-2020",
-        "examYear": "",
+        "examYear": "ffsd",
         "course": "Data Structures"
       },
       "expectedOutput": {
@@ -64,7 +64,7 @@
         "department": "Computer Science",
         "session": "2019-2020",
         "examYear": "2024",
-        "course": ""
+        "course": "ddsd"
       },
       "expectedOutput": {
         "error": "Course not found"
@@ -80,6 +80,54 @@
       },
       "expectedOutput": {
         "error": "Failed to fetch chapters"
+      }
+    },
+
+    {
+      "description": "Handle multiple chapters and objectives",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Algorithms"
+      },
+      "expectedOutput": {
+        "course_id": 5,
+        "course_code": "CSE 102",
+        "course_title": "Algorithms",
+        "course_type": "Theory",
+        "contact_hour": 3,
+        "rationale": "Foundational algorithms",
+        "chapters": ["Sorting", "Searching", "Graphs"],
+        "objectives": ["Design algorithms", "Analyze complexity"],
+        "prerequisites": ["Data Structures"],
+        "recommended_books": [
+          { "Book_title": "Introduction to Algorithms by Cormen" },
+          { "Book_title": "Algorithms by Sedgewick" }
+        ],
+        "student_learning_outcomes": ["Advanced Problem Solving", "Efficiency in Coding"]
+      }
+    },
+    {
+      "description": "Return empty response for optional fields",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Operating Systems"
+      },
+      "expectedOutput": {
+        "course_id": 6,
+        "course_code": "CSE 201",
+        "course_title": "Operating Systems",
+        "course_type": "Theory",
+        "contact_hour": 3,
+        "rationale": "Fundamental Knowledge on Linux",
+        "chapters": ["Forking"],
+        "objectives": ["Analyze complexity"],
+        "prerequisites": [],
+        "recommended_books": [],
+        "student_learning_outcomes": ["Efficiency in Linux"]
       }
     }
   ]

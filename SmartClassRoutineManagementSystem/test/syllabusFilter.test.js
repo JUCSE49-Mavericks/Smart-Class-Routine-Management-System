@@ -166,6 +166,10 @@ describe('CourseDataFetcher', () => {
   });
 
 
+  /**
+   * Tests error handling multiple chapters and objectives.
+   * @function
+   */
 
   it('should handle multiple chapters and objectives', async () => {
     queryStub.onFirstCall().yields(null, testData.department);
@@ -195,6 +199,8 @@ describe('CourseDataFetcher', () => {
       });
     });
   });
+
+
 
   it('should return empty response for optional fields', async () => {
     queryStub.onFirstCall().yields(null, testData.department);

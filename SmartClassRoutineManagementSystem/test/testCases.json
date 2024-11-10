@@ -1,34 +1,56 @@
 {
-    "generalEvents": {
+  "allEvents": {
+    "input": [],
+    "expectedOutput": [
+      { "event_name": "New Year", "date": "2023-12-31", "department": "Chemistry", "event_type": "holiday" },
+      { "event_name": "Independence Day", "date": "2024-07-04", "department": "Physics", "event_type": "holiday" },
+      { "event_name": "Science Fair", "date": "2024-03-10", "department": "CSE", "event_type": "activity" },
+      { "event_name": "Summer Vacation", "date": "2024-06-15", "department": "CSE", "event_type": "vacation" },
+      { "event_name": "Midterm Exams", "date": "2024-03-05", "department": "CSE", "event_type": "activity" }
+    ]
+  },
+  
+    "holidayEvents": {
       "input": [],
       "expectedOutput": [
-        { "eventName": "New Year", "date": "2023-12-31", "department": "General", "eventType": "holiday" },
-        { "eventName": "Independence Day", "date": "2024-07-04", "department": "General", "eventType": "holiday" }
+        { "event_name": "New Year", "date": "2023-12-31", "department": "Chemistry", "event_type": "holiday" },
+        { "event_name": "Independence Day", "date": "2024-07-04", "department": "Physics", "event_type": "holiday" }
       ]
     },
     "eventsByDepartment": {
-      "input": ["Science"],
+      "input": ["CSE"],
       "expectedOutput": [
-        { "eventName": "Science Fair", "date": "2024-03-10", "department": "Science", "eventType": "activity" }
+        { "event_name": "Science Fair", "date": "2024-03-10", "department": "CSE", "event_type": "activity" },
+        { "event_name": "Summer Vacation", "date": "2024-06-15", "department": "CSE", "event_type": "vacation" },
+        { "event_name": "Midterm Exams", "date": "2024-03-05", "department": "CSE", "event_type": "activity" }
       ]
     },
     "eventsByMonth": {
-      "input": [3],
+      "input": ["3"], 
       "expectedOutput": [
-        { "eventName": "Science Fair", "date": "2024-03-10", "department": "Science", "eventType": "activity" }
+        { "event_name": "Science Fair", "date": "2024-03-10", "department": "CSE", "event_type": "activity" },
+        { "event_name": "Midterm Exams", "date": "2024-03-05", "department": "CSE", "event_type": "activity" }
+      ]
+    },
+    "eventsByWeek": {
+  "input": ["10"],
+  "expectedOutput": [
+    { "event_name": "Science Fair", "date": "2024-03-10", "department": "CSE", "event_type": "activity" },
+    { "event_name": "Midterm Exams", "date": "2024-03-05", "department": "CSE", "event_type": "activity" }
       ]
     },
     "vacationsByDateRange": {
       "input": ["2024-06-01", "2024-06-30"],
       "expectedOutput": [
-        { "eventName": "Summer Vacation", "date": "2024-06-15", "department": "General", "eventType": "vacation" }
+        { "event_name": "Summer Vacation", "date": "2024-06-15", "department": "CSE", "event_type": "vacation" }
       ]
     },
     "activitiesByDateRange": {
       "input": ["2024-03-01", "2024-03-31"],
       "expectedOutput": [
-        { "eventName": "Science Fair", "date": "2024-03-10", "department": "Science", "eventType": "activity" }
+        { "event_name": "Science Fair", "date": "2024-03-10", "department": "CSE", "event_type": "activity" },
+        { "event_name": "Midterm Exams", "date": "2024-03-05", "department": "CSE", "event_type": "activity" }
       ]
     }
-  }
+}
   

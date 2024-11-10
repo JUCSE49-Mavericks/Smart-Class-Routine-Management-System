@@ -1,43 +1,136 @@
 const chai = require('chai');
 const expect = chai.expect;
+const sinon = require('sinon');
 const ViewAcademicCalendarController = require('../controllers/viewAcademicCalendarController');
 const testCases = require('./testCases.json');
 
 describe("ViewAcademicCalendarController Tests", function() {
-  it("should return general holidays for getGeneralizedView", async function() {
-    const result = await ViewAcademicCalendarController.getGeneralizedView();
-    console.log("Expected Output:", JSON.stringify(testCases.generalEvents.expectedOutput, null, 2));
-    console.log("Actual Output:", JSON.stringify(result, null, 2));
-    expect(result).to.deep.equal(testCases.generalEvents.expectedOutput);
+
+  // Test for getAllEvents function
+  it("should return all events for getAllEvents", function(done) {
+    const req = {}; // empty request object
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+  
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.allEvents.expectedOutput, null, 5));
+      console.log("Actual Output:", JSON.stringify(result, null, 5));
+      expect(result).to.deep.equal(testCases.allEvents.expectedOutput);
+      done();
+    });
+  
+    ViewAcademicCalendarController.getAllEvents(req, res); // This should now work
+  });
+  
+
+
+  // Test for getHolidayEventsView function
+  it("should return general holidays for getHolidayEventsView", function(done) {
+    const req = {}; // empty request object
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+    
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.holidayEvents.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
+      expect(result).to.deep.equal(testCases.holidayEvents.expectedOutput);
+      done();
+    });
+    
+    ViewAcademicCalendarController.getHolidayEventsView(req, res);
   });
 
-  it("should return events for specified department", async function() {
-    const result = await ViewAcademicCalendarController.getEventsByDepartment(testCases.eventsByDepartment.input[0]);
-    console.log("Expected Output:", JSON.stringify(testCases.eventsByDepartment.expectedOutput, null, 2));
-    console.log("Actual Output:", JSON.stringify(result, null, 2));
-    expect(result).to.deep.equal(testCases.eventsByDepartment.expectedOutput);
+  // Test for getEventsByDepartment function
+  it("should return events for specified department", function(done) {
+    const req = { params: { department: testCases.eventsByDepartment.input[0] } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+    
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.eventsByDepartment.expectedOutput, null, 3));
+      console.log("Actual Output:", JSON.stringify(result, null, 3));
+      expect(result).to.deep.equal(testCases.eventsByDepartment.expectedOutput);
+      done();
+    });
+    
+    ViewAcademicCalendarController.getEventsByDepartment(req, res);
   });
 
-  it("should return events for specified month", async function() {
-    const result = await ViewAcademicCalendarController.getEventsByMonth(testCases.eventsByMonth.input[0]);
-    console.log("Expected Output:", JSON.stringify(testCases.eventsByMonth.expectedOutput, null, 2));
-    console.log("Actual Output:", JSON.stringify(result, null, 2));
-    expect(result).to.deep.equal(testCases.eventsByMonth.expectedOutput);
+  // Test for getEventsByMonth function
+  it("should return events for specified month", function(done) {
+    const req = { params: { month: testCases.eventsByMonth.input[0] } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+    
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.eventsByMonth.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
+      expect(result).to.deep.equal(testCases.eventsByMonth.expectedOutput);
+      done();
+    });
+    
+    ViewAcademicCalendarController.getEventsByMonth(req, res);
   });
 
-  it("should return vacations within date range", async function() {
-    const [startDate, endDate] = testCases.vacationsByDateRange.input;
-    const result = await ViewAcademicCalendarController.getVacationsByDateRange(startDate, endDate);
-    console.log("Expected Output:", JSON.stringify(testCases.vacationsByDateRange.expectedOutput, null, 2));
+// Test for getEventsByWeek function
+it("should return events for specified week", function(done) {
+  const req = { params: { week: testCases.eventsByWeek.input[0] } };
+  const res = {
+    status: sinon.stub().returnsThis(),
+    json: sinon.stub()
+  };
+  
+  res.json.callsFake((result) => {
+    console.log("Expected Output:", JSON.stringify(testCases.eventsByWeek.expectedOutput, null, 2));
     console.log("Actual Output:", JSON.stringify(result, null, 2));
-    expect(result).to.deep.equal(testCases.vacationsByDateRange.expectedOutput);
+    expect(result).to.deep.equal(testCases.eventsByWeek.expectedOutput);
+    done();
+  });
+  
+  ViewAcademicCalendarController.getEventsByWeek(req, res);
+});
+
+  // Test for getVacationsByDateRange function
+  it("should return vacations within date range", function(done) {
+    const req = { params: { startDate: testCases.vacationsByDateRange.input[0], endDate: testCases.vacationsByDateRange.input[1] } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+    
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.vacationsByDateRange.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
+      expect(result).to.deep.equal(testCases.vacationsByDateRange.expectedOutput);
+      done();
+    });
+    
+    ViewAcademicCalendarController.getVacationsByDateRange(req, res);
   });
 
-  it("should return activities within date range", async function() {
-    const [startDate, endDate] = testCases.activitiesByDateRange.input;
-    const result = await ViewAcademicCalendarController.getActivitiesByDateRange(startDate, endDate);
-    console.log("Expected Output:", JSON.stringify(testCases.activitiesByDateRange.expectedOutput, null, 2));
-    console.log("Actual Output:", JSON.stringify(result, null, 2));
-    expect(result).to.deep.equal(testCases.activitiesByDateRange.expectedOutput);
+  // Test for getActivitiesByDateRange function
+  it("should return activities within date range", function(done) {
+    const req = { params: { startDate: testCases.activitiesByDateRange.input[0], endDate: testCases.activitiesByDateRange.input[1] } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+    
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.activitiesByDateRange.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
+      expect(result).to.deep.equal(testCases.activitiesByDateRange.expectedOutput);
+      done();
+    });
+    
+    ViewAcademicCalendarController.getActivitiesByDateRange(req, res);
   });
 });

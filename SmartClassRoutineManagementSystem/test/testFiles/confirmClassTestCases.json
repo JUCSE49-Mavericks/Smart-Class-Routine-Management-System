@@ -1,0 +1,29 @@
+{
+    "confirmScheduledClass": [
+        {
+            "description": "Should confirm the class successfully",
+            "scheduled_class_id": 1,
+            "dbResponse": {
+                "affectedRows": 1
+            },
+            "expectedStatus": 200,
+            "expectedMessage": "Class confirmed successfully"
+        },
+        {
+            "description": "Should return 404 if class not found or already confirmed",
+            "scheduled_class_id": 2,
+            "dbResponse": {
+                "affectedRows": 0
+            },
+            "expectedStatus": 404,
+            "expectedMessage": "No class found to confirm"
+        },
+        {
+            "description": "Should return 500 on database error",
+            "scheduled_class_id": 3,
+            "dbError": "Database connection error",
+            "expectedStatus": 500,
+            "expectedMessage": "Failed to confirm class"
+        }
+    ]
+}

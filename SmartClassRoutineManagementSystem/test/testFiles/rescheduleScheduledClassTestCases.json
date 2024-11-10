@@ -1,0 +1,29 @@
+{
+    "rescheduleScheduledClass": [
+      {
+        "description": "Should reschedule the class successfully",
+        "params": { "scheduled_class_id": 1 },
+        "body": { "new_date": "2024-11-15", "new_time_slot_id": 2 },
+        "dbResponse": { "affectedRows": 1 },
+        "expectedStatus": 200,
+        "expectedMessage": "Class rescheduled successfully"
+      },
+      {
+        "description": "Should return 404 if no class found to reschedule",
+        "params": { "scheduled_class_id": 99 },
+        "body": { "new_date": "2024-11-20", "new_time_slot_id": 3 },
+        "dbResponse": { "affectedRows": 0 },
+        "expectedStatus": 404,
+        "expectedMessage": "No class found to confirm"
+      },
+      {
+        "description": "Should return 500 on database error",
+        "params": { "scheduled_class_id": 1 },
+        "body": { "new_date": "2024-11-10", "new_time_slot_id": 1 },
+        "dbError": { "message": "Database connection error" },
+        "expectedStatus": 500,
+        "expectedMessage": "Failed to reschedule class"
+      }
+    ]
+  }
+  

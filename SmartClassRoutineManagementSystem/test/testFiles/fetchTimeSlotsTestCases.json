@@ -1,0 +1,29 @@
+{
+    "fetchTimeSlots": [
+      {
+        "description": "Should fetch all time slots successfully",
+        "dbResponse": [
+          { "timeslot_id": 1, "start_time": "09:00", "end_time": "10:00" },
+          { "timeslot_id": 2, "start_time": "10:00", "end_time": "11:00" }
+        ],
+        "expectedStatus": 200,
+        "expectedResponse": [
+          { "timeslot_id": 1, "start_time": "09:00", "end_time": "10:00" },
+          { "timeslot_id": 2, "start_time": "10:00", "end_time": "11:00" }
+        ]
+      },
+      {
+        "description": "Should return 404 if no time slots found",
+        "dbResponse": [],
+        "expectedStatus": 404,
+        "expectedMessage": "No time slot found"
+      },
+      {
+        "description": "Should return 500 on database error",
+        "dbError": { "message": "Database connection error" },
+        "expectedStatus": 500,
+        "expectedMessage": "Failed to fetch time slots"
+      }
+    ]
+  }
+  

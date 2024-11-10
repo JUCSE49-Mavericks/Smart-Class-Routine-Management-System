@@ -1,8 +1,18 @@
-const chai = require('chai');
-const expect = chai.expect;
-const sinon = require('sinon');
-const ViewAcademicCalendarController = require('../controllers/viewAcademicCalendarController');
-const testCases = require('./testCases.json');
+// const chai = require('chai');
+// const expect = chai.expect;
+// const sinon = require('sinon');
+// const ViewAcademicCalendarController = require('../controllers/viewAcademicCalendarController');
+// const testCases = require('./testCases.json');
+
+
+// Replace require with import
+import { expect } from 'chai';
+import ViewAcademicCalendarController from '../controllers/viewAcademicCalendarController.js';
+import sinon from 'sinon';
+import academicCalendarModel from '../models/academicCalendarModel.js';
+import testCases from './testCases.json' assert { type: 'json' };
+
+
 
 describe("ViewAcademicCalendarController Tests", function() {
 

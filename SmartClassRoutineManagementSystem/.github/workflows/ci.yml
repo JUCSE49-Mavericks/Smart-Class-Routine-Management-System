@@ -3,30 +3,35 @@ name: Run Tests
 on:
   push:
     branches:
-      - classRoutine_Trisha  # Trigger on push to the classRoutine_Trisha branch
+      - classRoutine_Trisha
   pull_request:
     branches:
-      - classRoutine_Trisha  # Trigger on pull requests to the classRoutine_Trisha branch
+      - classRoutine_Trisha
 
 jobs:
-  test:
-    runs-on: ubuntu-latest  # Runs the job on the latest Ubuntu environment
-    
+  build-and-test:
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Checkout the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'  # You can specify a different version of Node.js if needed
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Use the required Node.js version
 
-    - name: Install dependencies
-      run: |
-        npm install  # Install project dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./SmartClassRoutineManagementSystem
 
-    - name: Run tests
-      run: |
-        npm test  # Run the tests using Mocha
+      # Install Mocha globally to avoid permission issues
+      - name: Install Mocha globally
+        run: npm install -g mocha
+        working-directory: ./SmartClassRoutineManagementSystem
+
+      - name: Run Mocha tests
+        run: mocha --extension js,mjs 'test/*.{js,mjs}'
+        working-directory: ./SmartClassRoutineManagementSystem
 
     

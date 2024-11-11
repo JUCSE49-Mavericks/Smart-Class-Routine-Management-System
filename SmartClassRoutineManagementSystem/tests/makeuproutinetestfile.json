@@ -1,19 +1,96 @@
 [
   {
-      "courseName": "CSE-403",
-      "classesNeeded": 1,
-      "expectedSchedule": [
-          {
-              "day": "Thursday",
-              "slots": [
-                  { "start": "14:00", "end": "15:00" }
-              ]
-          }
-      ]
+    "description": "Valid input with preferred days and room provided",
+    "courseName": "Math 101",
+    "teacherName": "Dr. Smith",
+    "preferredTimes": [
+      { "start": "10:00", "end": "11:00" }
+    ],
+    "preferredDays": ["Monday", "Wednesday"],
+    "courseType": "Theory",
+    "preferredRoom": "101",
+    "classesNeeded": 3,
+    "expectedStatus": 200,
+    "expectedMessage": "Makeup schedule generated successfully"
   },
   {
-      "courseName": "Physics",
-      "classesNeeded": 0,
-      "expectedError": "No makeup classes needed for course: Physics"
+    "description": "No preferred days provided, defaults to all weekdays and preferred room is not specified",
+    "courseName": "History 101",
+    "teacherName": "Prof. Jones",
+    "preferredTimes": [
+      { "start": "09:00", "end": "10:00" },
+      { "start": "10:00", "end": "11:00" },
+      { "start": "13:00", "end": "14:00" }
+    ],
+    "preferredDays": null,
+    "courseType": "Theory",
+    "preferredRoom": null,
+    "classesNeeded": 4,
+    "expectedStatus": 200,
+    "expectedMessage": "Makeup schedule generated successfully"
+  },
+  {
+    "description": "No makeup classes needed, preferred room, time, days are not specified",
+    "courseName": "English 101",
+    "teacherName": "Ms. Green",
+    "classesNeeded": 0,
+    "expectedStatus": 200,
+    "expectedMessage": "No makeup classes needed"
+  },
+  {
+    "description": "Classes needed not found, routine cannot be generated",
+    "courseName": "Chemistry 101",
+    "teacherName": "Dr. Lee",
+    "preferredTimes": [
+      { "start": "14:00", "end": "15:00" }
+    ],
+    "preferredDays": ["Monday", "Wednesday"],
+    "courseType": "error",
+    "preferredRoom": "103",
+    "classesNeeded": "error",
+    "expectedStatus": 400,
+    "expectedMessage": "Routine cannot be generated as classesNeeded is not found"
+  },
+  {
+    "description": "Invalid preferred days provided, schedule cannot be generated",
+    "courseName": "Physics 101",
+    "teacherName": "Dr. Thompson",
+    "preferredTimes": [
+      { "start": "08:00", "end": "09:00" }
+    ],
+    "preferredDays": ["Funday", "Holiday"],  
+    "courseType": "Theory",
+    "preferredRoom": "101",
+    "classesNeeded": 2,
+    "expectedStatus": 400,
+    "expectedMessage": "Invalid preferred days provided"
+  },
+  {
+    "description": "Invalid preferred times provided, schedule cannot be generated",
+    "courseName": "Biology 101",
+    "teacherName": "Prof. Adams",
+    "preferredTimes": [
+      { "start": "20:00", "end": "25:00" }  
+    ],
+    "preferredDays": ["Tuesday", "Thursday"],
+    "courseType": "Theory",
+    "preferredRoom": "202",
+    "classesNeeded": 2,
+    "expectedStatus": 400,
+    "expectedMessage": "Invalid preferred times provided"
+  },
+  {
+    "description": "Invalid room number provided, schedule cannot be generated",
+    "courseName": "Chemistry 102",
+    "teacherName": "Dr. Wilson",
+    "preferredTimes": [
+      { "start": "09:00", "end": "10:00" }
+    ],
+    "preferredDays": ["Monday", "Thursday"],
+    "courseType": "Theory",
+    "preferredRoom": "999",  
+    "classesNeeded": 3,
+    "expectedStatus": 400,
+    "expectedMessage": "Invalid room number provided"
   }
 ]

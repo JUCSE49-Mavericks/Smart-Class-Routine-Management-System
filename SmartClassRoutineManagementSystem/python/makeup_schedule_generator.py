@@ -1,11 +1,12 @@
 import random
 from datetime import datetime, timedelta
+import json
 
 class MakeupClassSchedule:
-    def __init__(self, classes_needed, max_classes_per_day=2):
+    def __init__(self, classes_needed, slot_duration_minutes=60, max_classes_per_day=2):
         self.start_time = datetime.strptime("09:00", "%H:%M")
         self.end_time = datetime.strptime("16:00", "%H:%M")
-        self.slot_duration = timedelta(minutes=60)
+        self.slot_duration = timedelta(minutes=slot_duration_minutes)
         self.max_classes_per_day = max_classes_per_day
         self.classes_needed = classes_needed
         self.weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"]
@@ -29,7 +30,9 @@ class MakeupClassSchedule:
         return population
 
     def random_slot_time(self):
-        slot_start = self.start_time + timedelta(minutes=random.randint(0, 7) * 60)
+        available_slots = int((self.end_time - self.start_time) / self.slot_duration)
+        slot_index = random.randint(0, available_slots - 1)
+        slot_start = self.start_time + slot_index * self.slot_duration
         slot_end = slot_start + self.slot_duration
         return (slot_start.strftime("%H:%M"), slot_end.strftime("%H:%M"))
 
@@ -73,11 +76,20 @@ class MakeupClassSchedule:
             population = new_population
         
         best_schedule = max(population, key=self.fitness)
-        return best_schedule
+        # Transform the schedule into the desired format (array of objects)
+        formatted_schedule = []
+        for day, slots in best_schedule:
+            for slot in slots:
+                formatted_schedule.append({
+                    "day": day,
+                    "room": f"Room {random.randint(101, 999)}",  # Random room for now
+                    "time": f"{slot[0]} - {slot[1]}"
+                })
+        return formatted_schedule
 
 if __name__ == "__main__":
     import sys
     classes_needed = int(sys.argv[1])
     schedule = MakeupClassSchedule(classes_needed)
     best_schedule = schedule.generate_schedule()
-    print(best_schedule)
+    print(json.dumps(best_schedule, indent=2))

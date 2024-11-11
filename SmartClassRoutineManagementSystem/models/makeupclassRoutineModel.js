@@ -47,6 +47,12 @@ class MakeupScheduleModel {
             throw error;
         }
     }
+
+    /**
+     * Retrieves the number of classes needed for a course.
+     * @param {string} courseName - The name of the course.
+     * @returns {number} The number of classes needed.
+     */
     static async getClassesNeeded(courseName) {
         const query = `
             SELECT threshold_classes, classes_performed
@@ -58,18 +64,37 @@ class MakeupScheduleModel {
             if (rows.length === 0) {
                 throw new Error('Course not found');
             }
-
             const { threshold_classes, classes_performed } = rows[0];
-            const classesNeeded = threshold_classes - classes_performed;
-
-            return classesNeeded > 0 ? classesNeeded : 0; // Ensure non-negative result
+            return Math.max(threshold_classes - classes_performed, 0);
         } catch (error) {
             console.error('Error fetching class counts:', error);
             throw error;
         }
     }
 
-    // Additional methods for updating, deleting, and retrieving entries can be added here.
+    /**
+     * Retrieves the course type for a specific course name.
+     * @param {string} courseName - The name of the course to get the type for.
+     * @returns {string} The course type, either 'Lab' or 'Theory'.
+     */
+    static async getCourseTypeByCourseName(courseName) {
+        const query = `
+            SELECT course_type
+            FROM makeupschedule
+            WHERE course_name = ?
+            LIMIT 1
+        `;
+        try {
+            const [rows] = await db.query(query, [courseName]);
+            if (rows.length === 0) {
+                throw new Error('Course not found');
+            }
+            return rows[0].course_type;
+        } catch (error) {
+            console.error('Error fetching course type by course name:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = MakeupScheduleModel;

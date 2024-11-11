@@ -1,8 +1,7 @@
-// Import required modules
 
 const chai = require('chai');
 const sinon = require('sinon');
-const db = require('../config/db'); // Adjust the path as needed
+const db = require('../config/db');
 const { fetchClassRepresentativeByExamYearId} = require('../controllers/classRepresentativeController');
 const { createClassRepresentativeTable, getClassRepresentativeByExamYearId } = require('../models/classRepresentativeModel')
 

@@ -8,59 +8,6 @@
  <p align="center"> <a href="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki">
  <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Document.PNG"> </a> </p>
 
-## Our Team
-
-<table>
-<tr>
-<td align="center">
-<a href="https://github.com/Sa-dia">
-<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Sadia.jpg" alt="Sadia Hossain" width="120px" height="120px">
-</a>
-<h4><a href="https://github.com/Sa-dia">Sadia Hossain</a></h4>
-<p>Roll: 347</p>
-</td>
-
-<td align="center">
-<a href="https://github.com/Sumaiya351">
-<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Umma.jpg" alt="Umma Sumaiya Jahan" width="120px" height="120px">
-</a>
-<h4><a href="https://github.com/Sumaiya351">Umma Sumaiya Jahan</a></h4>
-<p>Roll: 351</p>
-</td>
-
-<td align="center">
-<a href="https://github.com/29mitu">
-<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/mitu.jpg" alt="Jannati Tajrimin" width="120px" height="120px">
-</a>
-<h4><a href="https://github.com/29mitu">Jannati Tajrimin Mitu</a></h4>
-<p>Roll No: 358</p>
-</td>
-
-<td align="center">
-<a href="https://github.com/TrishaSarkar174">
-<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Trisha.jpeg" alt="Trisha Sarkar" width="120px" height="120px">
-</a>
-<h4><a href="https://github.com/TrishaSarkar174">Trisha Sarkar</a></h4>
-<p>Roll No: 359</p>
-</td>
-
-<td align="center">
-<a href="https://github.com/Akila-Nipo">
-<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Akila_Nipo.jpg" alt="Akila Nipo" width="120px" height="120px">
-</a>
-<h4><a href="https://github.com/Akila-Nipo">Akila Nipo</a></h4>
-<p>Roll No: 368</p>
-</td>
-
-<td align="center">
-<a href="https://github.com/RubayedMunna">
-<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Rubayed.jpg" alt="Rubayed All Islam" width="120px" height="120px">
-</a>
-<h4><a href="https://github.com/RubayedMunna">Rubayed All Islam</a></h4>
-<p>Roll No: 370</p>
-</td>
-</tr>
-</table>
 ---
 
 ## 🏆 `Main Features of the Project`
@@ -234,4 +181,58 @@ We’re happy to assist you! 🤝
 
 Your **contributions** are greatly appreciated, and we thank you for helping make the project even better! 🙌
 
+---
+## Our Team
+
+<table>
+<tr>
+<td align="center">
+<a href="https://github.com/Sa-dia">
+<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Sadia.jpg" alt="Sadia Hossain" width="120px" height="120px">
+</a>
+<h4><a href="https://github.com/Sa-dia">Sadia Hossain</a></h4>
+<p>Roll: 347</p>
+</td>
+
+<td align="center">
+<a href="https://github.com/Sumaiya351">
+<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Umma.jpg" alt="Umma Sumaiya Jahan" width="120px" height="120px">
+</a>
+<h4><a href="https://github.com/Sumaiya351">Umma Sumaiya Jahan</a></h4>
+<p>Roll: 351</p>
+</td>
+
+<td align="center">
+<a href="https://github.com/29mitu">
+<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/mitu.jpg" alt="Jannati Tajrimin" width="120px" height="120px">
+</a>
+<h4><a href="https://github.com/29mitu">Jannati Tajrimin Mitu</a></h4>
+<p>Roll No: 358</p>
+</td>
+
+<td align="center">
+<a href="https://github.com/TrishaSarkar174">
+<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Trisha.jpeg" alt="Trisha Sarkar" width="120px" height="120px">
+</a>
+<h4><a href="https://github.com/TrishaSarkar174">Trisha Sarkar</a></h4>
+<p>Roll No: 359</p>
+</td>
+
+<td align="center">
+<a href="https://github.com/Akila-Nipo">
+<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Akila_Nipo.jpg" alt="Akila Nipo" width="120px" height="120px">
+</a>
+<h4><a href="https://github.com/Akila-Nipo">Akila Nipo</a></h4>
+<p>Roll No: 368</p>
+</td>
+
+<td align="center">
+<a href="https://github.com/RubayedMunna">
+<img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Rubayed.jpg" alt="Rubayed All Islam" width="120px" height="120px">
+</a>
+<h4><a href="https://github.com/RubayedMunna">Rubayed All Islam</a></h4>
+<p>Roll No: 370</p>
+</td>
+</tr>
+</table>
 ---

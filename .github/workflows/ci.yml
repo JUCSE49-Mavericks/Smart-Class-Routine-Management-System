@@ -12,18 +12,14 @@ jobs:
   backend-test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '16'  # You can change '16' to '20' if you want Node.js version 20.
 
     - name: Install dependencies for backend
       working-directory: ./SmartClassRoutineManagementSystem
@@ -32,3 +28,4 @@ jobs:
     - name: Run Mocha tests
       working-directory: ./SmartClassRoutineManagementSystem
       run: npx mocha "test/**/*.js"
+

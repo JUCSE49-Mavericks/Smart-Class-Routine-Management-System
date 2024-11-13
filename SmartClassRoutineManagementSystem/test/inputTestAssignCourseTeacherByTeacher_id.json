@@ -1,0 +1,47 @@
+{
+    "insertAssignedCourseTeacherObject": {
+      "req": {
+        "body": {
+          "course_id": 1,
+          "exam_year_id": 2023
+        }
+      },
+      "responses": {
+        "successInsert": {
+          "status": 200,
+          "body": {
+            "message": "Assigned course-teacher successfully"
+          }
+        },
+        "existingAssignment": {
+          "status": 200,
+          "body": {
+            "message": "Assigned course-teacher successfully"
+          }
+        },
+        "databaseError": {
+          "status": 500,
+          "body": {
+            "error": "Failed to assign or update course-teacher"
+          }
+        }
+      }
+    },
+    "addAssignedCourseTeacherObject": {
+      "responses": {
+        "successAdd": {
+          "message": "New course-teacher assignment added",
+          "results": {
+            "affectedRows": 1
+          }
+        },
+        "existingAssignment": {
+          "message": "Course-teacher assignment already exists, no action taken."
+        },
+        "databaseError": {
+          "error": "Database error"
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,115 @@
+/**
+ * @module models/examCommitteeModel
+ */
+
+const db = require('../config/db');
+
+/**
+ * Creates the ExamCommittee table in the database if it does not exist.
+ * @function createExamCommitteeTable
+ * @throws Will throw an error if the table creation fails.
+ */
+const createExamCommitteeTable = () => {
+    const query = `
+        CREATE TABLE IF NOT EXISTS ExamCommittee (
+            exam_committee_id INT AUTO_INCREMENT PRIMARY KEY,
+            exam_year_id INT NOT NULL,
+            teacher_id INT NOT NULL,
+            FOREIGN KEY (exam_year_id) REFERENCES ExamYear(exam_year_id),
+            FOREIGN KEY (teacher_id) REFERENCES Teacher(teacher_id),
+            UNIQUE (exam_year_id, teacher_id)
+        );
+    `;
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error creating ExamCommittee table:', err);
+            throw err;
+        }
+        console.log('ExamCommittee table created or already exists');
+    });
+};
+
+
+/**
+ * Retrieves a list of teachers associated with a specific exam year from the database.
+ * @function getTeachersByExamYearId
+ * @param {number} exam_year_id - The ID of the exam year for which to retrieve teachers.
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of teacher objects.
+ * @throws Will throw an error if the query fails.
+ */
+const getTeachersByExamYearId = (exam_year_id) => {
+    // console.log('holla');
+    const query = `
+      SELECT t.teacher_id, t.Name, t.Designation
+      FROM Teacher t
+      JOIN Department d ON t.dept_id = d.dept_id
+      JOIN Session s ON s.dept_id = d.dept_id
+      JOIN ExamYear e ON e.session_id = s.session_id
+      WHERE e.exam_year_id = ?;
+    `;
+
+    return new Promise((resolve, reject) => {
+        db.query(query, [exam_year_id], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+};
+
+
+/**
+ * Inserts or updates an entry in the ExamCommittee table based on the provided exam year and teacher IDs.
+ * @function insertOrUpdateExamCommittee
+ * @param {number} exam_year_id - The ID of the exam year to associate with the committee.
+ * @param {number} teacher_id - The ID of the teacher to add to the committee.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing a success message and results from the insert/update operation.
+ * @throws Will throw an error if the insert or update operation fails.
+ */
+const insertOrUpdateExamCommittee = (exam_year_id, teacher_id) => {
+    const selectQuery = `
+        SELECT * FROM ExamCommittee WHERE exam_year_id = ?;
+    `;
+    const insertQuery = `
+        INSERT INTO ExamCommittee (exam_year_id, teacher_id) VALUES (?, ?);
+    `;
+    const updateQuery = `
+        UPDATE ExamCommittee SET teacher_id = ? WHERE exam_year_id = ?;
+    `;
+
+    return new Promise((resolve, reject) => {
+        // First, check if a record with the given exam_year_id already exists
+        db.query(selectQuery, [exam_year_id], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+
+            if (results.length === 0) {
+                // If no row found, perform an INSERT
+                db.query(insertQuery, [exam_year_id, teacher_id], (insertErr, insertResults) => {
+                    if (insertErr) {
+                        return reject(insertErr);
+                    }
+                    resolve({ message: 'Inserted new exam committee', insertResults });
+                });
+            } else {
+                // If row found, perform an UPDATE
+                db.query(updateQuery, [teacher_id, exam_year_id], (updateErr, updateResults) => {
+                    if (updateErr) {
+                        return reject(updateErr);
+                    }
+                    resolve({ message: 'Updated existing exam committee', updateResults });
+                });
+            }
+        });
+    });
+};
+
+
+
+module.exports = {
+    createExamCommitteeTable,
+    getTeachersByExamYearId,
+    insertOrUpdateExamCommittee
+}

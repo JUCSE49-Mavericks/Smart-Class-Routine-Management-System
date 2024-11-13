@@ -9,7 +9,8 @@ const { getTeacherDesignations } = require('../controllers/teacherController');
 const {
     updateTeacherProfile,
     deleteTeacherById,
-    addNewTeacher
+    addNewTeacher,
+    fetchAllTeachers
 } = require('../controllers/teacherController');
 
 const router = express.Router();
@@ -109,6 +110,6 @@ router.delete('/delete-teacher/:teacher_id', async (req, res) => {
     }
 });
 
-
+router.get('/all-teachers', fetchAllTeachers);
 
 module.exports = router;

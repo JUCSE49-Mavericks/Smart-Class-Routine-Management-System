@@ -1,0 +1,41 @@
+{
+  "validReschedule": {
+    "params": {
+      "scheduled_class_id": 1
+    },
+    "body": {
+      "new_date": "2024-11-15",
+      "new_time_slot_id": 2
+    },
+    "expectedResponse": {
+      "status": 200,
+      "message": "Class rescheduled successfully"
+    }
+  },
+  "noClassFound": {
+    "params": {
+      "scheduled_class_id": 999
+    },
+    "body": {
+      "new_date": "2024-11-20",
+      "new_time_slot_id": 3
+    },
+    "expectedResponse": {
+      "status": 404,
+      "message": "No class found to confirm"
+    }
+  },
+  "dbError": {
+    "params": {
+      "scheduled_class_id": 2
+    },
+    "body": {
+      "new_date": "2024-11-10",
+      "new_time_slot_id": 1
+    },
+    "expectedResponse": {
+      "status": 500,
+      "message": "Failed to reschedule class"
+    }
+  }
+}

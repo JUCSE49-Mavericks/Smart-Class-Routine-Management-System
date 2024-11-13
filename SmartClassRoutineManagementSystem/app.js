@@ -29,10 +29,13 @@ const { createXmlDataExamYearTable } = require('./models/examYearModel');
 const { createCourseTable, createPrerequisiteCourseTable, createCourseChapterTable, createCourseObjectiveTable, createStudentLearningOutcomesTable, createRecommendedBookTable } = require('./models/syllabusModel');
 const { createScheduleTable} = require('./models/RoutineModel');
 const { createHolidayTable} = require('./models/holidaysModel');
-
+const { createExamCommitteeTable } = require('./models/examCommitteeModel');
+const { createClassRepresentativeTable } = require('./models/classRepresentativeModel');
 
 const {createclassRoutineTable}=require('./models/classRoutineModel');
-
+const {createAssignedCourseTeacherTable} = require('./models/assignedCourseTeacherModel');
+const {createTimeSlotTable} = require('./models/scheduledClassModel');
+const { createScheduledClassTable } = require('./models/scheduledClassModel');
 
 
 createSuperUserTable();
@@ -52,10 +55,14 @@ createStudentLearningOutcomesTable();
 createRecommendedBookTable();
 createScheduleTable();
 createHolidayTable();
-
+createExamCommitteeTable();
+createClassRepresentativeTable();
 
 createclassRoutineTable();
 
+createAssignedCourseTeacherTable();
+createTimeSlotTable();
+createScheduledClassTable();
 
 // Routes
 const superUserRoutes = require('./routes/superUserRoutes');
@@ -74,8 +81,11 @@ const syllabusFilterRoute = require('./routes/syllabusFilterRoutes');
 const dataFetch=require('./routes/DataFetch');
 const routineGenerator=require('./routes/routineGeneratorRoutes');
 const teacherImageUpload = require('./controllers/teacherImageUpload');
-
-
+const courseRoutes = require('./routes/courseRoutes');
+const classRepresentativeRoutes = require('./routes/classRepresentativeRoutes');
+const assignedCourseTeacherRoutes = require('./routes/assignedCourseTeacherRoutes');
+const examCommitteeRoutes = require('./routes/examCommitteeRoutes');
+const scheduleClassRoutes = require('./routes/scheduleClassRoutes')
 
 app.use('/api/auth', authRoutes);
 app.use('/api', superUserRoutes);
@@ -93,6 +103,12 @@ app.use('/api', syllabusFilterRoute);
 app.use('/api', dataFetch);
 app.use('/api', routineGenerator);
 app.use('/', teacherImageUpload);
+
+app.use('/api', courseRoutes);
+app.use('/api', classRepresentativeRoutes);
+app.use('/api', assignedCourseTeacherRoutes);
+app.use('/api', examCommitteeRoutes);
+app.use('/api', scheduleClassRoutes);
 
 
 

@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [16.x]
 
     steps:
     - name: Checkout repository
@@ -26,9 +26,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies for backend
-      working-directory: ./backend
+      working-directory: ./SmartClassRoutineManagementSystem
       run: npm install
 
     - name: Run Mocha tests
-      working-directory: ./backend
+      working-directory: ./SmartClassRoutineManagementSystem
       run: npx mocha "test/**/*.js"

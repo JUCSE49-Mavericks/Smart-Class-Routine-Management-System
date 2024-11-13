@@ -1,1 +1,42 @@
 
+name: Backend CI for classRoutine_Sadia
+
+on:
+  push:
+    branches:
+      - classRoutine_Sadia
+  pull_request:
+    branches:
+      - classRoutine_Sadia
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: --health-cmd "mongo --eval 'db.adminCommand(\"ping\")'" --health-interval 10s --health-timeout 5s --health-retries 3
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies for backend
+      working-directory: ./backend
+      run: npm install
+
+    - name: Run Mocha tests
+      working-directory: ./backend
+      run: npx mocha "test/**/*.js"

@@ -125,29 +125,6 @@ The following core functionalities are designed to streamline and enhance the Sm
     npm install
     ```
 
-### 4. **`Configure the Database`**
-- **`Set Up MySQL`**: Open your MySQL client (e.g., **[phpMyAdmin](https://www.phpmyadmin.net/)**, **[MySQL Workbench](https://www.mysql.com/products/workbench/)**, or the command line).
-- Create a new database for the application:
-
-    ```sql
-    CREATE DATABASE smart_class_routine;
-    ```
-
-- In the project folder, create a `.env` file and add the following configuration:
-
-    ```plaintext
-    DB_HOST=localhost
-    DB_USER=your_mysql_username
-    DB_PASSWORD=your_mysql_password
-    DB_NAME=smart_class_routine
-    PORT=3000
-    ```
-
-- Save and close the file.
-
-### 5. **`Import Database Tables`**
-- If a **SQL file** (e.g., `smart_class_routine.sql`) is provided, import it into the `smart_class_routine` database using **phpMyAdmin** or **MySQL Workbench** to set up the required tables.
-
 ---
 
 ## 🚀 **`Running the Application`**
@@ -223,12 +200,6 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 ## 🛠️ **`Troubleshooting`**
 
-- **❌ Error connecting to the database?**  
-  Double-check your `.env` file to ensure the correct **database configurations**. Ensure that:
-  - **`DB_HOST`** points to the correct MySQL server (usually `localhost` for local setups).
-  - **`DB_USER`** and **`DB_PASSWORD`** match your MySQL credentials.
-  - **`DB_NAME`** is correctly set to the database you're using for this app.
-
 - **⚠️ App doesn’t load?**  
   Ensure that both **[Node.js](https://nodejs.org/)** and **MySQL** are properly installed and running.  
   You can check **Node.js** by running:
@@ -240,12 +211,6 @@ The following core functionalities are designed to streamline and enhance the Sm
   If the app is still not loading, verify if your **MySQL** server is up and running.  
   You can check the status of MySQL or restart the service depending on your system.
 
-- **🔑 Missing environment variables?**  
-  If certain **environment variables** are missing or incorrect, the application may fail to start.  
-  Ensure that the **`.env`** file is properly set up with:
-  - Correct **MySQL** database connection details (**`DB_HOST`**, **`DB_USER`**, **`DB_PASSWORD`**, **`DB_NAME`**).
-  - The **PORT** is set to `3000` (or your preferred port).
-  
 ---
 
 ## 🎉 **Enjoy using the Smart Class Routine Management System!**

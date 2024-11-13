@@ -77,7 +77,7 @@ The following core functionalities are designed to streamline and enhance the Sm
 8. **Schedule Class**
 9. **Filter Syllabus**
 10. **Upload Files**
-11. **Request Rescheduling**
+11. **Request Rescheduling Class**
 12. **View Class Routine**
 13. **Approve Rescheduling**
 14. **View Class Representative Info**

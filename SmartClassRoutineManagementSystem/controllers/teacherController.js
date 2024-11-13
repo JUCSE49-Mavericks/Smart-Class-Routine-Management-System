@@ -1,12 +1,26 @@
-//controllers/teacherController.js
+/**
+ * @module teacherController
+ * @description Controller for managing teacher-related operations, including
+ * uploading teacher data from XML, handling image uploads, and managing teacher
+ * information in the database.
+ */
 
 const bcrypt = require('bcryptjs');
 const xml2js = require('xml2js');
 const db = require('../config/db');
-const { updateProfileImage } = require('../models/teacherModel')
+const { updateProfileImage, getAllTeachers } = require('../models/teacherModel')
 const multer = require('multer');
 const path = require('path');
 
+
+
+/**
+ * Upload teachers data from an XML file and insert it into the database.
+ * @function uploadTeacherAsXML
+ * @param {Object} req - The request object containing XML data in the body.
+ * @param {Object} res - The response object to send the result.
+ * @returns {Promise<void>} - A promise that resolves when the import is complete.
+ */
 const uploadTeacherAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData);
@@ -59,6 +73,23 @@ const uploadTeacherAsXML = async (req, res) => {
     });
 };
 
+
+/**
+ * Insert a teacher's data into the database.
+ * @function insertXmlTeacherIntoDatabase
+ * @param {Object} data - The teacher's data to be inserted.
+ * @param {string} data.teacher_id - The unique ID of the teacher.
+ * @param {string} data.Name - The name of the teacher.
+ * @param {string} data.Designation - The designation of the teacher.
+ * @param {string} data.dept_id - The department ID of the teacher.
+ * @param {string} data.Abvr - The abbreviation for the teacher's designation.
+ * @param {string} data.Email - The email address of the teacher.
+ * @param {string} data.hashedPassword - The hashed password for the teacher.
+ * @param {string} data.Phone - The phone number of the teacher.
+ * @param {string} data.resetToken - The reset token for password recovery.
+ * @param {Date} data.resetTokenExpires - The expiration date for the reset token.
+ * @returns {Promise<void>} - A promise that resolves when the insertion is complete.
+ */
 const insertXmlTeacherIntoDatabase = (data) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO Teacher (teacher_id, Name, Designation, dept_id, Abvr, Email, Password, Phone, resetToken, resetTokenExpires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
@@ -72,6 +103,13 @@ const insertXmlTeacherIntoDatabase = (data) => {
     });
 };
 
+
+/**
+ * Clear all records from a specified database table.
+ * @function clearTable
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise<void>} - A promise that resolves when the table is cleared.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;
@@ -86,6 +124,12 @@ const clearTable = (tableName) => {
 };
 
 
+/**
+ * Get a teacher by their email address.
+ * @function getTeacherByEmail
+ * @param {string} email - The email address of the teacher.
+ * @returns {Promise<Object|null>} - A promise that resolves to the teacher object or null if not found.
+ */
 const getTeacherByEmail = (email) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Teacher WHERE email = ?";
@@ -96,6 +140,13 @@ const getTeacherByEmail = (email) => {
     });
 };
 
+
+/**
+ * Get a teacher by their reset token.
+ * @function getTeacherByResetToken
+ * @param {string} token - The reset token of the teacher.
+ * @returns {Promise<Object|null>} - A promise that resolves to the teacher object or null if not found.
+ */
 const getTeacherByResetToken = (token) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM Teacher WHERE resetToken = ? AND resetTokenExpires > NOW()";
@@ -106,6 +157,12 @@ const getTeacherByResetToken = (token) => {
     });
 };
 
+
+/**
+ * Get the designations available for teachers from the database.
+ * @function getTeacherDesignations
+ * @returns {Promise<Array<string>>} - A promise that resolves to an array of designations.
+ */
 const getTeacherDesignations = () => {
     return new Promise((resolve, reject) => {
         const sql = "SHOW COLUMNS FROM Teacher LIKE 'Designation'";
@@ -119,6 +176,13 @@ const getTeacherDesignations = () => {
     });
 };
 
+
+/**
+ * Get all teachers by their department ID.
+ * @function getTeachersByDeptId
+ * @param {number} dept_id - The ID of the department.
+ * @returns {Promise<Array>} - A promise that resolves to an array of teachers.
+ */
 const getTeachersByDeptId = (dept_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -136,6 +200,13 @@ const getTeachersByDeptId = (dept_id) => {
     });
 };
 
+
+/**
+ * Get a teacher by their ID.
+ * @function getTeacherById
+ * @param {number} teacher_id - The ID of the teacher.
+ * @returns {Promise<Object|null>} - A promise that resolves to the teacher object or null if not found.
+ */
 const getTeacherById = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * FROM Teacher WHERE teacher_id = ?`;
@@ -153,7 +224,19 @@ const getTeacherById = (teacher_id) => {
     });
 };
 
-
+/**
+ * Update a teacher's details by their ID.
+ * @function updateTeacherById
+ * @param {number} teacher_id - The ID of the teacher.
+ * @param {Object} updateData - The data to update.
+ * @param {string} updateData.Name - The new name of the teacher.
+ * @param {string} updateData.Designation - The new designation of the teacher.
+ * @param {string} updateData.dept_id - The new department ID of the teacher.
+ * @param {string} updateData.Abvr - The new abbreviation for the teacher's designation.
+ * @param {string} updateData.Email - The new email address of the teacher.
+ * @param {string} updateData.Phone - The new phone number of the teacher.
+ * @returns {Promise<void>} - A promise that resolves when the update is complete.
+ */
 const updateTeacherById = (teacher_id, updateData) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -172,7 +255,12 @@ const updateTeacherById = (teacher_id, updateData) => {
 
 
 
-//Get Department of teacher
+/**
+ * Get the department associated with a specific teacher.
+ * @function getDepartmentByTeacherId
+ * @param {number} teacher_id - The ID of the teacher.
+ * @returns {Promise<Object|null>} - A promise that resolves to the department object or null if not found.
+ */
 const getDepartmentByTeacherId = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -224,6 +312,14 @@ function checkFileType(file, cb) {
     }
 }
 
+
+/**
+ * Handle image upload for a teacher.
+ * @function uploadImage
+ * @param {Object} req - The request object containing the image file.
+ * @param {Object} res - The response object to send the result.
+ * @returns {Promise<void>} - A promise that resolves when the image upload is complete.
+ */
 const uploadTeacherImage = (req, res) => {
     const teacher_id = req.params.id;
     console.log(teacher_id)
@@ -245,7 +341,18 @@ const uploadTeacherImage = (req, res) => {
     });
 };
 
-
+/**
+ * Updates the profile of a teacher in the database.
+ * @param {number} teacher_id - The ID of the teacher to update.
+ * @param {Object} data - The data to update the teacher profile with.
+ * @param {string} data.Name - The name of the teacher.
+ * @param {string} data.Designation - The designation of the teacher.
+ * @param {number} data.dept_id - The department ID of the teacher.
+ * @param {string} data.Abvr - The abbreviation for the teacher.
+ * @param {string} data.Email - The email address of the teacher.
+ * @param {string} data.Phone - The phone number of the teacher.
+ * @returns {Promise<Object>} - A promise that resolves to the result of the database operation.
+ */
 const updateTeacherProfile = (teacher_id, data) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -260,7 +367,18 @@ const updateTeacherProfile = (teacher_id, data) => {
 };
 
 
-// Database operation function to add a new teacher
+/**
+ * Adds a new teacher to the database.
+ * @param {Object} teacher - The teacher data to insert.
+ * @param {string} teacher.Name - The name of the teacher.
+ * @param {string} teacher.Designation - The designation of the teacher.
+ * @param {number} teacher.dept_id - The department ID of the teacher.
+ * @param {string} teacher.Abvr - The abbreviation for the teacher.
+ * @param {string} teacher.Email - The email address of the teacher.
+ * @param {string} teacher.Phone - The phone number of the teacher.
+ * @param {string} teacher.hashedPassword - The hashed password of the teacher.
+ * @returns {Promise<Object>} - A promise that resolves to the result of the database operation.
+ */
 const addNewTeacher = ({ Name, Designation, dept_id, Abvr, Email, Phone, hashedPassword }) => {
     
     return new Promise((resolve, reject) => {
@@ -275,7 +393,11 @@ const addNewTeacher = ({ Name, Designation, dept_id, Abvr, Email, Phone, hashedP
     });
 };
 
-// Database operation function to delete a teacher
+/**
+ * Deletes a teacher from the database by their ID.
+ * @param {number} teacher_id - The ID of the teacher to delete.
+ * @returns {Promise<Object>} - A promise that resolves to the result of the database operation.
+ */
 const deleteTeacherById = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -287,6 +409,29 @@ const deleteTeacherById = (teacher_id) => {
         });
     });
 };
+
+
+/**
+ * Controller to handle fetching all teachers from the database.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the response has been sent.
+ */
+const fetchAllTeachers = async (req, res) => {
+    try {
+        const results = await getAllTeachers();
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No teachers found' });
+        }
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching teacher data:', error);
+        res.status(500).json({ error: 'Database error' });
+    }
+};
+
 
 
 module.exports = {
@@ -301,5 +446,6 @@ module.exports = {
     getTeacherDesignations,
     updateTeacherProfile,
     addNewTeacher,
-    deleteTeacherById
+    deleteTeacherById,
+    fetchAllTeachers
 };

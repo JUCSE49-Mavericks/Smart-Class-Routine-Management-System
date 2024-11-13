@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: assignedCourseTeacherController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: assignedCourseTeacherController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module controllers/assignedCourseTeacherController
+ */
+const {
+    updateAssignedCourseTeacher,
+    addAssignedCourseTeacherObject,
+    getAssignedCourseTeachersByExamYearId,
+    getCoursesByExamYearId,
+    uploadCSVAssignedCourseTeacherModel
+} = require('../models/assignedCourseTeacherModel');
+
+
+/**
+ * Updates the assigned course teacher based on provided IDs.
+ * @async
+ * @function handleUpdateAssignedCourseTeacher
+ * @param {Object} req - Express request object containing `assigned_course_teacher_id` and `teacher_id` in the body.
+ * @param {Object} res - Express response object.
+ * @returns {Promise&lt;void>} - Sends JSON response with success message or error details.
+ */
+const handleUpdateAssignedCourseTeacher = async (req, res) => {
+    const { assigned_course_teacher_id, teacher_id } = req.body;
+
+    try {
+        const result = await updateAssignedCourseTeacher(assigned_course_teacher_id, teacher_id);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error handling course-teacher assignment:', error);
+        res.status(500).json({ error: 'Database error while assigning course to teacher' });
+    }
+};
+
+
+/**
+ * Inserts or updates a course-teacher assignment.
+ * @async
+ * @function insertAssignedCourseTeacherObject
+ * @param {Object} req - Express request object containing `course_id` and `exam_year_id` in the body.
+ * @param {Object} res - Express response object.
+ * @returns {Promise&lt;void>} - Sends JSON response with success message or error details.
+ */
+const insertAssignedCourseTeacherObject = async (req, res) => {
+
+    const { course_id , exam_year_id} = req.body;
+    try {
+        const result = await addAssignedCourseTeacherObject(course_id, exam_year_id);
+        res.status(200).json({ message: 'Assigned course-teacher successfully', result });
+    } catch (error) {
+        console.error('Controller error:', error);
+        res.status(500).json({ error: 'Failed to assign or update course-teacher' });
+    }
+};
+
+/**
+ * Retrieves assigned course teachers by `exam_year_id`.
+ * @async
+ * @function getAssignedCourseTeachers
+ * @param {Object} req - Express request object containing `exam_year_id` as a URL parameter.
+ * @param {Object} res - Express response object.
+ * @returns {Promise&lt;void>} - Sends JSON response with a list of assigned course teachers or error details.
+ */
+const getAssignedCourseTeachers = async (req, res) => {
+    const exam_year_id = req.params.exam_year_id;
+
+    try {
+        const results = await getAssignedCourseTeachersByExamYearId(exam_year_id);
+        res.status(200).json(results);
+    } catch (err) {
+        res.status(500).json({ message: 'Error retrieving data', error: err });
+    }
+};
+
+/**
+ * Fetches courses assigned to teachers by `exam_year_id`.
+ * @async
+ * @function fetchCoursesByExamYearId
+ * @param {Object} req - Express request object containing `exam_year_id` as a URL parameter.
+ * @param {Object} res - Express response object.
+ * @returns {Promise&lt;void>} - Sends JSON response with a list of courses or error details.
+ */
+const fetchCoursesByExamYearId = async (req, res) => {
+    const exam_year_id = req.params.exam_year_id;
+    // console.log(exam_year_id);
+    try {
+        const results = await getCoursesByExamYearId(exam_year_id);
+        // console.log(results);
+        res.status(200).json(results);
+    } catch (err) {
+        res.status(500).json({ message: 'Error retrieving data', error: err });
+    }
+};
+
+
+
+/**
+ * Processes CSV data for bulk insertion or update of course-teacher assignments.
+ * @async
+ * @function processCSVData
+ * @param {Array&lt;Object>} csvData - Array of objects representing CSV rows, with `course_id` and `teacher_id`.
+ * @returns {Promise&lt;Object>} - Resolves with success message and results, or throws an error.
+ */
+const processCSVData = async (csvData) => {
+    // console.log('Hello hello');
+    // console.log(csvData);
+    const promises = csvData.map((row) => {
+        const { course_id, teacher_id } = row; // Adjust based on your CSV structure
+        return uploadCSVAssignedCourseTeacherModel(course_id, teacher_id);
+    });
+
+    try {
+        const results = await Promise.all(promises);
+        return { message: 'All records processed successfully', results };
+    } catch (error) {
+        console.error('Error processing records:', error);
+        throw new Error('Error processing records');
+    }
+};
+
+/**
+ * Handles CSV data upload and processes it for bulk course-teacher assignments.
+ * @function uploadCSVAssignedCourseTeacher
+ * @param {Object} req - Express request object containing `csvData` in the body.
+ * @param {Object} res - Express response object.
+ * @returns {void} - Sends JSON response with a success message or error details.
+ */
+const uploadCSVAssignedCourseTeacher = (req, res) => {
+    const csvData = req.body.csvData; // Assume this is an array of objects representing CSV rows
+    // console.log('hello');
+    // console.log(csvData);
+    processCSVData(csvData)
+        .then(response => {
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            res.status(500).json({ message: err.message });
+        });
+};
+
+
+module.exports = {
+    handleUpdateAssignedCourseTeacher,
+    insertAssignedCourseTeacherObject,
+    getAssignedCourseTeachers,
+    fetchCoursesByExamYearId,
+    uploadCSVAssignedCourseTeacher
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_assignedCourseTeacherController.html">controllers/assignedCourseTeacherController</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Nov 01 2024 15:58:54 GMT+0600 (Bangladesh Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

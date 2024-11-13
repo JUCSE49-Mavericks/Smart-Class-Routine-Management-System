@@ -1,0 +1,50 @@
+{
+    "updateExistingCourse": {
+      "req": {
+        "body": {
+          "assigned_course_teacher_id": 1,
+          "teacher_id": 2
+        }
+      },
+      "expectedResponse": {
+        "status": 200,
+        "body": { "message": "Teacher updated for existing course" }
+      },
+      "dbResponses": [
+        [{ "assigned_course_teacher_id": 1 }],
+        { "affectedRows": 1 }
+      ]
+    },
+    "insertNewAssignment": {
+      "req": {
+        "body": {
+          "assigned_course_teacher_id": 1,
+          "teacher_id": 3
+        }
+      },
+      "expectedResponse": {
+        "status": 200,
+        "body": { "message": "New course-teacher assignment added" }
+      },
+      "dbResponses": [
+        [],
+        { "affectedRows": 1 }
+      ]
+    },
+    "databaseError": {
+      "req": {
+        "body": {
+          "assigned_course_teacher_id": 1,
+          "teacher_id": 2
+        }
+      },
+      "expectedResponse": {
+        "status": 500,
+        "body": { "error": "Database error while assigning course to teacher" }
+      },
+      "dbResponses": [
+        null
+      ]
+    }
+  }
+  

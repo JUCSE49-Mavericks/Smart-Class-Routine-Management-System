@@ -1,7 +1,23 @@
+/**
+ * @module controllers/departmentChairmanController
+ */
+
 const bcrypt = require('bcryptjs');
 const xml2js = require('xml2js');
 const db = require('../config/db');
 
+
+/**
+ * Uploads department chairman data from an XML format.
+ * This function receives XML data, parses it, and inserts
+ * the data into the DepartmentChairman table in the database.
+ * 
+ * @function uploadDepartmentChairmanAsXML
+ * @param {Object} req - The request object containing the XML data in the body.
+ * @param {Object} res - The response object used to send the response back to the client.
+ * @returns {Promise<void>} - A promise that resolves when the data is imported successfully,
+ * or rejects with an error if the import fails.
+ */
 const uploadDepartmentChairmanAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData);
@@ -38,6 +54,15 @@ const uploadDepartmentChairmanAsXML = async (req, res) => {
     });
 };
 
+
+/**
+ * Inserts a new department chairman record into the database.
+ * 
+ * @function insertXmlTeacherIntoDatabase
+ * @param {Object} data - The data object containing dept_id and teacher_id.
+ * @returns {Promise<Object>} - A promise that resolves to the results of the insert operation.
+ * @throws {Error} Throws an error if the database operation fails.
+ */
 const insertXmlTeacherIntoDatabase = (data) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO DepartmentChairman (dept_id, teacher_id) VALUES (?, ?)';
@@ -52,6 +77,15 @@ const insertXmlTeacherIntoDatabase = (data) => {
 };
 
 
+/**
+ * Retrieves the department chairman's details by department ID.
+ * 
+ * @function getDepartmentChairmanByDeptId
+ * @param {number} dept_id - The ID of the department to retrieve the chairman for.
+ * @returns {Promise<Object|null>} - A promise that resolves to the chairman's details or null
+ * if no chairman is found.
+ * @throws {Error} Throws an error if the database operation fails.
+ */
 const getDepartmentChairmanByDeptId = (dept_id) => {
     // console.log(dept_id);
     return new Promise((resolve, reject) => {
@@ -71,7 +105,15 @@ const getDepartmentChairmanByDeptId = (dept_id) => {
     });
 };
 
-// Function to update department chairman
+/**
+ * Updates the department chairman for a specific department.
+ * 
+ * @function updateDepartmentChairman
+ * @param {number} dept_id - The ID of the department to update.
+ * @param {number} teacher_id - The ID of the teacher to set as chairman.
+ * @returns {Promise<Object>} - A promise that resolves to the results of the update operation.
+ * @throws {Error} Throws an error if the database operation fails.
+ */
 const updateDepartmentChairman = (dept_id, teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -86,7 +128,14 @@ const updateDepartmentChairman = (dept_id, teacher_id) => {
 };
 
 
-
+/**
+ * Clears all records from a specified table.
+ * 
+ * @function clearTable
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise<Object>} - A promise that resolves to the results of the clear operation.
+ * @throws {Error} Throws an error if the database operation fails.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;

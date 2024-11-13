@@ -1,0 +1,38 @@
+{
+    "fetchScheduledClasses": [
+      {
+        "description": "Should fetch scheduled classes successfully",
+        "teacherId": 1,
+        "expectedResult": [
+          {
+            "scheduled_class_id": 1,
+            "class_date": "2024-11-10",
+            "status": "Confirmed",
+            "course_code": "CS101",
+            "course_title": "Introduction to Computer Science",
+            "startTime": "09:00:00",
+            "endTime": "10:30:00",
+            "Room_no": "A101"
+          }
+        ]
+      },
+      {
+        "description": "Should return an empty array if no classes found for the teacher",
+        "teacherId": 999,
+        "expectedResult": []
+      }
+    ],
+    "updateStatusToConducted": [
+      {
+        "description": "Should update classes status to 'Conducted' if end time has passed",
+        "initialStatus": "Confirmed",
+        "expectedAffectedRows": 3
+      },
+      {
+        "description": "Should not update classes status if no class matches the condition",
+        "initialStatus": "Conducted",
+        "expectedAffectedRows": 0
+      }
+    ]
+  }
+  

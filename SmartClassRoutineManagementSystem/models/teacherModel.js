@@ -1,6 +1,25 @@
-//models/teacherModel.js
+/**
+ * @module models/teacherModel
+ */
+
 const db = require('../config/db');
 
+
+/**
+ * Creates the Teacher table if it does not already exist.
+ * This table stores information about teachers including their 
+ * name, designation, department association, and other profile details.
+ * 
+ * The primary key for this table is teacher_id, which is an 
+ * auto-incrementing integer. The dept_id field is a foreign key 
+ * referencing the Department table, establishing a relationship 
+ * between teachers and their respective departments.
+ * 
+ * @function createXmlDataTeacherTable
+ * @returns {Promise<void>} - A promise that resolves when the table 
+ * creation is complete.
+ * @throws {Error} Throws an error if the table creation fails.
+ */
 const createXmlDataTeacherTable = () => {
     const query = `
         CREATE TABLE IF NOT EXISTS Teacher (
@@ -27,6 +46,17 @@ const createXmlDataTeacherTable = () => {
     });
 };
 
+
+/**
+ * Updates the profile image of a teacher in the database.
+ * 
+ * @function updateProfileImage
+ * @param {number} teacher_id - The ID of the teacher whose profile image 
+ * is to be updated.
+ * @param {string} profileImage - The new profile image URL.
+ * @param {function} callback - The callback function to handle the result 
+ * of the query.
+ */
 const updateProfileImage = (teacher_id, profileImage, callback) => {
     const query = `
       UPDATE Teacher
@@ -36,7 +66,35 @@ const updateProfileImage = (teacher_id, profileImage, callback) => {
     db.query(query, [profileImage, teacher_id], callback);
 };
 
+/**
+ * Fetches all teachers from the database along with their department names.
+ * 
+ * @function getAllTeachers
+ * @returns {Promise<Array>} - A promise that resolves to an array of 
+ * teacher objects with their associated department names.
+ * @throws {Error} Throws an error if fetching teachers fails.
+ */
+const getAllTeachers = () => {
+    const query = `
+        SELECT Teacher.*, Department.Dept_Name 
+        FROM Teacher 
+        JOIN Department ON Teacher.dept_id = Department.dept_id
+    `;
+
+    return new Promise((resolve, reject) => {
+        db.query(query, (error, results) => {
+            if (error) {
+                console.error('Error fetching teachers:', error);
+                return reject(error);
+            }
+            resolve(results);
+        });
+    });
+};
+
+
 module.exports = {
     createXmlDataTeacherTable,
-    updateProfileImage
+    updateProfileImage,
+    getAllTeachers,
 }

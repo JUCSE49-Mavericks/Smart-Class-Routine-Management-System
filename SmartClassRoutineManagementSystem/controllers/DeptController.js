@@ -1,3 +1,7 @@
+/**
+ * @module controllers/DeptController
+ */
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const xml2js = require('xml2js');
@@ -6,7 +10,15 @@ const path = require('path');
 const db = require('../config/db');
 const { getDepartmentBySessionId } = require('./sessionController');
 
-// Function to handle uploading department data as XML
+/**
+ * Handles the uploading of department data in XML format.
+ * 
+ * @function uploadDeptAsXML
+ * @async
+ * @param {Object} req - The request object, containing the XML data in the body.
+ * @param {Object} res - The response object used to send a response.
+ * @returns {Promise<void>} Resolves when the data is successfully imported.
+ */
 const uploadDeptAsXML = async (req, res) => {
     const xmlData = req.body;
     console.log('Received XML Data:', xmlData); // Log incoming data for debugging
@@ -44,7 +56,19 @@ const uploadDeptAsXML = async (req, res) => {
     });
 };
 
-// Function to insert department data into the database
+/**
+ * Inserts a department record into the database.
+ * 
+ * @function insertXmlDeptIntoDatabase
+ * @param {Object} row - The department data to insert.
+ * @param {string} row.dept_id - The ID of the department.
+ * @param {string} row.Dept_Name - The name of the department.
+ * @param {string} row.Descript - The description of the department.
+ * @param {string} row.Phone - The phone number of the department.
+ * @param {string} row.Fax - The fax number of the department.
+ * @param {string} row.Email - The email of the department.
+ * @returns {Promise<void>} Resolves when the insert operation is complete.
+ */
 const insertXmlDeptIntoDatabase = (row) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO Department (dept_id, Dept_Name, Descript, Phone, Fax, Email) VALUES (?, ?, ?, ?, ?, ?)';
@@ -58,6 +82,13 @@ const insertXmlDeptIntoDatabase = (row) => {
     });
 };
 
+
+/**
+ * Retrieves all departments from the database.
+ * 
+ * @function getAllDepartments
+ * @returns {Promise<Array>} A promise that resolves to an array of department objects.
+ */
 const getAllDepartments = () => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM Department';
@@ -73,6 +104,14 @@ const getAllDepartments = () => {
     });
 };
 
+
+/**
+ * Retrieves a department by its ID.
+ * 
+ * @function getDepartmentById
+ * @param {string} dept_id - The ID of the department to retrieve.
+ * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ */
 const getDepartmentById = (dept_id) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM Department WHERE dept_id = ?';
@@ -88,6 +127,14 @@ const getDepartmentById = (dept_id) => {
     });
 };
 
+
+/**
+ * Retrieves the department associated with a specific teacher ID.
+ * 
+ * @function getDepartmentByTeacherId
+ * @param {string} teacher_id - The ID of the teacher.
+ * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ */
 const getDepartmentByTeacherId = (teacher_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -111,7 +158,13 @@ const getDepartmentByTeacherId = (teacher_id) => {
     });
 };
 
-
+/**
+ * Retrieves the department associated with a specific student ID.
+ * 
+ * @function getDepartmentByStudentId
+ * @param {string} student_id - The ID of the student.
+ * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ */
 const getDepartmentByStudentId = (student_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -134,6 +187,14 @@ const getDepartmentByStudentId = (student_id) => {
     });
 };
 
+
+/**
+ * Retrieves the department associated with a specific staff ID.
+ * 
+ * @function getDepartmentByStaffId
+ * @param {string} staff_id - The ID of the staff member.
+ * @returns {Promise<Object|null>} A promise that resolves to the department object or null if not found.
+ */
 const getDepartmentByStaffId = (staff_id) => {
     return new Promise((resolve, reject) => {
         const sql = `
@@ -158,7 +219,13 @@ const getDepartmentByStaffId = (staff_id) => {
 };
 
 
-// Function to clear the specified table
+/**
+ * Clears all records from the specified table.
+ * 
+ * @function clearTable
+ * @param {string} tableName - The name of the table to clear.
+ * @returns {Promise<void>} Resolves when the table is cleared.
+ */
 const clearTable = (tableName) => {
     return new Promise((resolve, reject) => {
         const query = `DELETE FROM ${tableName}`;
@@ -172,6 +239,13 @@ const clearTable = (tableName) => {
     });
 };
 
+
+/**
+ * Retrieves department IDs and names for dropdowns or selection.
+ * 
+ * @function getDeptIdAndNames
+ * @returns {Promise<Array>} A promise that resolves to an array of department ID and name pairs.
+ */
 const getDeptIdAndNames = () => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT dept_id, Dept_Name FROM Department";

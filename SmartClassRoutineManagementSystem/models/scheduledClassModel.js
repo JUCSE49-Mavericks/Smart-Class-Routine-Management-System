@@ -1,8 +1,10 @@
-//models/scheduledClassModel.js
+// models/scheduledClassModel.js
 
-const db = require('../config/db')
+const db = require('../config/db');
 
-// Function to create the TimeSlot table
+/**
+ * Creates the TimeSlot table in the database if it doesn't already exist.
+ */
 function createTimeSlotTable() {
     const createTableQuery = `
         CREATE TABLE IF NOT EXISTS TimeSlot (
@@ -21,7 +23,9 @@ function createTimeSlotTable() {
     });
 }
 
-// Function to create the ScheduledClass table
+/**
+ * Creates the ScheduledClass table in the database if it doesn't already exist.
+ */
 function createScheduledClassTable() {
     const createTableQuery = `
         CREATE TABLE IF NOT EXISTS ScheduledClass (
@@ -48,9 +52,11 @@ function createScheduledClassTable() {
     });
 }
 
-
-
-// Function to fetch all Scheduled Classes by teacher_id
+/**
+ * Fetches all scheduled classes for a specific teacher.
+ * @param {number} teacherId - The teacher's ID to fetch scheduled classes for.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function getScheduledClassesByTeacherId(teacherId, callback) {
     const fetchQuery = `
         SELECT 
@@ -85,7 +91,10 @@ function getScheduledClassesByTeacherId(teacherId, callback) {
     });
 }
 
-// Function to update the status of confirmed classes to "Conducted" if current time is greater than endTime
+/**
+ * Updates the status of confirmed classes to 'Conducted' if the current time is greater than the end time.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function updateStatusToConducted(callback) {
     const updateQuery = `
         UPDATE ScheduledClass sc
@@ -104,8 +113,11 @@ function updateStatusToConducted(callback) {
     });
 }
 
-
-// Function to update the status of a class to 'Confirmed'
+/**
+ * Updates the status of a class to 'Confirmed'.
+ * @param {number} scheduledClassId - The ID of the scheduled class to update.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function confirmClass(scheduledClassId, callback) {
     const updateQuery = `
         UPDATE ScheduledClass
@@ -122,7 +134,11 @@ function confirmClass(scheduledClassId, callback) {
     });
 }
 
-// Function to update the status of a class to 'Cancelled'
+/**
+ * Updates the status of a class to 'Cancelled'.
+ * @param {number} scheduledClassId - The ID of the scheduled class to cancel.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function cancelClass(scheduledClassId, callback) {
     const updateQuery = `
         UPDATE ScheduledClass
@@ -139,8 +155,11 @@ function cancelClass(scheduledClassId, callback) {
     });
 }
 
-
-// Function to update the status of a class to 'Scheduled' from 'Confirmed'
+/**
+ * Updates the status of a class from 'Confirmed' back to 'Scheduled'.
+ * @param {number} scheduledClassId - The ID of the scheduled class to update.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function setNotConfirmed(scheduledClassId, callback) {
     const updateQuery = `
         UPDATE ScheduledClass
@@ -157,8 +176,10 @@ function setNotConfirmed(scheduledClassId, callback) {
     });
 }
 
-
-// Fetch all available time slots
+/**
+ * Fetches all available time slots from the database.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function getTimeSlots(callback) {
     const query = 'SELECT * FROM TimeSlot';
     db.query(query, (error, results) => {
@@ -170,7 +191,13 @@ function getTimeSlots(callback) {
     });
 }
 
-// Reschedule a class (update class_date and time_slot_id)
+/**
+ * Reschedules a class by updating its date and time slot.
+ * @param {number} scheduledClassId - The ID of the class to reschedule.
+ * @param {string} newDate - The new date for the class (YYYY-MM-DD).
+ * @param {number} newTimeSlotId - The ID of the new time slot for the class.
+ * @param {function} callback - The callback function to handle the results or error.
+ */
 function rescheduleClass(scheduledClassId, newDate, newTimeSlotId, callback) {
     const updateQuery = `
         UPDATE ScheduledClass
@@ -196,4 +223,4 @@ module.exports = {
     setNotConfirmed,
     getTimeSlots,
     rescheduleClass
-}
+};

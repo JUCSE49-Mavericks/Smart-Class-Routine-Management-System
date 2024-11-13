@@ -10,7 +10,12 @@ const {
 
 const { rescheduleClass } = require('../models/scheduledClassModel');
 
-// Controller to fetch scheduled classes by teacher ID
+/**
+ * Controller to fetch scheduled classes by teacher ID
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {void}
+ */
 const fetchScheduledClasses = (req, res) => {
     const teacherId = req.params.teacher_id;
 
@@ -30,8 +35,12 @@ const fetchScheduledClasses = (req, res) => {
     });
 };
 
-
-// Controller to confirm a class
+/**
+ * Controller to confirm a scheduled class
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {void}
+ */
 const confirmScheduledClass = (req, res) => {
     const { scheduled_class_id } = req.params;
 
@@ -49,8 +58,12 @@ const confirmScheduledClass = (req, res) => {
     });
 };
 
-
-// Controller to cancel a class
+/**
+ * Controller to cancel a scheduled class
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {void}
+ */
 const cancelScheduledClass = (req, res) => {
     const { scheduled_class_id } = req.params;
 
@@ -67,7 +80,12 @@ const cancelScheduledClass = (req, res) => {
     });
 };
 
-// Controller to set class status to 'Scheduled' from 'Confirmed'
+/**
+ * Controller to set a class status to 'Scheduled' from 'Confirmed'
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {void}
+ */
 const setClassNotConfirmed = (req, res) => {
     const { scheduled_class_id } = req.params;
 
@@ -85,7 +103,12 @@ const setClassNotConfirmed = (req, res) => {
     });
 };
 
-// Controller to fetch all time slots
+/**
+ * Controller to fetch all available time slots
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {void}
+ */
 const fetchTimeSlots = (req, res) => {
     getTimeSlots((error, results) => {
         if (error) {
@@ -101,8 +124,12 @@ const fetchTimeSlots = (req, res) => {
     });
 };
 
-
-// Controller to reschedule a class
+/**
+ * Controller to reschedule a class
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @returns {void}
+ */
 const rescheduleScheduledClass = (req, res) => {
     const { scheduled_class_id } = req.params;
     const { new_date, new_time_slot_id } = req.body;
@@ -121,7 +148,6 @@ const rescheduleScheduledClass = (req, res) => {
     });
 };
 
-
 module.exports = {
     fetchScheduledClasses,
     confirmScheduledClass,
@@ -129,4 +155,4 @@ module.exports = {
     setClassNotConfirmed,
     fetchTimeSlots,
     rescheduleScheduledClass
-}
+};

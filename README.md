@@ -69,7 +69,7 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 1. **User Login**
    
-3. **Personalized Dashboard**
+3. **View Personalized Dashboard**
 4. **Generate Class Routine**
 5. **Generate Makeup Routine**
 6. **View Academic Calendar**

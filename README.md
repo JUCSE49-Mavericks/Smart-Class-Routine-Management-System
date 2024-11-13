@@ -1,6 +1,14 @@
 
 # 🎓 **Smart Class Routine Management System**
 
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+ <p> <a href="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki">
+ <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/Document.PNG"> </a> </p>
+
+
 ## 🛠️ **How to Use**
 
 ### 1. **`Clone the Project`**

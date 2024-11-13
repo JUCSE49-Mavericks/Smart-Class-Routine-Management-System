@@ -217,7 +217,7 @@ Your **contributions** are greatly appreciated, and we thank you for helping mak
 <a href="https://github.com/29mitu">
 <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/mitu.jpg" alt="Jannati Tajrimin" width="120px" height="120px">
 </a>
-<h4><a href="https://github.com/29mitu">Jannati Tajrimin</a></h4>
+<h4><a href="https://github.com/29mitu">Jannati Tajrimin Mitu</a></h4>
 <p>Roll No: 358</p>
 </td>
 

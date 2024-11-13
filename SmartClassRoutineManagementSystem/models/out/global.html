@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="addAssignedCourseTeacherObject"><span class="type-signature"></span>addAssignedCourseTeacherObject<span class="signature">(course_id, exam_year_id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="cancelClass"><span class="type-signature"></span>cancelClass<span class="signature">(scheduledClassId, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -112,7 +112,7 @@
 
 
 <div class="description">
-    Adds a new course-teacher assignment if no assignment already exists for the course.
+    Updates the status of a class to 'Cancelled'.
 </div>
 
 
@@ -148,7 +148,7 @@
 
         <tr>
             
-                <td class="name"><code>course_id</code></td>
+                <td class="name"><code>scheduledClassId</code></td>
             
 
             <td class="type">
@@ -164,20 +164,20 @@
 
             
 
-            <td class="description last">The ID of the course to assign.</td>
+            <td class="description last">The ID of the scheduled class to cancel.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>exam_year_id</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">function</span>
 
 
             
@@ -187,7 +187,7 @@
 
             
 
-            <td class="description last">The ID of the exam year for the assignment.</td>
+            <td class="description last">The callback function to handle the results or error.</td>
         </tr>
 
     
@@ -228,117 +228,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="assignedCourseTeacherModel.js.html">assignedCourseTeacherModel.js</a>, <a href="assignedCourseTeacherModel.js.html#line87">line 87</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - A promise that resolves with the operation result.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="createAssignedCourseTeacherTable"><span class="type-signature"></span>createAssignedCourseTeacherTable<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Creates the AssignedCourseTeacher table if it does not already exist.The table links courses, teachers, and exam years with unique constraints.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="assignedCourseTeacherModel.js.html">assignedCourseTeacherModel.js</a>, <a href="assignedCourseTeacherModel.js.html#line14">line 14</a>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -374,7 +264,7 @@
     
 
     
-    <h4 class="name" id="getAssignedCourseTeachersByExamYearId"><span class="type-signature"></span>getAssignedCourseTeachersByExamYearId<span class="signature">(exam_year_id)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
+    <h4 class="name" id="confirmClass"><span class="type-signature"></span>confirmClass<span class="signature">(scheduledClassId, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -382,7 +272,7 @@
 
 
 <div class="description">
-    Retrieves assigned course-teacher records by a specific exam year ID.
+    Updates the status of a class to 'Confirmed'.
 </div>
 
 
@@ -418,7 +308,7 @@
 
         <tr>
             
-                <td class="name"><code>exam_year_id</code></td>
+                <td class="name"><code>scheduledClassId</code></td>
             
 
             <td class="type">
@@ -434,7 +324,30 @@
 
             
 
-            <td class="description last">The ID of the exam year to retrieve assignments for.</td>
+            <td class="description last">The ID of the scheduled class to update.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback function to handle the results or error.</td>
         </tr>
 
     
@@ -475,7 +388,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="assignedCourseTeacherModel.js.html">assignedCourseTeacherModel.js</a>, <a href="assignedCourseTeacherModel.js.html#line124">line 124</a>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -500,28 +413,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - A promise that resolves with an array of assigned course-teacher records.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Array></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -533,7 +424,7 @@
     
 
     
-    <h4 class="name" id="getCoursesByExamYearId"><span class="type-signature"></span>getCoursesByExamYearId<span class="signature">(exam_year_id)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
+    <h4 class="name" id="createScheduledClassTable"><span class="type-signature"></span>createScheduledClassTable<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -541,7 +432,183 @@
 
 
 <div class="description">
-    Retrieves course details along with their assigned teachers by exam year ID.
+    Creates the ScheduledClass table in the database if it doesn't already exist.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createTimeSlotTable"><span class="type-signature"></span>createTimeSlotTable<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates the TimeSlot table in the database if it doesn't already exist.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getScheduledClassesByTeacherId"><span class="type-signature"></span>getScheduledClassesByTeacherId<span class="signature">(teacherId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Fetches all scheduled classes for a specific teacher.
 </div>
 
 
@@ -577,7 +644,7 @@
 
         <tr>
             
-                <td class="name"><code>exam_year_id</code></td>
+                <td class="name"><code>teacherId</code></td>
             
 
             <td class="type">
@@ -593,7 +660,30 @@
 
             
 
-            <td class="description last">The ID of the exam year to retrieve courses for.</td>
+            <td class="description last">The teacher's ID to fetch scheduled classes for.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback function to handle the results or error.</td>
         </tr>
 
     
@@ -634,7 +724,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="assignedCourseTeacherModel.js.html">assignedCourseTeacherModel.js</a>, <a href="assignedCourseTeacherModel.js.html#line147">line 147</a>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -659,28 +749,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - A promise that resolves with an array of course details.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Array></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -692,7 +760,7 @@
     
 
     
-    <h4 class="name" id="updateAssignedCourseTeacher"><span class="type-signature"></span>updateAssignedCourseTeacher<span class="signature">(assigned_course_teacher_id, teacher_id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getTimeSlots"><span class="type-signature"></span>getTimeSlots<span class="signature">(callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -700,7 +768,7 @@
 
 
 <div class="description">
-    Updates or inserts a teacher assignment for an existing course.If the course already exists, updates the teacher ID. Otherwise, inserts a new assignment.
+    Fetches all available time slots from the database.
 </div>
 
 
@@ -736,13 +804,13 @@
 
         <tr>
             
-                <td class="name"><code>assigned_course_teacher_id</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">function</span>
 
 
             
@@ -752,30 +820,7 @@
 
             
 
-            <td class="description last">The ID of the assigned course-teacher record.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>teacher_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The ID of the teacher to assign.</td>
+            <td class="description last">The callback function to handle the results or error.</td>
         </tr>
 
     
@@ -816,7 +861,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="assignedCourseTeacherModel.js.html">assignedCourseTeacherModel.js</a>, <a href="assignedCourseTeacherModel.js.html#line45">line 45</a>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line183">line 183</a>
     </li></ul></dd>
     
 
@@ -841,28 +886,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - A promise that resolves with the operation result.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -874,7 +897,7 @@
     
 
     
-    <h4 class="name" id="uploadCSVAssignedCourseTeacherModel"><span class="type-signature"></span>uploadCSVAssignedCourseTeacherModel<span class="signature">(course_id, teacher_id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="rescheduleClass"><span class="type-signature"></span>rescheduleClass<span class="signature">(scheduledClassId, newDate, newTimeSlotId, callback)</span><span class="type-signature"></span></h4>
     
 
     
@@ -882,7 +905,7 @@
 
 
 <div class="description">
-    Inserts or updates an assigned course-teacher record based on CSV upload data.
+    Reschedules a class by updating its date and time slot.
 </div>
 
 
@@ -918,7 +941,7 @@
 
         <tr>
             
-                <td class="name"><code>course_id</code></td>
+                <td class="name"><code>scheduledClassId</code></td>
             
 
             <td class="type">
@@ -934,14 +957,37 @@
 
             
 
-            <td class="description last">The ID of the course to assign.</td>
+            <td class="description last">The ID of the class to reschedule.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>teacher_id</code></td>
+                <td class="name"><code>newDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new date for the class (YYYY-MM-DD).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newTimeSlotId</code></td>
             
 
             <td class="type">
@@ -957,7 +1003,30 @@
 
             
 
-            <td class="description last">The ID of the teacher to assign.</td>
+            <td class="description last">The ID of the new time slot for the class.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback function to handle the results or error.</td>
         </tr>
 
     
@@ -998,7 +1067,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="assignedCourseTeacherModel.js.html">assignedCourseTeacherModel.js</a>, <a href="assignedCourseTeacherModel.js.html#line185">line 185</a>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line201">line 201</a>
     </li></ul></dd>
     
 
@@ -1023,28 +1092,303 @@
 
 
 
-<h5>Returns:</h5>
+
+
+
+
 
         
-<div class="param-desc">
-    - A promise that resolves with the operation result.
+            
+
+    
+
+    
+    <h4 class="name" id="setNotConfirmed"><span class="type-signature"></span>setNotConfirmed<span class="signature">(scheduledClassId, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the status of a class from 'Confirmed' back to 'Scheduled'.
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-<span class="param-type">Promise.&lt;Object></span>
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>scheduledClassId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
-    </dd>
-</dl>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the scheduled class to update.</td>
+        </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback function to handle the results or error.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line163">line 163</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateStatusToConducted"><span class="type-signature"></span>updateStatusToConducted<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the status of confirmed classes to 'Conducted' if the current time is greater than the end time.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The callback function to handle the results or error.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="scheduledClassModel.js.html">scheduledClassModel.js</a>, <a href="scheduledClassModel.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1066,13 +1410,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addAssignedCourseTeacherObject">addAssignedCourseTeacherObject</a></li><li><a href="global.html#createAssignedCourseTeacherTable">createAssignedCourseTeacherTable</a></li><li><a href="global.html#getAssignedCourseTeachersByExamYearId">getAssignedCourseTeachersByExamYearId</a></li><li><a href="global.html#getCoursesByExamYearId">getCoursesByExamYearId</a></li><li><a href="global.html#updateAssignedCourseTeacher">updateAssignedCourseTeacher</a></li><li><a href="global.html#uploadCSVAssignedCourseTeacherModel">uploadCSVAssignedCourseTeacherModel</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#cancelClass">cancelClass</a></li><li><a href="global.html#confirmClass">confirmClass</a></li><li><a href="global.html#createScheduledClassTable">createScheduledClassTable</a></li><li><a href="global.html#createTimeSlotTable">createTimeSlotTable</a></li><li><a href="global.html#getScheduledClassesByTeacherId">getScheduledClassesByTeacherId</a></li><li><a href="global.html#getTimeSlots">getTimeSlots</a></li><li><a href="global.html#rescheduleClass">rescheduleClass</a></li><li><a href="global.html#setNotConfirmed">setNotConfirmed</a></li><li><a href="global.html#updateStatusToConducted">updateStatusToConducted</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Nov 01 2024 15:45:37 GMT+0600 (Bangladesh Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Nov 14 2024 00:01:30 GMT+0600 (Bangladesh Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

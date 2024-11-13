@@ -61,8 +61,31 @@
 </td>
 </tr>
 </table>
+---
 
-## 🛠️ **How to Use**
+## 🏆 `Main Functions of the Project`
+
+The following core functionalities are designed to streamline and enhance the Smart Class Routine Management System:
+
+1. **User Login**
+   
+3. **Personalized Dashboard**
+4. **Generate Class Routine**
+5. **Generate Makeup Routine**
+6. **View Academic Calendar**
+7. **Assign Course Teacher**
+8. **Schedule Class**
+9. **Filter Syllabus**
+10. **Upload Files**
+11. **Request Rescheduling**
+12. **View Class Routine**
+13. **Approve Rescheduling**
+14. **View Class Representative Info**
+15. **Update Class Representative Info**
+
+ ---
+
+## 🛠️ **`How to Use`**
 
 ### 1. **`Clone the Project`**
 - Install **[Git Bash](https://git-scm.com/)** (if not already installed).

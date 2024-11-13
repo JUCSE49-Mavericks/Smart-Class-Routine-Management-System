@@ -3,7 +3,7 @@
 
 ## 🛠️ **How to Use**
 
-### 1. **Clone the Project**
+### 1. **`Clone the Project`**
 - Install **[Git Bash](https://git-scm.com/)** (if not already installed).
 - Open the **Git Bash** terminal in your local directory.
 - Configure **Git**:
@@ -19,7 +19,7 @@
     git clone https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System.git
     ```
 
-### 2. **Navigate to the Project Directory**
+### 2. **`Navigate to the Project Directory`**
 - Go to the project directory:
 
     ```bash
@@ -34,15 +34,15 @@
 
 - Open the terminal in VS Code (`Ctrl + J`).
 
-### 3. **Install Dependencies**
+### 3. **`Install Dependencies`**
 - Install all the required dependencies by running:
 
     ```bash
     npm install
     ```
 
-### 4. **Configure the Database**
-- **Set Up MySQL**: Open your MySQL client (e.g., **[phpMyAdmin](https://www.phpmyadmin.net/)**, **[MySQL Workbench](https://www.mysql.com/products/workbench/)**, or the command line).
+### 4. **`Configure the Database`**
+- **`Set Up MySQL`**: Open your MySQL client (e.g., **[phpMyAdmin](https://www.phpmyadmin.net/)**, **[MySQL Workbench](https://www.mysql.com/products/workbench/)**, or the command line).
 - Create a new database for the application:
 
     ```sql
@@ -61,14 +61,14 @@
 
 - Save and close the file.
 
-### 5. **Import Database Tables**
+### 5. **`Import Database Tables`**
 - If a **SQL file** (e.g., `smart_class_routine.sql`) is provided, import it into the `smart_class_routine` database using **phpMyAdmin** or **MySQL Workbench** to set up the required tables.
 
 ---
 
-## 🚀 **Running the Application**
+## 🚀 **`Running the Application`**
 
-### 1. **Start the Application**
+### 1. **`Start the Application`**
 - To start the application, run the following command:
 
     ```bash
@@ -77,16 +77,16 @@
 
 ---
 
-## 🧑‍💻 **How to Develop**
+## 🧑‍💻 **`How to Develop`**
 
-### 1. **Create a New Branch**
+### 1. **`Create a New Branch`**
 - To start working on a new feature or bug fix, create a new branch:
 
     ```bash
     git checkout -b <new_branch_name>
     ```
 
-### 2. **Make Changes**
+### 2. **`Make Changes`**
 - Implement your changes.
 - If you need to modify the database structure (e.g., adding new tables), run:
 
@@ -94,13 +94,13 @@
     npm run migrate
     ```
 
-- **Run tests** to ensure everything works:
+- **`Run tests`** to ensure everything works:
 
     ```bash
     npm test
     ```
 
-### 3. **Commit and Push Changes**
+### 3. **`Commit and Push Changes`**
 - Stage and commit your changes:
 
     ```bash
@@ -114,14 +114,14 @@
     git push origin <new_branch_name>
     ```
 
-### 4. **Create a Pull Request**
+### 4. **`Create a Pull Request`**
 - After pushing your branch, create a **[Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request)** to merge your changes into the main development branch.
 
-### 5. **Review and Merge**
+### 5. **`Review and Merge`**
 - Collaborators will review changes in the Pull Request.
 - If approved, merge the changes into the main branch.
 
-### 6. **Update Local Repository**
+### 6. **`Update Local Repository`**
 - After the merge, make sure your local repository is up to date:
 
     ```bash
@@ -137,7 +137,7 @@
 
 ---
 
-## 🛠️ **Troubleshooting**
+## 🛠️ **`Troubleshooting`**
 
 - **❌ Error connecting to the database?**  
   Double-check your `.env` file to ensure the correct **database configurations**. Ensure that:

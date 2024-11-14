@@ -1,3 +1,43 @@
+# name: Node.js CI
+
+# on:
+#   push:
+#     branches:
+#       - Class_Routine_Rubayed
+#   pull_request:
+#     branches:
+#       - Class_Routine_Rubayed
+
+# jobs:
+#   build-and-test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'  # Use the required Node.js version
+
+#       - name: Install dependencies
+#         run: npm install
+#         working-directory: ./SmartClassRoutineManagementSystem
+
+#       # Install Mocha globally to avoid permission issues
+#       - name: Install Mocha globally
+#         run: npm install -g mocha
+#         working-directory: ./SmartClassRoutineManagementSystem
+
+#       - name: Run Mocha tests
+#         run: mocha --extension js,mjs 'test/**/*.{js,mjs}'
+#         working-directory: ./SmartClassRoutineManagementSystem
+
+
+
+
+
 name: Node.js CI
 
 on:
@@ -12,6 +52,20 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD:
+          MYSQL_DATABASE: db_class_routine
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,17 +73,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Use the required Node.js version
+          node-version: '16'
 
       - name: Install dependencies
         run: npm install
         working-directory: ./SmartClassRoutineManagementSystem
 
-      # Install Mocha globally to avoid permission issues
+      - name: Wait for MySQL to be ready
+        run: sleep 15
+
+      - name: Run Database Migrations
+        run: npm run migrate
+        working-directory: ./SmartClassRoutineManagementSystem
+
       - name: Install Mocha globally
         run: npm install -g mocha
         working-directory: ./SmartClassRoutineManagementSystem
 
       - name: Run Mocha tests
-        run: mocha --extension js,mjs 'test/**/*.{js,mjs}'
+        run: mocha 'test/**/*.test.js' --recursive
         working-directory: ./SmartClassRoutineManagementSystem

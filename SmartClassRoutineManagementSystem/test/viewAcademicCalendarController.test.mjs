@@ -1,56 +1,46 @@
-// const chai = require('chai');
-// const expect = chai.expect;
-// const sinon = require('sinon');
-// const ViewAcademicCalendarController = require('../controllers/viewAcademicCalendarController');
-// const testCases = require('./testCases.json');
-
-
-// Replace require with import
+// Import modules with ES6 syntax
 import { expect } from 'chai';
 import ViewAcademicCalendarController from '../controllers/viewAcademicCalendarController.js';
 import sinon from 'sinon';
 import academicCalendarModel from '../models/academicCalendarModel.js';
 import testCases from './testCases.json' assert { type: 'json' };
 
-
-
 describe("ViewAcademicCalendarController Tests", function() {
+  this.timeout(5000); // Increase timeout to 5000ms for async operations
 
   // Test for getAllEvents function
   it("should return all events for getAllEvents", function(done) {
-    const req = {}; // empty request object
+    const req = {};
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub()
     };
-  
+
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.allEvents.expectedOutput, null, 5));
-      console.log("Actual Output:", JSON.stringify(result, null, 5));
+      console.log("Expected Output:", JSON.stringify(testCases.allEvents.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.allEvents.expectedOutput);
       done();
     });
-  
-    ViewAcademicCalendarController.getAllEvents(req, res); // This should now work
-  });
-  
 
+    ViewAcademicCalendarController.getAllEvents(req, res);
+  });
 
   // Test for getHolidayEventsView function
   it("should return general holidays for getHolidayEventsView", function(done) {
-    const req = {}; // empty request object
+    const req = {};
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub()
     };
-    
+
     res.json.callsFake((result) => {
       console.log("Expected Output:", JSON.stringify(testCases.holidayEvents.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.holidayEvents.expectedOutput);
       done();
     });
-    
+
     ViewAcademicCalendarController.getHolidayEventsView(req, res);
   });
 
@@ -61,14 +51,14 @@ describe("ViewAcademicCalendarController Tests", function() {
       status: sinon.stub().returnsThis(),
       json: sinon.stub()
     };
-    
+
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.eventsByDepartment.expectedOutput, null, 3));
-      console.log("Actual Output:", JSON.stringify(result, null, 3));
+      console.log("Expected Output:", JSON.stringify(testCases.eventsByDepartment.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByDepartment.expectedOutput);
       done();
     });
-    
+
     ViewAcademicCalendarController.getEventsByDepartment(req, res);
   });
 
@@ -79,34 +69,34 @@ describe("ViewAcademicCalendarController Tests", function() {
       status: sinon.stub().returnsThis(),
       json: sinon.stub()
     };
-    
+
     res.json.callsFake((result) => {
       console.log("Expected Output:", JSON.stringify(testCases.eventsByMonth.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByMonth.expectedOutput);
       done();
     });
-    
+
     ViewAcademicCalendarController.getEventsByMonth(req, res);
   });
 
-// Test for getEventsByWeek function
-it("should return events for specified week", function(done) {
-  const req = { params: { week: testCases.eventsByWeek.input[0] } };
-  const res = {
-    status: sinon.stub().returnsThis(),
-    json: sinon.stub()
-  };
-  
-  res.json.callsFake((result) => {
-    console.log("Expected Output:", JSON.stringify(testCases.eventsByWeek.expectedOutput, null, 2));
-    console.log("Actual Output:", JSON.stringify(result, null, 2));
-    expect(result).to.deep.equal(testCases.eventsByWeek.expectedOutput);
-    done();
+  // Test for getEventsByWeek function
+  it("should return events for specified week", function(done) {
+    const req = { params: { week: testCases.eventsByWeek.input[0] } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub()
+    };
+
+    res.json.callsFake((result) => {
+      console.log("Expected Output:", JSON.stringify(testCases.eventsByWeek.expectedOutput, null, 2));
+      console.log("Actual Output:", JSON.stringify(result, null, 2));
+      expect(result).to.deep.equal(testCases.eventsByWeek.expectedOutput);
+      done();
+    });
+
+    ViewAcademicCalendarController.getEventsByWeek(req, res);
   });
-  
-  ViewAcademicCalendarController.getEventsByWeek(req, res);
-});
 
   // Test for getVacationsByDateRange function
   it("should return vacations within date range", function(done) {
@@ -115,14 +105,14 @@ it("should return events for specified week", function(done) {
       status: sinon.stub().returnsThis(),
       json: sinon.stub()
     };
-    
+
     res.json.callsFake((result) => {
       console.log("Expected Output:", JSON.stringify(testCases.vacationsByDateRange.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.vacationsByDateRange.expectedOutput);
       done();
     });
-    
+
     ViewAcademicCalendarController.getVacationsByDateRange(req, res);
   });
 
@@ -133,14 +123,14 @@ it("should return events for specified week", function(done) {
       status: sinon.stub().returnsThis(),
       json: sinon.stub()
     };
-    
+
     res.json.callsFake((result) => {
       console.log("Expected Output:", JSON.stringify(testCases.activitiesByDateRange.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.activitiesByDateRange.expectedOutput);
       done();
     });
-    
+
     ViewAcademicCalendarController.getActivitiesByDateRange(req, res);
   });
 });

@@ -25,6 +25,10 @@ jobs:
       working-directory: ./SmartClassRoutineManagementSystem
       run: npm install
 
+    - name: Install Mocha globally
+        working-directory: ./SmartClassRoutineManagementSystem
+        run: npm install -g mocha
+
     - name: Run Mocha tests
       working-directory: ./SmartClassRoutineManagementSystem
       run: npx mocha "test/**/*.js"

@@ -27,6 +27,6 @@
     "sinon": "^19.0.2"
   },
   "scripts": {
-    "test": "mocha test/*.mjs"
+   "test": "mocha --no-timeouts --extension js,mjs 'test/**/*.{js,mjs}'"
   }
 }

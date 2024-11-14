@@ -13,7 +13,7 @@
 ---
 
 
-##  `Main Features of the Project`
+##  ✅`Main Features of the Project`
 
 The following core functionalities are designed to streamline and enhance the Smart Class Routine Management System:
 

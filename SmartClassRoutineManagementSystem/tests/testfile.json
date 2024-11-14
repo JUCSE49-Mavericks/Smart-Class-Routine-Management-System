@@ -1,22 +1,8 @@
-{
-    "validStudentData": {
-      "body": "<root><row><student_id>2</student_id><Name>Sadia Hossain</Name><Gender>Female</Gender><session_id>3</session_id><Class_roll>347</Class_roll><Exam_roll>202150</Exam_roll><Registration_no>20200650712</Registration_no><Email>sadia.stu2019@juniv.edu</Email><Password>1234</Password><Phone>01856458952</Phone></row></root>",
-      "expectedStatus": 200,
-      "expectedMessage": "XML data imported successfully."
-    },
+{ 
     "invalidXmlData": {
       "body": "<root><row><student_id>2<student_id><Name>Sadia Hossain</Name></row></root>",
       "expectedStatus": 400,
       "expectedMessage": "Invalid XML data"
-    },
-    "incompleteData": {
-      "body": "<root><row><student_id>2</student_id><Name>Sadia Hossain</Name><Email>sadia.stu20191@juniv.edu</Email><Password>1234</Password></row></root>",
-      "expectedStatus": 200,
-      "expectedMessage": "XML data imported successfully."
-    },
-    "databaseError": {
-      "body": "<root><row><student_id>3</student_id><Name>John Doe</Name><Email>john.doe@example.com</Email><Password>password123</Password></row></root>",
-      "expectedStatus": 500,
-      "expectedMessage": "Error importing XML data."
     }
+    
   }

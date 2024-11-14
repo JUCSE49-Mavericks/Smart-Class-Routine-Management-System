@@ -1,0 +1,31 @@
+name: Backend CI for classRoutine_Sadia
+
+on:
+  push:
+    branches:
+      - classRoutine_Sadia
+  pull_request:
+    branches:
+      - classRoutine_Sadia
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.18.0'  # You can change '16' to '20' if you want Node.js version 20.
+
+    - name: Install dependencies for backend
+      working-directory: ./SmartClassRoutineManagementSystem
+      run: npm install
+
+    - name: Run Mocha tests
+      working-directory: ./SmartClassRoutineManagementSystem
+      run: npx mocha "test/**/*.js"
+

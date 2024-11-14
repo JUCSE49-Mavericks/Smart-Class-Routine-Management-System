@@ -1,7 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import xml2js from 'xml2js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import fs from 'fs';
 import path from 'path';
 import { uploadStudentAsXML } from '../controllers/studentController.js';

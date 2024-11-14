@@ -1,37 +1,82 @@
 
+---
+
 # 🎓 **Smart Class Routine Management System**
 
 <p align="center">
     <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
 </p>
 
- <p align="center"> <a href="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki">
+<p align="center"> <a href="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki">
  <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/DocumentClickHere.PNG"> </a> </p>
 
 ---
 
-## 🏆 `Main Features of the Project`
+
+##  `Main Features of the Project`
 
 The following core functionalities are designed to streamline and enhance the Smart Class Routine Management System:
 
 1. **User Login**
+2. **View Personalized Dashboard**
+3. **Generate Class Routine**
+4. **Generate Makeup Routine**
+5. **View Academic Calendar**
+6. **Assign Course Teacher**
+7. **Schedule Class**
+8. **Filter Syllabus**
+9. **Upload Files**
+10. **Request Rescheduling Class**
+11. **View Class Routine**
+12. **Approve Rescheduling**
+13. **View Class Representative Info**
+14. **Update Class Representative Info**
+
+---
+
+
+# 📑 **Table of Contents**
+
+1. [Main Features of the Project](#main-features-of-the-project)
    
-3. **View Personalized Dashboard**
-4. **Generate Class Routine**
-5. **Generate Makeup Routine**
-6. **View Academic Calendar**
-7. **Assign Course Teacher**
-8. **Schedule Class**
-9. **Filter Syllabus**
-10. **Upload Files**
-11. **Request Rescheduling Class**
-12. **View Class Routine**
-13. **Approve Rescheduling**
-14. **View Class Representative Info**
-15. **Update Class Representative Info**
+3. [Documentation](#documentation)
+4. [Our Team](#our-team)
+5. [How to Use](#how-to-use)
+    - [Clone the Project](#clone-the-project)
+    - [Navigate to the Project Directory](#navigate-to-the-project-directory)
+    - [Install Dependencies](#install-dependencies)
+6. [Running the Application](#running-the-application)
+7. [How to Develop](#how-to-develop)
+    - [Create a New Branch](#create-a-new-branch)
+    - [Make Changes](#make-changes)
+    - [Commit and Push Changes](#commit-and-push-changes)
+    - [Create a Pull Request](#create-a-pull-request)
+    - [Review and Merge](#review-and-merge)
+    - [Update Local Repository](#update-local-repository)
+8. [Troubleshooting](#troubleshooting)
+9. [Contributing](#contributing)
+
+
+---
+
+#  **Documentation**
+
+- 📚 **[Explore the full Wiki for more documents and project details](https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki)** 
+
+- 📑 **[Software Requirements Specification (SRS)](https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki/SRS)**  
+  
+
+- 🚀 **[Sprint 1 Planning](https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki/Meeting-Minutes-7-(Sprint-1-Planning))**  
+  
+
+- 🛠️ **[Sprint 2 Planning](https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki/Sprint-2-Planning)**  
+
+
+Check out each document for in-depth insights into our development process, features, and project evolution! 👆
 
 
  ---
+
 ## Our Team
 
 <table>
@@ -92,10 +137,9 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 ---
 
+##  **`How to Use`** 
 
-## 🛠️ **`How to Use`**
-
-### 1. **`Clone the Project`**
+###  **`Clone the Project`**
 - Install **[Git Bash](https://git-scm.com/)** (if not already installed).
 - Open the **Git Bash** terminal in your local directory.
 - Configure **Git**:
@@ -111,7 +155,7 @@ The following core functionalities are designed to streamline and enhance the Sm
     git clone https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System.git
     ```
 
-### 2. **`Navigate to the Project Directory`**
+###  **`Navigate to the Project Directory`**
 - Go to the project directory:
 
     ```bash
@@ -126,7 +170,7 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 - Open the terminal in VS Code (`Ctrl + J`).
 
-### 3. **`Install Dependencies`**
+###  **`Install Dependencies`**
 - Install all the required dependencies by running:
 
     ```bash
@@ -135,9 +179,9 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 ---
 
-## 🚀 **`Running the Application`**
+##  **`Running the Application`**
 
-### 1. **`Start the Application`**
+###  **`Start the Application`**
 - To start the application, run the following command:
 
     ```bash
@@ -146,16 +190,16 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 ---
 
-## 🧑‍💻 **`How to Develop`**
+## **`How to Develop`**
 
-### 1. **`Create a New Branch`**
+###  **`Create a New Branch`**
 - To start working on a new feature or bug fix, create a new branch:
 
     ```bash
     git checkout -b <new_branch_name>
     ```
 
-### 2. **`Make Changes`**
+###  **`Make Changes`**
 - Implement your changes.
 - If you need to modify the database structure (e.g., adding new tables), run:
 
@@ -169,7 +213,7 @@ The following core functionalities are designed to streamline and enhance the Sm
     npm test
     ```
 
-### 3. **`Commit and Push Changes`**
+###  **`Commit and Push Changes`**
 - Stage and commit your changes:
 
     ```bash
@@ -183,64 +227,36 @@ The following core functionalities are designed to streamline and enhance the Sm
     git push origin <new_branch_name>
     ```
 
-### 4. **`Create a Pull Request`**
-- After pushing your branch, create a **[Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request)** to merge your changes into the main development branch.
+###  **`Create a Pull Request`**
+- Go to the GitHub repository and create a pull request.
 
-### 5. **`Review and Merge`**
-- Collaborators will review changes in the Pull Request.
-- If approved, merge the changes into the main branch.
+###  **`Review and Merge`**
+- Review the pull request and merge it after approval.
 
-### 6. **`Update Local Repository`**
-- After the merge, make sure your local repository is up to date:
+###  **`Update Local Repository`**
+- Keep your local repository up to date by pulling the latest changes:
 
     ```bash
-    git checkout main
     git pull origin main
-    ```
-
-- Optionally, delete the local feature branch after merging:
-
-    ```bash
-    git branch -d <new_branch_name>
     ```
 
 ---
 
-## 🛠️ **`Troubleshooting`**
+##  **Troubleshooting**
 
-- **⚠️ App doesn’t load?**  
-  Ensure that both **[Node.js](https://nodejs.org/)** and **MySQL** are properly installed and running.  
-  You can check **Node.js** by running:
+- **Error: `Cannot start the application`**  
+  Solution: Ensure that all dependencies are installed by running `npm install`.
 
-    ```bash
-    node -v
-    ```
+- **Error: `Database connection failed`**  
+  Solution: Ensure your database configurations are correct in `config/db.js`.
 
-  If the app is still not loading, verify if your **MySQL** server is up and running.  
-  You can check the status of MySQL or restart the service depending on your system.
+---
+
+##  **Contributing**
+
+- Fork this repository, create a new branch, and submit a pull request.  
+- Make sure your code is well-commented and follows the project’s coding standards.
 
 ---
 
 ## 🎉 **Enjoy using the Smart Class Routine Management System!**
-
-We hope the system helps you streamline your class scheduling process! If you have any questions or need support, feel free to reach out to us.  
-We’re happy to assist you! 🤝
-
----
-
-## 🤝 **Contributing**
-
-**We welcome contributions** to improve the **Smart Class Routine Management System**! Whether you want to add new features, fix bugs, or improve documentation, we’re excited to collaborate with you.
-
-### To contribute:
-1. **Fork** the repository.
-2. **Create a new branch** for your feature or bug fix.
-3. **Implement your changes**.
-4. **Test everything thoroughly** to ensure stability.
-5. Open a **Pull Request** to merge your changes into the main repository.
-
-
-Your **contributions** are greatly appreciated, and we thank you for helping make the project even better! 🙌
-
-
----

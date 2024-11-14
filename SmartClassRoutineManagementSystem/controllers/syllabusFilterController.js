@@ -93,7 +93,8 @@ class CourseDataFetcher {
         const query = `
             SELECT 
                 c.course_id, 
-                c.Course_code, 
+                c.Course_code,
+                c.Couorse_credit, 
                 c.course_title, 
                 c.course_type, 
                 c.contact_hour, 

@@ -31,5 +31,5 @@ jobs:
         working-directory: ./SmartClassRoutineManagementSystem
 
       - name: Run Mocha tests
-        run: mocha --extension js,mjs 'test/**/*.{js,mjs}'
+        run: mocha --extension js,mjs 'tests/**/*.{js,mjs}'
         working-directory: ./SmartClassRoutineManagementSystem

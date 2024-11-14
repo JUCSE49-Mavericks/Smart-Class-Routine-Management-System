@@ -6,10 +6,9 @@ import academicCalendarModel from '../models/academicCalendarModel.js';
 import testCases from './testCases.json' assert { type: 'json' };
 
 describe("ViewAcademicCalendarController Tests", function() {
-  this.timeout(5000); // Increase timeout to 5000ms for async operations
 
   // Test for getAllEvents function
-  it("should return all events for getAllEvents", function(done) {
+  it("should return all events for getAllEvents", async function() {
     const req = {};
     const res = {
       status: sinon.stub().returnsThis(),
@@ -20,14 +19,13 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.allEvents.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.allEvents.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getAllEvents(req, res);
+    await ViewAcademicCalendarController.getAllEvents(req, res);
   });
 
   // Test for getHolidayEventsView function
-  it("should return general holidays for getHolidayEventsView", function(done) {
+  it("should return general holidays for getHolidayEventsView", async function() {
     const req = {};
     const res = {
       status: sinon.stub().returnsThis(),
@@ -38,14 +36,13 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.holidayEvents.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.holidayEvents.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getHolidayEventsView(req, res);
+    await ViewAcademicCalendarController.getHolidayEventsView(req, res);
   });
 
   // Test for getEventsByDepartment function
-  it("should return events for specified department", function(done) {
+  it("should return events for specified department", async function() {
     const req = { params: { department: testCases.eventsByDepartment.input[0] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -56,14 +53,13 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.eventsByDepartment.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByDepartment.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getEventsByDepartment(req, res);
+    await ViewAcademicCalendarController.getEventsByDepartment(req, res);
   });
 
   // Test for getEventsByMonth function
-  it("should return events for specified month", function(done) {
+  it("should return events for specified month", async function() {
     const req = { params: { month: testCases.eventsByMonth.input[0] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -74,14 +70,13 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.eventsByMonth.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByMonth.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getEventsByMonth(req, res);
+    await ViewAcademicCalendarController.getEventsByMonth(req, res);
   });
 
   // Test for getEventsByWeek function
-  it("should return events for specified week", function(done) {
+  it("should return events for specified week", async function() {
     const req = { params: { week: testCases.eventsByWeek.input[0] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -92,14 +87,13 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.eventsByWeek.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByWeek.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getEventsByWeek(req, res);
+    await ViewAcademicCalendarController.getEventsByWeek(req, res);
   });
 
   // Test for getVacationsByDateRange function
-  it("should return vacations within date range", function(done) {
+  it("should return vacations within date range", async function() {
     const req = { params: { startDate: testCases.vacationsByDateRange.input[0], endDate: testCases.vacationsByDateRange.input[1] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -110,14 +104,13 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.vacationsByDateRange.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.vacationsByDateRange.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getVacationsByDateRange(req, res);
+    await ViewAcademicCalendarController.getVacationsByDateRange(req, res);
   });
 
   // Test for getActivitiesByDateRange function
-  it("should return activities within date range", function(done) {
+  it("should return activities within date range", async function() {
     const req = { params: { startDate: testCases.activitiesByDateRange.input[0], endDate: testCases.activitiesByDateRange.input[1] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -128,9 +121,8 @@ describe("ViewAcademicCalendarController Tests", function() {
       console.log("Expected Output:", JSON.stringify(testCases.activitiesByDateRange.expectedOutput, null, 2));
       console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.activitiesByDateRange.expectedOutput);
-      done();
     });
 
-    ViewAcademicCalendarController.getActivitiesByDateRange(req, res);
+    await ViewAcademicCalendarController.getActivitiesByDateRange(req, res);
   });
 });

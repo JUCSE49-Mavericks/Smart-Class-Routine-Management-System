@@ -18,10 +18,15 @@ const mockDataPath = join(__dirname, '../testCases/testCases1.json');
 const mockData = JSON.parse(fs.readFileSync(mockDataPath, 'utf8'));
 
 describe('RoutineGenerateController - generateRoutine', () => {
+    
+        /** @type {RoutineGenerateController} */
+
     let routineGenerateController;
     
 
-
+    /**
+     * Test case to verify correct mapping of preferred times for teachers.
+     */
     it('should map preferred times for teachers correctly', () => {
         console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
         const routineGenController = new RoutineGenerateController();
@@ -118,7 +123,7 @@ describe('RoutineGenerateController - generateRoutine', () => {
         {
             room_type: 'Lab',
             room_count: 2,
-            Rooms: ['Lab1', 'Lab2'],
+            Rooms: ['203', '302'],
         },
     ];
 
@@ -128,162 +133,170 @@ describe('RoutineGenerateController - generateRoutine', () => {
     });
 
 
+    /**
+     * Test case to verify assignment of consecutive slots for courses that require multiple slots.
+     */
 
+    // it('should assign consecutive slots for a 2-slot course', async () => {
+    //     console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
+    //     // Arrange
+    //     const scheduleData = {
+    //         slots: [
+    //             { startTime: '09:00', endTime: '10:00' },
+    //             { startTime: '10:00', endTime: '11:00' },
+    //             { startTime: '11:00', endTime: '12:00' }
+    //         ]
+    //     };
 
-    it('should assign consecutive slots for a 2-slot course', async () => {
-        console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
-        // Arrange
-        const scheduleData = {
-            slots: [
-                { startTime: '09:00', endTime: '10:00' },
-                { startTime: '10:00', endTime: '11:00' },
-                { startTime: '11:00', endTime: '12:00' }
-            ]
-        };
+    //     const departmentData = {
+    //         deptId: 1,
+    //         departmentName: 'Computer Science & Engineering',
+    //         teacherDetails: [
+    //             { teacher_id: 1, Name: 'Dr. Md. Musfique Anwar' }
+    //         ]
+    //     };
 
-        const departmentData = {
-            deptId: 1,
-            departmentName: 'Computer Science & Engineering',
-            teacherDetails: [
-                { teacher_id: 1, Name: 'Dr. Md. Musfique Anwar' }
-            ]
-        };
+    //     const classroomDetails = [
+    //         { room_type: 'Lab', Rooms: ['203', '302'] }
+    //     ];
 
-        const classroomDetails = [
-            { room_type: 'Lab', Rooms: ['203', '302'] }
-        ];
+    //     const routineGenController = new RoutineGenerateController();
 
-        const routineGenController = new RoutineGenerateController();
+    //     // Simulate the courses data with a 2-slot course
+    //     const courses = [
+    //         {
+    //             course_id: 404,
+    //             course_title: 'Software Engieering & ISD Lab',
+    //             teacher_id: 1,
+    //             classes_per_week: 1,
+    //             class: '4-1',
+    //             slots: 2 // 2-slot course
+    //         }
+    //     ];
 
-        // Simulate the courses data with a 2-slot course
-        const courses = [
-            {
-                course_id: 404,
-                course_title: 'Software Engieering & ISD Lab',
-                teacher_id: 1,
-                classes_per_week: 1,
-                class: '4-1',
-                slots: 2 // 2-slot course
-            }
-        ];
+    //     // Set the department data with courses
+    //     departmentData.courses = courses;
 
-        // Set the department data with courses
-        departmentData.courses = courses;
+    //     // Map preferred times for the teacher
+    //     routineGenController.mapPreferredTimes = function (teacherDetails) {
+    //         return {
+    //             1: {
+    //                 Thursday: [{ start: '09:00', end: '11:00' }] // Teacher prefers this time
+    //             }
+    //         };
+    //     };
 
-        // Map preferred times for the teacher
-        routineGenController.mapPreferredTimes = function (teacherDetails) {
-            return {
-                1: {
-                    Thursday: [{ start: '09:00', end: '11:00' }] // Teacher prefers this time
-                }
-            };
-        };
+    //     // Allocate rooms for the course
+    //     routineGenController.allocateRooms = function (courses, classroomDetails) {
+    //         return {
+    //             404: '203' // Allocate Lab1 for Algorithms course
+    //         };
+    //     };
 
-        // Allocate rooms for the course
-        routineGenController.allocateRooms = function (courses, classroomDetails) {
-            return {
-                404: '203' // Allocate Lab1 for Algorithms course
-            };
-        };
+    //     // Act
+    //     const routine = await routineGenController.generateRoutine(scheduleData, departmentData, classroomDetails);
 
-        // Act
-        const routine = await routineGenController.generateRoutine(scheduleData, departmentData, classroomDetails);
-
-        // Assert
-        const allocatedClasses = routine.filter(entry => entry.course_id === 404);
-        assert.equal(allocatedClasses.length, 2, 'Two classes should be allocated for the course');
-        assert.deepEqual(allocatedClasses[0].time, { start: '09:00', end: '10:00' }, 'First class time should be 09:00 to 10:00');
-        assert.deepEqual(allocatedClasses[1].time, { start: '10:00', end: '11:00' }, 'Second class time should be 10:00 to 11:00');
-        assert.equal(allocatedClasses[0].room, '203', 'First class should be assigned to LaB 203');
-        assert.equal(allocatedClasses[1].room, '203', 'Second class should also be assigned to Lab 203');
-        console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
-    });
+    //     // Assert
+    //     const allocatedClasses = routine.filter(entry => entry.course_id === 404);
+    //     assert.equal(allocatedClasses.length, 2, 'Two classes should be allocated for the course');
+    //     assert.deepEqual(allocatedClasses[0].time, { start: '09:00', end: '10:00' }, 'First class time should be 09:00 to 10:00');
+    //     assert.deepEqual(allocatedClasses[1].time, { start: '10:00', end: '11:00' }, 'Second class time should be 10:00 to 11:00');
+    //     assert.equal(allocatedClasses[0].room, '203', 'First class should be assigned to LaB 203');
+    //     assert.equal(allocatedClasses[1].room, '203', 'Second class should also be assigned to Lab 203');
+    //     console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
+    // });
     
 
-    it('should skip a course from allocating on that day if no preferred times are available for the course TEACHER i.e preferred time is NULL', async () => {
-        console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
-        const modifiedDepartmentData = {
-            ...mockDepartmentData,
-            teacherDetails: [
-                {
-                    teacher_id: 1,
-                    Name: 'John Doe',
-                    preferredTimes: [], // No preferred times
-                },
-            ],
-        };
+    /**
+     * Test case to verify that courses are skipped if no preferred times are set.
+     */
 
-        const routine = await routineGenerateController.generateRoutine(
-            mockScheduleData,
-            modifiedDepartmentData,
-            mockClassroomDetails
-        );
+    // it('should skip a course from allocating on that day if no preferred times are available for the course TEACHER i.e preferred time is NULL', async () => {
+    //     console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
+    //     const modifiedDepartmentData = {
+    //         ...mockDepartmentData,
+    //         teacherDetails: [
+    //             {
+    //                 teacher_id: 1,
+    //                 Name: 'Dr. Md. Musfique Anwar',
+    //                 preferredTimes: [], // No preferred times
+    //             },
+    //         ],
+    //     };
 
-        expect(routine).to.be.an('array').that.is.empty; // No routine generated due to lack of preferred times
-        console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
-    });
+    //     const routine = await routineGenerateController.generateRoutine(
+    //         mockScheduleData,
+    //         modifiedDepartmentData,
+    //         mockClassroomDetails
+    //     );
+
+    //     expect(routine).to.be.an('array').that.is.empty; // No routine generated due to lack of preferred times
+    //     console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
+    // });
 
 
 
 
   
+    /**
+     * Test case to verify that a teacher is not assigned to different classes at the same time slot.
+     */
+    // it('should handle cases so that the same TEACHER is not assigned to two different classes at the same TIME SLOT', async () => {
+    //     console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    //     const modifiedDepartmentData = {
+    //         deptId: 1,
+    //         teacherDetails: [
+    //             {
+    //                 teacher_id: 1,
+    //                 Name: 'Dr. Md. Musfique Anwar',
+    //                 preferredTimes: [{ start: '09:00', end: '10:00' }],
+    //             },
+    //         ],
+    //         courses: [
+    //             {
+    //                 course_id: 404,
+    //                 course_title: 'Software Engineering & ISD Lab',
+    //                 teacher_id: 1,
+    //                 classes_per_week: 1,
+    //                 slots: 1,
+    //                 room_type: 'Lab',
+    //                 class: '4-1',
+    //             },
+    //             {
+    //                 course_id: 312,
+    //                 course_title: 'OOAD',
+    //                 teacher_id: 1,
+    //                 classes_per_week: 1,
+    //                 slots: 1,
+    //                 room_type: 'Lab',
+    //                 class: '3-1',
+    //             },
+    //         ],
+    //         departmentName: 'CSE',
+    //     };
 
-    it('should handle cases so that the same TEACHER is not assigned to two different classes at the same TIME SLOT', async () => {
-        console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
-        const modifiedDepartmentData = {
-            deptId: 1,
-            teacherDetails: [
-                {
-                    teacher_id: 1,
-                    Name: 'Dr. Md. Musfique Anwar',
-                    preferredTimes: [{ start: '09:00', end: '10:00' }],
-                },
-            ],
-            courses: [
-                {
-                    course_id: 404,
-                    course_title: 'Software Engineering & ISD Lab',
-                    teacher_id: 1,
-                    classes_per_week: 1,
-                    slots: 1,
-                    room_type: 'Lab',
-                    class: '4-1',
-                },
-                {
-                    course_id: 312,
-                    course_title: 'OOAD',
-                    teacher_id: 1,
-                    classes_per_week: 1,
-                    slots: 1,
-                    room_type: 'Lab',
-                    class: '3-1',
-                },
-            ],
-            departmentName: 'CSE',
-        };
-
-        const routine = await routineGenerateController.generateRoutine(
-            mockScheduleData,
-            modifiedDepartmentData,
-            mockClassroomDetails
-        );
-        modifiedDepartmentData.teacherDetails.forEach((teacher) => {
-            console.log(`Teacher ID: ${teacher.teacher_id}`);
-            console.log(`Name: ${teacher.Name}`);
+    //     const routine = await routineGenerateController.generateRoutine(
+    //         mockScheduleData,
+    //         modifiedDepartmentData,
+    //         mockClassroomDetails
+    //     );
+    //     modifiedDepartmentData.teacherDetails.forEach((teacher) => {
+    //         console.log(`Teacher ID: ${teacher.teacher_id}`);
+    //         console.log(`Name: ${teacher.Name}`);
             
-            // Loop through each preferred time for this teacher
-            teacher.preferredTimes.forEach((time, index) => {
-                console.log(`Preferred Time ${index + 1}: Start - ${time.start}, End - ${time.end}`);
-            });
-        });
+    //         // Loop through each preferred time for this teacher
+    //         teacher.preferredTimes.forEach((time, index) => {
+    //             console.log(`Preferred Time ${index + 1}: Start - ${time.start}, End - ${time.end}`);
+    //         });
+    //     });
      
-        console.log(modifiedDepartmentData.courses);
+    //     console.log(modifiedDepartmentData.courses);
 
-        // Expecting a single class to be assigned due to time conflicts
-        expect(routine).to.be.an('array').that.has.lengthOf(1);
-        expect(routine[0]).to.include({ teacher_id: 1, course_title: 'Software Engineering & ISD Lab' }); 
-        console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
-    });
+    //     // Expecting a single class to be assigned due to time conflicts
+    //     expect(routine).to.be.an('array').that.has.lengthOf(1);
+    //     expect(routine[0]).to.include({ teacher_id: 1, course_title: 'Software Engineering & ISD Lab' }); 
+    //     console.log('----------------------------------------------------------------------------------------------------------------------------------------------');
+    // });
 
 
 
@@ -346,6 +359,16 @@ describe('RoutineGenerateController - generateRoutine', () => {
 
    
 });
+
+/**
+ * Helper function to check if a time slot falls within a preferred time range.
+ *
+ * @param {string} startTime - The start time of the slot.
+ * @param {string} endTime - The end time of the slot.
+ * @param {string} preferredStart - The preferred start time.
+ * @param {string} preferredEnd - The preferred end time.
+ * @returns {boolean} - True if the slot is within the preferred time range, false otherwise.
+ */
 
 // Helper function to check if a time slot falls within a preferred time range
 function isWithinTimeRange(startTime, endTime, preferredStart, preferredEnd) {

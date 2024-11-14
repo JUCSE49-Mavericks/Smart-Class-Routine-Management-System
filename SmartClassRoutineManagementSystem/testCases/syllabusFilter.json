@@ -1,0 +1,134 @@
+{
+  "testCases": [
+    {
+      "description": "Fetch course data successfully",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "course_id": 4,
+        "course_code": "CSE 101",
+        "course_title": "Data Structures",
+        "course_type": null,
+        "contact_hour": null,
+        "rationale": null,
+        "chapters": ["Introduction"],
+        "objectives": ["Understand Algorithms"],
+        "prerequisites": ["Basic Programming"],
+        "recommended_books": [{ "Book_title": "Data Structures by Knuth" }],
+        "student_learning_outcomes": ["Problem Solving"]
+      }
+    },
+    {
+      "description": "Department not found",
+      "input": {
+        "department": "fsfs",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Department not found"
+      }
+    },
+    {
+      "description": "Session not found",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "3dd",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Session not found"
+      }
+    },
+    {
+      "description": "Exam year not found",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "ffsd",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Exam year not found"
+      }
+    },
+    {
+      "description": "Course not found",
+      "input": {
+        "department": "Computer Science",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "ddsd"
+      },
+      "expectedOutput": {
+        "error": "Course not found"
+      }
+    },
+    {
+      "description": "Additional data fetch fails",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Data Structures"
+      },
+      "expectedOutput": {
+        "error": "Failed to fetch chapters"
+      }
+    },
+
+    {
+      "description": "Handle multiple chapters and objectives",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Algorithms"
+      },
+      "expectedOutput": {
+        "course_id": 5,
+        "course_code": "CSE 102",
+        "course_title": "Algorithms",
+        "course_type": "Theory",
+        "contact_hour": 3,
+        "rationale": "Foundational algorithms",
+        "chapters": ["Sorting", "Searching", "Graphs"],
+        "objectives": ["Design algorithms", "Analyze complexity"],
+        "prerequisites": ["Data Structures"],
+        "recommended_books": [
+          { "Book_title": "Introduction to Algorithms by Cormen" },
+          { "Book_title": "Algorithms by Sedgewick" }
+        ],
+        "student_learning_outcomes": ["Advanced Problem Solving", "Efficiency in Coding"]
+      }
+    },
+    {
+      "description": "Return empty response for optional fields",
+      "input": {
+        "department": "Computer Science & Engineering",
+        "session": "2019-2020",
+        "examYear": "2024",
+        "course": "Operating Systems"
+      },
+      "expectedOutput": {
+        "course_id": 6,
+        "course_code": "CSE 201",
+        "course_title": "Operating Systems",
+        "course_type": "Theory",
+        "contact_hour": 3,
+        "rationale": "Fundamental Knowledge on Linux",
+        "chapters": ["Forking"],
+        "objectives": ["Analyze complexity"],
+        "prerequisites": [],
+        "recommended_books": [],
+        "student_learning_outcomes": ["Efficiency in Linux"]
+      }
+    }
+  ]
+}

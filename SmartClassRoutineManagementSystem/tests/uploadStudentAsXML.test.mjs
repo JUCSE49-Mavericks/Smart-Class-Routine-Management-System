@@ -6,7 +6,8 @@ import bcrypt from 'bcryptjs';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { uploadStudentAsXML } from '../controllers/studentController.js';
-import { clearTable, insertXmlStudentIntoDatabase } from '../models/studentModel.js';
+import pkg from '../models/studentModel.js';
+const { clearTable, insertXmlStudentIntoDatabase } = pkg;
 
 // Resolve __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);

@@ -1,15 +1,26 @@
 const MakeupScheduleModel = require('../models/makeupclassRoutineModel');
 
 // Updated validDays array excluding Friday and Saturday
-const validDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Sunday"];
-const theoryRooms = ["101", "102", "103"];
-const labRooms = ["203", "302"];
-const validRooms = ["101", "102", "103", "203", "201", "302"];
+const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Sunday'];
+const theoryRooms = ['101', '102', '103'];
+const labRooms = ['203', '302'];
+const validRooms = ['101', '102', '103', '203', '201', '302'];
 
 const MakeupScheduleController = {
+  /**
+   * Generate the makeup schedule based on the provided preferences.
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   */
   generateMakeupSchedule: async (req, res) => {
     try {
-      const { courseName, teacherName, preferredTimes, preferredDays, preferredRoom } = req.body;
+      const {
+        courseName,
+        teacherName,
+        preferredTimes,
+        preferredDays,
+        preferredRoom
+      } = req.body;
 
       // Validate course name and teacher name
       if (!courseName || !teacherName) {
@@ -21,10 +32,11 @@ const MakeupScheduleController = {
       if (classesNeeded === 0) {
         return res.status(200).json({ message: 'No makeup classes needed', schedule: [] });
       }
-      if (classesNeeded === "error") {
+
+      if (classesNeeded === 'error') {
         return res.status(400).json({ message: 'Routine cannot be generated as classesNeeded is not found', schedule: [] });
       }
-      
+
       // Fetch courseType based on courseName
       const courseType = await MakeupScheduleModel.getCourseTypeByCourseName(courseName);
       if (courseType === null) {
@@ -38,10 +50,10 @@ const MakeupScheduleController = {
 
       // If preferredRoom is provided, validate it
       if (preferredRoom) {
-        const invalidRooms = Array.isArray(preferredRoom) 
-          ? preferredRoom.filter(room => !validRooms.includes(room)) 
+        const invalidRooms = Array.isArray(preferredRoom)
+          ? preferredRoom.filter(room => !validRooms.includes(room))
           : !validRooms.includes(preferredRoom);
-        
+
         if (invalidRooms.length > 0) {
           return res.status(400).json({ message: 'Invalid preferred room(s) provided' });
         }
@@ -61,9 +73,9 @@ const MakeupScheduleController = {
       }
 
       // Default preferred times if not provided
-      const times = (preferredTimes && Array.isArray(preferredTimes) && preferredTimes.length > 0) 
-        ? preferredTimes 
-        : [{ start: "09:00", end: "10:00" }];
+      const times = (preferredTimes && Array.isArray(preferredTimes) && preferredTimes.length > 0)
+        ? preferredTimes
+        : [{ start: '09:00', end: '10:00' }];
 
       if (times.some(time => !time.start || !time.end)) {
         return res.status(400).json({ message: 'Invalid preferred time(s)' });
@@ -72,11 +84,15 @@ const MakeupScheduleController = {
       // Create the schedule
       const schedule = [];
 
-      // Function to select classroom based on course type
+      /**
+       * Select classroom based on course type.
+       * @param {string} courseType - The type of course (Theory or Lab).
+       * @returns {string} - The selected classroom.
+       */
       function selectClassroom(courseType) {
-        if (courseType === "Theory") {
+        if (courseType === 'Theory') {
           return theoryRooms[Math.floor(Math.random() * theoryRooms.length)];
-        } else if (courseType === "Lab") {
+        } else if (courseType === 'Lab') {
           return labRooms[Math.floor(Math.random() * labRooms.length)];
         }
         return 'Default Room';
@@ -91,7 +107,7 @@ const MakeupScheduleController = {
       // Generate the time slots and assign classrooms
       times.forEach((timeSlot) => {
         const { start, end } = timeSlot;
-        const startTime = start || "09:00";
+        const startTime = start || '09:00';
         const endTime = end || getOneHourLater(startTime);
 
         for (let i = 0; i < classesNeeded; i++) {

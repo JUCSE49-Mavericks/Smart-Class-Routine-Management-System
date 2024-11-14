@@ -1,20 +1,27 @@
-//config/db.js
-
 const mysql = require('mysql');
 
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "class_routine_management"
-});
+// If the environment is CI, mock the database connection (skip real connection)
+if (process.env.CI === 'true') {
+    console.log('Skipping actual DB connection in CI environment');
+    module.exports = {
+        query: () => { return { yields: () => {} }; }, // Mock query method
+    };
+} else {
+    const db = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "class_routine_management"
+    });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to MySQL:', err);
-        throw err;
-    }
-    console.log('Connected to MySQL database');
-});
+    db.connect((err) => {
+        if (err) {
+            console.error('Error connecting to MySQL:', err);
+            throw err;
+        }
+        console.log('Connected to MySQL database');
+    });
 
-module.exports = db;
+    module.exports = db;
+}
+

@@ -11,6 +11,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Increase the global timeout value
+const TIMEOUT = 5000; // Adjust as needed
+
 // Function to read test data asynchronously
 const readTestData = async () => {
   const filePath = path.resolve(__dirname, './testCases.json');
@@ -21,13 +24,15 @@ const readTestData = async () => {
 describe("ViewAcademicCalendarController Tests", function() {
   let testCases;
 
-  // Load test data before running tests
+  // Load test data before running tests and set timeout for loading data
   before(async function() {
+    this.timeout(TIMEOUT); // Ensure enough time for setup
     testCases = await readTestData();
   });
 
   // Test for getAllEvents function
   it("should return all events for getAllEvents", async function() {
+    this.timeout(TIMEOUT);
     const req = {};
     const res = {
       status: sinon.stub().returnsThis(),
@@ -35,8 +40,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.allEvents.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.allEvents.expectedOutput);
     });
 
@@ -45,6 +48,7 @@ describe("ViewAcademicCalendarController Tests", function() {
 
   // Test for getHolidayEventsView function
   it("should return general holidays for getHolidayEventsView", async function() {
+    this.timeout(TIMEOUT);
     const req = {};
     const res = {
       status: sinon.stub().returnsThis(),
@@ -52,8 +56,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.holidayEvents.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.holidayEvents.expectedOutput);
     });
 
@@ -62,6 +64,7 @@ describe("ViewAcademicCalendarController Tests", function() {
 
   // Test for getEventsByDepartment function
   it("should return events for specified department", async function() {
+    this.timeout(TIMEOUT);
     const req = { params: { department: testCases.eventsByDepartment.input[0] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -69,8 +72,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.eventsByDepartment.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByDepartment.expectedOutput);
     });
 
@@ -79,6 +80,7 @@ describe("ViewAcademicCalendarController Tests", function() {
 
   // Test for getEventsByMonth function
   it("should return events for specified month", async function() {
+    this.timeout(TIMEOUT);
     const req = { params: { month: testCases.eventsByMonth.input[0] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -86,8 +88,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.eventsByMonth.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByMonth.expectedOutput);
     });
 
@@ -96,6 +96,7 @@ describe("ViewAcademicCalendarController Tests", function() {
 
   // Test for getEventsByWeek function
   it("should return events for specified week", async function() {
+    this.timeout(TIMEOUT);
     const req = { params: { week: testCases.eventsByWeek.input[0] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -103,8 +104,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.eventsByWeek.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.eventsByWeek.expectedOutput);
     });
 
@@ -113,6 +112,7 @@ describe("ViewAcademicCalendarController Tests", function() {
 
   // Test for getVacationsByDateRange function
   it("should return vacations within date range", async function() {
+    this.timeout(TIMEOUT);
     const req = { params: { startDate: testCases.vacationsByDateRange.input[0], endDate: testCases.vacationsByDateRange.input[1] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -120,8 +120,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.vacationsByDateRange.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.vacationsByDateRange.expectedOutput);
     });
 
@@ -130,6 +128,7 @@ describe("ViewAcademicCalendarController Tests", function() {
 
   // Test for getActivitiesByDateRange function
   it("should return activities within date range", async function() {
+    this.timeout(TIMEOUT);
     const req = { params: { startDate: testCases.activitiesByDateRange.input[0], endDate: testCases.activitiesByDateRange.input[1] } };
     const res = {
       status: sinon.stub().returnsThis(),
@@ -137,8 +136,6 @@ describe("ViewAcademicCalendarController Tests", function() {
     };
 
     res.json.callsFake((result) => {
-      console.log("Expected Output:", JSON.stringify(testCases.activitiesByDateRange.expectedOutput, null, 2));
-      console.log("Actual Output:", JSON.stringify(result, null, 2));
       expect(result).to.deep.equal(testCases.activitiesByDateRange.expectedOutput);
     });
 

@@ -10,27 +10,7 @@
 <p align="center"> <a href="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/wiki">
  <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/DocumentClickHere.PNG"> </a> </p>
 
----
 
-
-##  ✅`Main Features of the Project`
-
-The following core functionalities are designed to streamline and enhance the Smart Class Routine Management System:
-
-1. **User Login**
-2. **View Personalized Dashboard**
-3. **Generate Class Routine**
-4. **Generate Makeup Routine**
-5. **View Academic Calendar**
-6. **Assign Course Teacher**
-7. **Schedule Class**
-8. **Filter Syllabus**
-9. **Upload Files**
-10. **Request Rescheduling Class**
-11. **View Class Routine**
-12. **Approve Rescheduling**
-13. **View Class Representative Info**
-14. **Update Class Representative Info**
 
 ---
 
@@ -56,6 +36,28 @@ The following core functionalities are designed to streamline and enhance the Sm
 8. [Troubleshooting](#troubleshooting)
 9. [Contributing](#contributing)
 
+
+---
+
+
+##  ✅`Main Features of the Project`
+
+The following core functionalities are designed to streamline and enhance the Smart Class Routine Management System:
+
+1. **User Login**
+2. **View Personalized Dashboard**
+3. **Generate Class Routine**
+4. **Generate Makeup Routine**
+5. **View Academic Calendar**
+6. **Assign Course Teacher**
+7. **Schedule Class**
+8. **Filter Syllabus**
+9. **Upload Files**
+10. **Request Rescheduling Class**
+11. **View Class Routine**
+12. **Approve Rescheduling**
+13. **View Class Representative Info**
+14. **Update Class Representative Info**
 
 ---
 

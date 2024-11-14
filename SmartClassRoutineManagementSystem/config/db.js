@@ -1,6 +1,12 @@
 //config/db.js
 
 const mysql = require('mysql');
+if (process.env.CI === 'true') {
+    console.log('Skipping actual DB connection in CI environment');
+    module.exports = {
+        query: () => { return { yields: () => {} }; }, // Mock query method
+    };
+} else {
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -18,3 +24,4 @@ db.connect((err) => {
 });
 
 module.exports = db;
+}

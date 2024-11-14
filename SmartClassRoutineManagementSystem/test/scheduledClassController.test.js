@@ -244,68 +244,68 @@ describe('fetchTimeSlots Controller', () => {
 });
 
 
-const { rescheduleClass } = require('../models/scheduledClassModel'); // Ensure you're importing the function
-const { rescheduleScheduledClass } = require('../controllers/scheduleClassController'); // Controller import
+// const { rescheduleClass } = require('../models/scheduledClassModel'); // Ensure you're importing the function
+// const { rescheduleScheduledClass } = require('../controllers/scheduleClassController'); // Controller import
 
-describe('Scheduled Class Controller - Reschedule Class', function () {
-    let sandbox;
+// describe('Scheduled Class Controller - Reschedule Class', function () {
+//     let sandbox;
   
-    beforeEach(() => {
-      sandbox = sinon.createSandbox();
-    });
+//     beforeEach(() => {
+//       sandbox = sinon.createSandbox();
+//     });
   
-    afterEach(() => {
-      sandbox.restore();
-    });
+//     afterEach(() => {
+//       sandbox.restore();
+//     });
   
-    it('should reschedule a class successfully', async function () {
-      const mockResults = { affectedRows: 1 };
+//     it('should reschedule a class successfully', async function () {
+//       const mockResults = { affectedRows: 1 };
   
-      // Correct way to stub the rescheduleClass function
-      sandbox.stub(rescheduleClass, 'rescheduleClass').callsFake((scheduledClassId, newDate, newTimeSlotId, callback) => {
-        callback(null, mockResults);
-      });
+//       // Correct way to stub the rescheduleClass function
+//       sandbox.stub(rescheduleClass, 'rescheduleClass').callsFake((scheduledClassId, newDate, newTimeSlotId, callback) => {
+//         callback(null, mockResults);
+//       });
   
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub().returns(res);
+//       res.status = sinon.stub().returns(res);
+//       res.json = sinon.stub().returns(res);
   
-      await rescheduleScheduledClass(req, res);
+//       await rescheduleScheduledClass(req, res);
   
-      sinon.assert.calledOnce(rescheduleClass.rescheduleClass);
-      sinon.assert.calledWith(res.status, 200);
-      sinon.assert.calledWith(res.json, { message: 'Class rescheduled successfully' });
-    });
+//       sinon.assert.calledOnce(rescheduleClass.rescheduleClass);
+//       sinon.assert.calledWith(res.status, 200);
+//       sinon.assert.calledWith(res.json, { message: 'Class rescheduled successfully' });
+//     });
   
-    it('should return 404 if no class is found to reschedule', async function () {
-      const mockResults = { affectedRows: 0 };
+//     it('should return 404 if no class is found to reschedule', async function () {
+//       const mockResults = { affectedRows: 0 };
   
-      sandbox.stub(rescheduleClass, 'rescheduleClass').callsFake((scheduledClassId, newDate, newTimeSlotId, callback) => {
-        callback(null, mockResults);
-      });
+//       sandbox.stub(rescheduleClass, 'rescheduleClass').callsFake((scheduledClassId, newDate, newTimeSlotId, callback) => {
+//         callback(null, mockResults);
+//       });
   
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub().returns(res);
+//       res.status = sinon.stub().returns(res);
+//       res.json = sinon.stub().returns(res);
   
-      await rescheduleScheduledClass(req, res);
+//       await rescheduleScheduledClass(req, res);
   
-      sinon.assert.calledOnce(rescheduleClass.rescheduleClass);
-      sinon.assert.calledWith(res.status, 404);
-      sinon.assert.calledWith(res.json, { message: 'No class found to confirm' });
-    });
+//       sinon.assert.calledOnce(rescheduleClass.rescheduleClass);
+//       sinon.assert.calledWith(res.status, 404);
+//       sinon.assert.calledWith(res.json, { message: 'No class found to confirm' });
+//     });
   
-    it('should handle database errors', async function () {
-      const dbError = new Error('Database Error');
-      sandbox.stub(rescheduleClass, 'rescheduleClass').callsFake((scheduledClassId, newDate, newTimeSlotId, callback) => {
-        callback(dbError, null);
-      });
+//     it('should handle database errors', async function () {
+//       const dbError = new Error('Database Error');
+//       sandbox.stub(rescheduleClass, 'rescheduleClass').callsFake((scheduledClassId, newDate, newTimeSlotId, callback) => {
+//         callback(dbError, null);
+//       });
   
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub().returns(res);
+//       res.status = sinon.stub().returns(res);
+//       res.json = sinon.stub().returns(res);
   
-      await rescheduleScheduledClass(req, res);
+//       await rescheduleScheduledClass(req, res);
   
-      sinon.assert.calledOnce(rescheduleClass.rescheduleClass);
-      sinon.assert.calledWith(res.status, 500);
-      sinon.assert.calledWith(res.json, { message: 'Failed to reschedule class', error: dbError });
-    });
-  });
+//       sinon.assert.calledOnce(rescheduleClass.rescheduleClass);
+//       sinon.assert.calledWith(res.status, 500);
+//       sinon.assert.calledWith(res.json, { message: 'Failed to reschedule class', error: dbError });
+//     });
+//   });

@@ -1,9 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const xml2js = require('xml2js');
-const bcrypt = require('bcryptjs');
-const { uploadStudentAsXML } = require('../controllers/studentController.js');
-const { clearTable, insertXmlStudentIntoDatabase } = require('../models/studentModel.js');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import xml2js from 'xml2js';
+import bcrypt from 'bcryptjs';
+import sinon from 'sinon';
+import { expect } from 'chai';
+import { uploadStudentAsXML } from '../controllers/studentController.js';
+import { clearTable, insertXmlStudentIntoDatabase } from '../models/studentModel.js';
+
+// Resolve __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('uploadStudentAsXML', () => {
   let req, res, testCases;

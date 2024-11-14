@@ -1,8 +1,0 @@
-{ 
-    "invalidXmlData": {
-      "body": "<root><row><student_id>2<student_id><Name>Sadia Hossain</Name></row></root>",
-      "expectedStatus": 400,
-      "expectedMessage": "Invalid XML data"
-    }
-    
-  }

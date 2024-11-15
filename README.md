@@ -18,6 +18,7 @@
 # 📑 **Table of Contents**
 
 1. [Main Features of the Project](#main-features-of-the-project)
+2. [Demonstrating a Feature](#demonstrating-a-feature)
    
 3. [Documentation](#documentation)
 4. [Our Team](#our-team)
@@ -59,6 +60,13 @@ The following core functionalities are designed to streamline and enhance the Sm
 12. **Approve Rescheduling**
 13. **View Class Representative Info**
 14. **Update Class Representative Info**
+
+---
+
+# `Demonstrating a Feature`
+
+
+[![demonstrating a feature of the **Smart Class Routine Management System**](https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/FilterSyllabus.mp4)
 
 ---
 

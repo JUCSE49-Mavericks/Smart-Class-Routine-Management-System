@@ -25,7 +25,7 @@
     {
       "description": "Department not found",
       "input": {
-        "department": "fsfs",
+        "department": "Cpmter Science and Engineering",
         "session": "2019-2020",
         "examYear": "2024",
         "course": "Data Structures"
@@ -38,7 +38,7 @@
       "description": "Session not found",
       "input": {
         "department": "Computer Science & Engineering",
-        "session": "3dd",
+        "session": "20190-2020",
         "examYear": "2024",
         "course": "Data Structures"
       },
@@ -51,7 +51,7 @@
       "input": {
         "department": "Computer Science & Engineering",
         "session": "2019-2020",
-        "examYear": "ffsd",
+        "examYear": "20240",
         "course": "Data Structures"
       },
       "expectedOutput": {
@@ -64,7 +64,7 @@
         "department": "Computer Science",
         "session": "2019-2020",
         "examYear": "2024",
-        "course": "ddsd"
+        "course": "Dat Strcture"
       },
       "expectedOutput": {
         "error": "Course not found"

@@ -25,6 +25,7 @@
     - [Clone the Project](#clone-the-project)
     - [Navigate to the Project Directory](#navigate-to-the-project-directory)
     - [Install Dependencies](#install-dependencies)
+ 6. [Database Setup](#database-setup) 
 6. [Running the Application](#running-the-application)
 7. [How to Develop](#how-to-develop)
     - [Create a New Branch](#create-a-new-branch)
@@ -178,6 +179,78 @@ Check out each document for in-depth insights into our development process, feat
     ```bash
     npm install
     ```
+
+---
+
+## **Database Setup**
+
+### 1. **Install MySQL**
+- Download and install **MySQL Community Server** from the official website: [https://dev.mysql.com/downloads/](https://dev.mysql.com/downloads/).
+- During the setup, note down the **root user credentials** (username and password) as they'll be needed for configuration.
+
+### 2. **Create a Database**
+- Open your MySQL Workbench or terminal and log in as the **root user**.
+- Create the required database:
+
+    ```sql
+    CREATE DATABASE db_class_routine;
+    ```
+
+### 3. **Configure the Project for Database**
+- The database configuration is stored in the `config/db.js` file.  
+- If you're using a different MySQL username or password, update the `config/db.js` file accordingly:
+
+    ```javascript
+    const db = mysql.createConnection({
+        host: "localhost",
+        user: "your_mysql_user",
+        password: "your_mysql_password",
+        database: "db_class_routine"
+    });
+    ```
+
+- Replace `your_mysql_user` and `your_mysql_password` with your actual MySQL username and password.
+
+### 4. **Environment Variables**
+- Create a `.env` file in the root directory of the project. Add the following content to it:
+
+    ```plaintext
+    EMAIL_USER=_yourEmail_
+    EMAIL_PASS=_yourPassword_
+    JWT_SECRET=your-secret-key
+    # PORT=5000
+    ```
+    ▶️▶️_N.B_ _Provide the email where you want to receive login requests as a superuser_ .
+
+- Replace `your-secret-key` with your own secure secret key for JWT.
+
+### 5. **Set Up the Project**
+- Run the following commands in the project directory:
+
+    ```bash
+    npm install
+    npm run migrate
+    ```
+
+    - The `npm run migrate` command will set up all necessary tables and seed data into the database.
+
+### 6. **Verify the Connection**
+- Start the application:
+
+    ```bash
+    node server.js
+    ```
+
+- If the setup is correct, you'll see a success message:  
+  ```plaintext
+  Connected to MySQL database
+  ```
+
+## Accessing Project Files
+
+To access all necessary project files, clone or download the project from the following GitHub repository:
+
+[JUCSE49-Mavericks/SCRMS-Files](https://github.com/JUCSE49-Mavericks/SCRMS-Files)
 
 ---
 

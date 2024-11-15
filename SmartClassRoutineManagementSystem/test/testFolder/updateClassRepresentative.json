@@ -1,0 +1,147 @@
+{
+    "fetchStudentsByExamYearId": [
+        {
+            "description": "should return students for the given exam year ID",
+            "input": {
+                "params": {
+                    "exam_year_id": 1
+                }
+            },
+            "mock": {
+                "method": "getStudentsByExamYear",
+                "returnValue": [
+                    {
+                        "student_id": 1,
+                        "name": "John Doe"
+                    }
+                ]
+            },
+            "expected": {
+                "status": 200,
+                "response": [
+                    {
+                        "student_id": 1,
+                        "name": "John Doe"
+                    }
+                ]
+            }
+        },
+        {
+            "description": "should return 404 if no students are found",
+            "input": {
+                "params": {
+                    "exam_year_id": 1
+                }
+            },
+            "mock": {
+                "method": "getStudentsByExamYear",
+                "returnValue": []
+            },
+            "expected": {
+                "status": 404,
+                "response": {
+                    "error": "No students found for the specified exam year"
+                }
+            }
+        },
+        {
+            "description": "should return 500 if there is a database error",
+            "input": {
+                "params": {
+                    "exam_year_id": 1
+                }
+            },
+            "mock": {
+                "method": "getStudentsByExamYear",
+                "throwError": "Database error"
+            },
+            "expected": {
+                "status": 500,
+                "response": {
+                    "error": "Database error"
+                }
+            }
+        }
+    ],
+    "updateClassRepresentativeInfo": [
+        {
+            "description": "should update the class representative successfully",
+            "input": {
+                "body": {
+                    "exam_year_id": 1,
+                    "student_id": 2,
+                    "role": "Male"
+                }
+            },
+            "mock": {
+                "method": "updateClassRepresentative",
+                "returnValue": {
+                    "affectedRows": 1
+                }
+            },
+            "expected": {
+                "status": 200,
+                "response": {
+                    "message": "Class representative updated successfully"
+                }
+            }
+        },
+        {
+            "description": "should return 400 if required fields are missing",
+            "input": {
+                "body": {
+                    "exam_year_id": 1,
+                    "student_id": 2
+                }
+            },
+            "expected": {
+                "status": 400,
+                "response": {
+                    "error": "Missing required fields"
+                }
+            }
+        },
+        {
+            "description": "should return 404 if the class representative is not found",
+            "input": {
+                "body": {
+                    "exam_year_id": 1,
+                    "student_id": 2,
+                    "role": "Male"
+                }
+            },
+            "mock": {
+                "method": "updateClassRepresentative",
+                "returnValue": {
+                    "affectedRows": 0
+                }
+            },
+            "expected": {
+                "status": 404,
+                "response": {
+                    "error": "Class representative not found for the given exam_year_id"
+                }
+            }
+        },
+        {
+            "description": "should return 500 if there is a database error",
+            "input": {
+                "body": {
+                    "exam_year_id": 1,
+                    "student_id": 2,
+                    "role": "Male"
+                }
+            },
+            "mock": {
+                "method": "updateClassRepresentative",
+                "throwError": "Database error"
+            },
+            "expected": {
+                "status": 500,
+                "response": {
+                    "error": "Database error"
+                }
+            }
+        }
+    ]
+}

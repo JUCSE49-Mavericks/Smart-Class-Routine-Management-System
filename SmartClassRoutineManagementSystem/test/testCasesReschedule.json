@@ -1,66 +1,58 @@
 {
-    "fetchPendingRequests": [
-      {
-        "description": "should return a list of pending reschedule requests",
-        "expectedStatus": 200,
-        "mockData": [
-          { "id": 1, "original_time": "2024-11-15 09:00:00", "requested_time": "2024-11-20 10:00:00", "reason": "Teacher unavailable", "course_id": 101, "status": "pending" }
-        ],
-        "expectedResponse": [
-          { "id": 1, "original_time": "2024-11-15 09:00:00", "requested_time": "2024-11-20 10:00:00", "reason": "Teacher unavailable", "course_id": 101, "status": "pending" }
-        ]
-      },
-      {
-        "description": "should handle errors when fetching pending requests",
-        "expectedStatus": 500,
-        "mockData": null,
-        "expectedResponse": { "message": "Failed to retrieve pending rescheduling requests. Please try again later." }
-      }
-    ],
-    "fetchRequestDetails": [
-      {
-        "description": "should return details of a specific request",
-        "expectedStatus": 200,
-        "mockData": { "id": 1, "original_time": "2024-11-15 09:00:00", "requested_time": "2024-11-20 10:00:00", "reason": "Teacher unavailable", "course_id": 101, "status": "pending" },
-        "expectedResponse": { "id": 1, "original_time": "2024-11-15 09:00:00", "requested_time": "2024-11-20 10:00:00", "reason": "Teacher unavailable", "course_id": 101, "status": "pending" }
-      },
-      {
-        "description": "should return 404 if request details are not found",
-        "expectedStatus": 404,
-        "mockData": null,
-        "expectedResponse": { "message": "Request not found." }
-      },
-      {
-        "description": "should handle errors when fetching request details",
-        "expectedStatus": 500,
-        "mockData": null,
-        "expectedResponse": { "message": "Unable to display the details of the rescheduling request." }
-      }
-    ],
-    "approveOrRejectRequest": [
-      {
-        "description": "should approve the request and update the status",
-        "action": "approve",
-        "expectedStatus": 200,
-        "mockData": { "id": 1, "original_time": "2024-11-15 09:00:00", "requested_time": "2024-11-20 10:00:00", "reason": "Teacher unavailable", "course_id": 101, "status": "pending" },
-        "newTime": "2024-12-01 10:00:00",
-        "expectedResponse": { "message": "Request approved successfully.", "newTime": "2024-12-01 10:00:00" }
-      },
-      {
-        "description": "should reject the request and update the status",
-        "action": "reject",
-        "expectedStatus": 200,
-        "mockData": { "id": 1, "original_time": "2024-11-15 09:00:00", "requested_time": "2024-11-20 10:00:00", "reason": "Teacher unavailable", "course_id": 101, "status": "pending" },
-        "newTime": null,
-        "expectedResponse": { "message": "Request rejected successfully." }
-      },
-      {
-        "description": "should handle errors when approving or rejecting the request",
-        "action": "approve",
-        "expectedStatus": 500,
-        "mockData": null,
-        "expectedResponse": { "message": "Unable to process the approval or rejection of the request." }
-      }
+  "fetchPendingRequests": {
+    "input": [],
+    "expectedOutput": [
+      { "id": 1, "requestType": "Reschedule", "status": "Pending" },
+      { "id": 2, "requestType": "Reschedule", "status": "Pending" }
     ]
+  },
+  "fetchPendingRequestsError": {
+    "input": [],
+    "expectedOutput": {
+      "statusCode": 500,
+      "responseBody": { "error": "Failed to fetch pending requests." }
+    }
+  },
+  "approveRequestSuccess": {
+    "input": ["1"],
+    "expectedOutput": {
+      "statusCode": 200,
+      "responseBody": { "message": "Request approved successfully." }
+    }
+  },
+  "approveRequestNotFound": {
+    "input": ["1"],
+    "expectedOutput": {
+      "statusCode": 404,
+      "responseBody": { "error": "Request not found." }
+    }
+  },
+  "approveRequestError": {
+    "input": ["1"],
+    "expectedOutput": {
+      "statusCode": 500,
+      "responseBody": { "error": "Failed to approve request." }
+    }
+  },
+  "rejectRequestSuccess": {
+    "input": ["2"],
+    "expectedOutput": {
+      "statusCode": 200,
+      "responseBody": { "message": "Request rejected successfully." }
+    }
+  },
+  "rejectRequestNotFound": {
+    "input": ["2"],
+    "expectedOutput": {
+      "statusCode": 404,
+      "responseBody": { "error": "Request not found." }
+    }
+  },
+  "rejectRequestError": {
+    "input": ["2"],
+    "expectedOutput": {
+      "statusCode": 500,
+      "responseBody": { "error": "Failed to reject request." }
+    }
   }
-  
+}

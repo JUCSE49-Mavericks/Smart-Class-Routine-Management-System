@@ -23,13 +23,13 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./SmartClassRoutineManagementSystem
+        working-directory: ./SmartClassRoutineManagementSystem # Actual directory for test file
 
       # Install Mocha globally to avoid permission issues
       - name: Install Mocha globally
         run: npm install -g mocha
-        working-directory: ./SmartClassRoutineManagementSystem
+        working-directory: ./SmartClassRoutineManagementSystem  # Actual directory for test file
 
       - name: Run Mocha tests
         run: mocha --extension js,mjs 'test/**/*.{js,mjs}'
-        working-directory: ./SmartClassRoutineManagementSystem
+        working-directory: ./SmartClassRoutineManagementSystem # Actual directory for test file

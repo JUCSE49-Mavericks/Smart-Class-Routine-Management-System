@@ -18,8 +18,6 @@
 # 📑 **Table of Contents**
 
 1. [Main Features of the Project](#main-features-of-the-project)
-2. [Demonstrating a Feature](#demonstrating-a-feature)
-   
 3. [Documentation](#documentation)
 4. [Our Team](#our-team)
 5. [How to Use](#how-to-use)
@@ -63,12 +61,6 @@ The following core functionalities are designed to streamline and enhance the Sm
 
 ---
 
-# `Demonstrating a Feature`
-
-
-[![demonstrating a feature of the **Smart Class Routine Management System**](https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/FilterSyllabus.mp4)
-
----
 
 #  **Documentation**
 

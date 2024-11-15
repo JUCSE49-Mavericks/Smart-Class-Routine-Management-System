@@ -2,29 +2,29 @@
   {
     "description": "Test Case 1: Should generate makeup schedule successfully",
     "input": {
-      "courseName": "Math 101",
-      "teacherName": "Dr. Smith",
+      "courseName": "CSE-403",
+      "teacherName": "Dr. Md. Musfique Anwar",
       "preferredTimes": [{ "start": "10:00", "end": "11:00" }],
       "preferredDays": ["Monday", "Wednesday"],
       "courseType": "Theory",
-      "preferredRoom": "101"
+      "preferredRoom": "101",
+      "classesNeeded": 3
     },
     "expectedOutput": {
       "expectedStatus": 200,
       "expectedMessage": "Makeup schedule generated successfully",
-      "classesNeeded": 3,
       "generatedRoutine": [
-        { "day": "Monday", "time": "10:00 - 11:00", "room": "101", "teacher": "Dr. Smith" },
-        { "day": "Wednesday", "time": "10:00 - 11:00", "room": "101", "teacher": "Dr. Smith" },
-        { "day": "Monday", "time": "10:00 - 11:00", "room": "101", "teacher": "Dr. Smith" }
+        { "day": "Monday", "time": "10:00 - 11:00", "room": "101", "teacher": "Dr. Md. Musfique Anwar" },
+        { "day": "Wednesday", "time": "10:00 - 11:00", "room": "101", "teacher": "Dr. Md. Musfique Anwar" },
+        { "day": "Monday", "time": "10:00 - 11:00", "room": "101", "teacher": "Dr. Md. Musfique Anwar" }
       ]
     }
   },
   {
     "description": "Test Case 2: No preferred days provided, defaults to all weekdays and preferred room is not specified",
     "input": {
-      "courseName": "History 101",
-      "teacherName": "Prof. Jones",
+      "courseName": "CSE-407",
+      "teacherName": "Samsun Nahar Khandaker",
       "preferredTimes": [
         { "start": "09:00", "end": "10:00" },
         { "start": "10:00", "end": "11:00" },
@@ -32,119 +32,124 @@
       ],
       "preferredDays": null,
       "courseType": "Theory",
-      "preferredRoom": null
+      "preferredRoom": null,
+      "classesNeeded": 4
     },
     "expectedOutput": {
       "expectedStatus": 200,
       "expectedMessage": "Makeup schedule generated successfully",
-      "classesNeeded": 4,
       "generatedRoutine": [
-        { "day": "Monday", "time": "09:00 - 10:00", "room": "default", "teacher": "Prof. Jones" },
-        { "day": "Tuesday", "time": "10:00 - 11:00", "room": "default", "teacher": "Prof. Jones" },
-        { "day": "Wednesday", "time": "13:00 - 14:00", "room": "default", "teacher": "Prof. Jones" },
-        { "day": "Thursday", "time": "09:00 - 10:00", "room": "default", "teacher": "Prof. Jones" }
+        { "day": "Monday", "time": "09:00 - 10:00", "room": "101", "teacher": "Samsun Nahar Khandaker" },
+        { "day": "Tuesday", "time": "10:00 - 11:00", "room": "101", "teacher": "Samsun Nahar Khandaker" },
+        { "day": "Wednesday", "time": "13:00 - 14:00", "room": "101", "teacher": "Samsun Nahar Khandaker" },
+        { "day": "Thursday", "time": "09:00 - 10:00", "room": "101", "teacher": "Samsun Nahar Khandaker" }
       ]
     }
   },
   {
     "description": "Test Case 3: No makeup classes needed, preferred room, time, days are not specified",
     "input": {
-      "courseName": "English 101",
-      "teacherName": "Ms. Green",
+      "courseName": "CSE-404",
+      "teacherName": "Dr. Md. Musfique Anwar",
       "preferredTimes": [],
       "preferredDays": [],
-      "courseType": "Theory",
-      "preferredRoom": null
+      "courseType": "Lab",
+      "preferredRoom": null,
+      "classesNeeded": 0
     },
     "expectedOutput": {
       "expectedStatus": 200,
       "expectedMessage": "No makeup classes needed",
-      "classesNeeded": 0,
       "generatedRoutine": []
     }
   },
   {
     "description": "Test Case 4: Classes needed not found, routine cannot be generated",
     "input": {
-      "courseName": "Chemistry 101",
-      "teacherName": "Dr. Lee",
+      "courseName": "CSE-470",
+      "teacherName": "Dr. Md. ABC",
       "preferredTimes": [{ "start": "14:00", "end": "15:00" }],
       "preferredDays": ["Monday", "Wednesday"],
       "courseType": "Theory",
-      "preferredRoom": "103"
+      "preferredRoom": "103",
+      "classesNeeded": null
     },
     "expectedOutput": {
       "expectedStatus": 400,
       "expectedMessage": "Routine cannot be generated as classesNeeded is not found",
-      "classesNeeded": "error",
       "generatedRoutine": null
     }
   },
   {
     "description": "Test Case 5: Invalid preferred days provided, schedule cannot be generated",
     "input": {
-      "courseName": "Physics 101",
-      "teacherName": "Dr. Thompson",
+      "courseName": "CSE-403",
+      "teacherName": "Dr. Md. Musfique Anwar",
       "preferredTimes": [{ "start": "08:00", "end": "09:00" }],
       "preferredDays": ["Funday", "Holiday"],
       "courseType": "Theory",
-      "preferredRoom": "101"
+      "preferredRoom": "102",
+      "classesNeeded": 2
     },
     "expectedOutput": {
       "expectedStatus": 400,
       "expectedMessage": "Invalid preferred days provided",
-      "classesNeeded": 2,
       "generatedRoutine": null
     }
   },
   {
     "description": "Test Case 6: Invalid preferred times provided, schedule cannot be generated",
     "input": {
-      "courseName": "Biology 101",
-      "teacherName": "Prof. Adams",
+      "courseName": "CSE-403",
+      "teacherName": "Dr. Md. Musfique Anwar",
       "preferredTimes": [{ "start": "20:00", "end": "25:00" }],
       "preferredDays": ["Tuesday", "Thursday"],
       "courseType": "Theory",
-      "preferredRoom": "202"
+      "preferredRoom": "202",
+      "classesNeeded": 3
     },
     "expectedOutput": {
       "expectedStatus": 400,
       "expectedMessage": "Invalid preferred times provided",
-      "classesNeeded": 2,
       "generatedRoutine": null
     }
   },
   {
     "description": "Test Case 7: Invalid room number provided",
     "input": {
-      "courseName": "Chemistry 102",
-      "teacherName": "Dr. Wilson",
+      "courseName": "CSE-403",
+      "teacherName": "Dr. Md. Musfique Anwar",
       "preferredTimes": [{ "start": "09:00", "end": "10:00" }],
       "preferredDays": ["Monday", "Thursday"],
       "courseType": "Theory",
-      "preferredRoom": "999"
+      "preferredRoom": "999",
+      "classesNeeded": 3
     },
     "expectedOutput": {
       "expectedStatus": 200,
       "expectedMessage": "Makeup schedule generated successfully",
-      "classesNeeded": 3,
       "generatedRoutine": [
-        {
-          "day": "Monday",
-          "time": "09:00 - 10:00",
-          "room": "101"
-        },
-        {
-          "day": "Thursday",
-          "time": "09:00 - 10:00",
-          "room": "102"
-        },
-        {
-          "day": "Monday",
-          "time": "09:00 - 10:00",
-          "room": "103"
-        }
+        { "day": "Monday", "time": "09:00 - 10:00", "room": "101", "teacher": "Dr. Md. Musfique Anwar" },
+        { "day": "Thursday", "time": "09:00 - 10:00", "room": "101", "teacher": "Dr. Md. Musfique Anwar" },
+        { "day": "Monday", "time": "09:00 - 10:00", "room": "101", "teacher": "Dr. Md. Musfique Anwar" }
       ]
+    }
+  },
+  {
+    "description": "Test Case 8: Simulating a database error when retrieving classes needed",
+    "input": {
+      "courseName": "CSE-499",
+      "teacherName": "Dr. X",
+      "preferredTimes": [{ "start": "12:00", "end": "13:00" }],
+      "preferredDays": ["Monday"],
+      "courseType": "Theory",
+      "preferredRoom": "202",
+      "classesNeeded": 2
+    },
+    "expectedOutput": {
+      "expectedStatus": 500,
+      "expectedMessage": "Database error",
+      "generatedRoutine": null
     }
   }
 ]

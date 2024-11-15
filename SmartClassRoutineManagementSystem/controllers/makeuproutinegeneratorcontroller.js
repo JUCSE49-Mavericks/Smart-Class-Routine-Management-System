@@ -112,11 +112,15 @@ const MakeupScheduleController = {
 
         for (let i = 0; i < classesNeeded; i++) {
           const day = daysToAssign[i % daysToAssign.length];
-          schedule.push({
+          const classSchedule = {
             day: day,
             time: `${startTime} - ${endTime}`,
             room: room
-          });
+          };
+          schedule.push(classSchedule);
+
+          // Log the schedule to console
+          console.log(`Class scheduled on ${classSchedule.day} from ${classSchedule.time} in Room ${classSchedule.room}`);
         }
       });
 

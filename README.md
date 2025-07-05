@@ -339,48 +339,41 @@ To access all necessary project files, clone or download the project from the fo
     <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(1).png" alt="project logo">
 </p>
 
+
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(2).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(3).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(4).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(5).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(6).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(7).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(8).png" alt="project logo">
+</p>
+<p align="center">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(9).png" alt="project logo">
 </p>
 
 <p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(10).png" alt="project logo">
 </p>
 
-<p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
-</p>
-
-<p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
-</p>
-
-<p align="center">
-    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
-</p>
 ---
 ## 🎉 **Enjoy using the Smart Class Routine Management System!**

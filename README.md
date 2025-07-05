@@ -333,5 +333,54 @@ To access all necessary project files, clone or download the project from the fo
 - Make sure your code is well-commented and follows the project’s coding standards.
 
 ---
+## 🎞️ Highlights from Our OOA Presentation Slides
 
+<p align="center">
+    <img src="https://github.com/Akila-Nipo/django_temporary/blob/main/PresentationSlide_OOAD(ClassRoutineManagementSystem).pptx%20(1).png" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+
+<p align="center">
+    <img src="https://github.com/JUCSE49-Mavericks/Smart-Class-Routine-Management-System/blob/main/resources/logo_edited.PNG" alt="project logo">
+</p>
+---
 ## 🎉 **Enjoy using the Smart Class Routine Management System!**
